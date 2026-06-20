@@ -116,13 +116,13 @@
     border-right: 1px solid rgba(0, 0, 0, 0.05);
   }
 
-  /* Brown gradient */
+  /* Primary gradient (legacy name kept for backwards compat) */
   .brown-gradient {
-    background: linear-gradient(135deg, hsl(16 85% 23%), hsl(16 65% 35%));
+    background: linear-gradient(135deg, hsl(224 76% 40%), hsl(221 83% 53%));
   }
-  
+
   .brown-gradient-soft {
-    background: linear-gradient(135deg, hsl(30 40% 95%), hsl(30 30% 92%));
+    background: linear-gradient(135deg, hsl(220 33% 98%), hsl(220 14% 96%));
   }
 
   /* Shadows */
