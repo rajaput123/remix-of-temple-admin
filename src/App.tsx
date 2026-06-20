@@ -310,6 +310,7 @@ const App = () => {
             <Route path="/business-connect/explore" element={<BCExplore />} />
             <Route path="/business-connect/dashboard" element={<BCDashboard />} />
             <Route path="/business-connect/profile" element={<BCProfile />} />
+            <Route path="/business-connect/services" element={<BusinessServicesPage />} />
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
               <Route index element={<Navigate to="business" replace />} />
               <Route path="business" element={<StepBusinessInfo />} />
