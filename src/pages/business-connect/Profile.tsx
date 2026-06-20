@@ -23,11 +23,9 @@ export default function BCProfile() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-muted/30">
-      <BCHeader showCta={false} />
-      <main className="container mx-auto w-full max-w-5xl flex-1 px-4 py-6 md:py-10">
-        {/* Preview header */}
-        <Card className="overflow-hidden">
+    <div className="max-w-5xl space-y-6">
+      {/* Preview header */}
+      <Card className="overflow-hidden">
           <div
             className="h-32 w-full bg-gradient-to-r from-primary/40 to-primary/10"
             style={
