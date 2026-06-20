@@ -1,228 +1,133 @@
-## VIP Devotee Management — Enterprise Screen Wireframe Spec
+# Digidevalaya Business Connect – Implementation Plan
 
-Target route: `/temple/vip/devotees` (redesign of existing `src/pages/temple/vip/Devotees.tsx`)
-Stack: shadcn/ui + Tailwind, Saffron temple theme, mobile-first. **No code in this phase — wireframe only.**
+A new self-contained `/business-connect` section delivering the 12-flow onboarding journey as a mobile-first wizard. Frontend only — all data persists to `localStorage` via a single Zustand store. No backend, no real OTP, no real uploads (file inputs preview locally). Reuses the existing blue enterprise theme and shadcn/ui components.
 
-Data already wired: `src/data/devotees.ts` (`Devotee` + `VipInfo` overlay: status, category, level, validFrom, validTill, sensitive, approvedBy, notes). VIP-eligible = devotees with `vip` object present.
-
----
-
-### 1. Screen Layout (top to bottom)
+## 1. Route map (added to `src/App.tsx`)
 
 ```text
-┌──────────────────────────────────────────────────────────────────────┐
-│  HEADER BAR                                                          │
-│  👑 VIP Devotee Management         [Export ▾] [+ Add VIP Devotee]    │
-│  Manage VIP profiles, renewals, privileges                           │
-├──────────────────────────────────────────────────────────────────────┤
-│  KPI STRIP (5 cards, 1 col mobile · 2 col tablet · 5 col desktop)    │
-│  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐              │
-│  │ Total  │ │ Active │ │Expiring│ │Pending │ │Lifetime│              │
-│  │ VIPs   │ │ VIPs   │ │ <30d   │ │Approval│ │  ₹ Val │              │
-│  │  24    │ │  18    │ │   4    │ │   2    │ │ ₹42.5L │              │
-│  │ ▲ +3 mo│ │ 75%    │ │ amber  │ │ orange │ │ ▲ 12%  │              │
-│  └────────┘ └────────┘ └────────┘ └────────┘ └────────┘              │
-├──────────────────────────────────────────────────────────────────────┤
-│  FILTER / SEARCH BAR (sticky on scroll)                              │
-│  [🔍 Search name / phone / VIP ID........]  [Level ▾] [Category ▾]   │
-│  [Status ▾] [Validity ▾] [Sensitive ▾] [More filters] [Clear]        │
-│  Active chips: × Platinum  × Expiring 30d                            │
-├──────────────────────────────────────────────────────────────────────┤
-│  VIEW TOGGLE / BULK BAR                                              │
-│  [▦ Table] [▥ Cards] [⊞ Kanban by Level]   3 selected → [⇪ Renew]   │
-│                                              [⬆ Upgrade] [⬇ Down] ⋯  │
-├──────────────────────────────────────────────────────────────────────┤
-│  DATA TABLE (default view)                                           │
-│  ☐ │Devotee │Lvl│Category│Valid Till│Donations│Last Visit│Status│⋯  │
-│  ──┼────────┼───┼────────┼──────────┼─────────┼──────────┼──────┼─  │
-│  ☐ │● Ramesh│Plt│High Don│28 Feb 26 │₹1.25 L  │09 Feb 26 │Active│⋯  │
-│  ☐ │● Lakshmi│Gld│Vol Donor│05 Mar 26│₹85,000 │08 Feb 26 │⚠ Exp │⋯  │
-│  Row click → opens Profile Drawer                                    │
-│  ⋯ menu: View · Edit · Renew · Upgrade · Downgrade · Deactivate     │
-│  [Pagination · 10/25/50 per page · 1-10 of 24]                       │
-└──────────────────────────────────────────────────────────────────────┘
+/business-connect                         Landing page (Flow 1)
+/business-connect/auth                    Login / Signup (Flow 2)
+/business-connect/onboarding              Wizard shell (layout w/ stepper)
+  ├── /type                               Flow 3  Business Type
+  ├── /info                               Flow 4  Business Information
+  ├── /location                           Flow 5  Business Location
+  ├── /languages                          Flow 6  Languages & Communication
+  ├── /verification                       Flow 7  Verification (skippable)
+  ├── /gallery                            Flow 8  Media / Gallery
+  ├── /subscription                       Flow 9  Plan selection
+  └── /complete                           Flow 10 Congratulations
+/business-connect/dashboard               Flow 11 First-time dashboard
+/business-connect/profile                 Flow 12 Profile management (tabs)
+/business-connect/explore                 Public business directory (stub)
 ```
 
----
+Existing temple routes are untouched.
 
-### 2. Component Hierarchy
+## 2. File structure
 
 ```text
-<VipDevoteesPage>
-├── <PageHeader title icon={Crown} actions={ExportMenu, AddVipButton} />
-├── <VipKpiStrip>
-│   └── <KpiCard variant=(primary|success|warning|orange|info)> ×5
-├── <VipFilterBar sticky>
-│   ├── <SearchInput />
-│   ├── <Select Level | Category | Status | Validity | Sensitive />
-│   ├── <Sheet "More filters"> (date range, donation min/max, tags, approved-by)
-│   └── <ActiveFilterChips />
-├── <ViewToggle modes=[table, cards, kanban] />
-├── <BulkActionBar visible={selected>0}>
-│   └── [Renew, Upgrade, Downgrade, Deactivate, Export selected]
-├── <VipDataTable>
-│   ├── Columns: checkbox, devotee(avatar+name+phone), level badge,
-│   │            category, valid till (+countdown), donations,
-│   │            last visit, status badge, row-actions menu
-│   ├── Sortable headers · empty state · loading skeleton
-│   └── <Pagination />
-├── <VipCardsView> (alt layout) — same data, glanceable cards
-├── <VipKanbanView> (alt) — columns by Level (Plt/Gold/Silver/Bronze)
-│
-├── <VipProfileDrawer side=right size=xl>      ← opens on row click
-│   ├── <ProfileHeader avatar, name, VIP ID, level chip, sensitive lock>
-│   │   Quick actions: [Edit] [Renew] [Upgrade] [Downgrade] [Deactivate]
-│   ├── <Tabs defaultValue="overview">
-│   │   ├── Overview     — contact, demographics, vip card, KPIs
-│   │   ├── Benefits     — privileges granted by current level (checklist)
-│   │   ├── History      — vertical timeline (joined→upgrades→renewals→notes)
-│   │   ├── Bookings     — table of seva/darshan bookings
-│   │   ├── Donations    — donation history + receipts
-│   │   ├── Communication— SMS / WhatsApp / Email logs
-│   │   └── Audit        — approval trail, role-based access log
-│   └── Sticky footer: [Print VIP Card] [Close]
-│
-├── <AddVipDialog>                  (existing flow, retained)
-├── <RenewVipDialog>                (NEW — pick new validTill, fee, payment)
-├── <UpgradeDowngradeDialog>        (NEW — change level, requires admin)
-├── <DeactivateConfirmDialog>       (NEW — reason required, audit logged)
-└── <ApprovalQueueSheet>            (NEW — pending VIP nominations)
+src/
+├── pages/business-connect/
+│   ├── Landing.tsx
+│   ├── Auth.tsx
+│   ├── OnboardingLayout.tsx        wizard shell: stepper, prev/next, save
+│   ├── steps/
+│   │   ├── StepBusinessType.tsx
+│   │   ├── StepBusinessInfo.tsx
+│   │   ├── StepLocation.tsx
+│   │   ├── StepLanguages.tsx
+│   │   ├── StepVerification.tsx
+│   │   ├── StepGallery.tsx
+│   │   ├── StepSubscription.tsx
+│   │   └── StepComplete.tsx
+│   ├── Dashboard.tsx
+│   ├── Profile.tsx
+│   └── Explore.tsx
+├── components/business-connect/
+│   ├── BCHeader.tsx                top nav (logo, login/account)
+│   ├── BCFooter.tsx
+│   ├── BusinessTypeCard.tsx        icon + label selectable card
+│   ├── WizardStepper.tsx           horizontal on desktop, compact on mobile
+│   ├── FileDropzone.tsx            local preview only (FileReader → dataURL)
+│   ├── OtpInput.tsx                6-digit input, accepts any value in mock
+│   ├── PlanCard.tsx                Free / Basic / Pro / Premium
+│   ├── ProfileCompletion.tsx       progress ring + checklist
+│   └── VerificationBadge.tsx
+├── stores/businessConnectStore.ts  Zustand + persist('bc-onboarding')
+├── data/businessTypes.ts           12 categories + subcategories + icons
+└── types/businessConnect.ts        TS interfaces
 ```
 
----
+## 3. State model (`businessConnectStore.ts`)
 
-### 3. Sub-screen Wireframes
-
-**3a. Profile Drawer (right side, ~520px desktop · full-screen mobile)**
-```text
-┌──────────────────────────────── ✕ ─┐
-│ [👤]  Ramesh Kumar   [👑 Platinum] │
-│ VIP-0001 · 🔒 Sensitive            │
-│ +91 98765 43210 · Bangalore        │
-│ [Edit] [Renew] [⬆] [⬇] [Deactivate]│
-├────────────────────────────────────┤
-│ Overview│Benefits│History│Book│Don │
-├────────────────────────────────────┤
-│  ┌──────────┐ ┌──────────┐         │
-│  │Total Don │ │Visits 12m│         │
-│  │ ₹1.25 L  │ │   28     │         │
-│  └──────────┘ └──────────┘         │
-│  Validity ─────────────●──         │
-│  01 Mar 25         28 Feb 26       │
-│  19 days left (amber)              │
-│                                    │
-│  Personal · Address · Tags · Notes │
-└────────────────────────────────────┘
+```ts
+interface BCState {
+  account: { mobile?: string; email?: string; verified: boolean };
+  businessType?: { category: string; subcategory?: string };
+  info?: { name; legalName?; description?; ownerName; phone; whatsapp?; email; experience?; website?; gst? };
+  location?: { line1; line2?; landmark?; city; district; state; country; pincode; lat?; lng?; reach };
+  comms?: { languages: string[]; channels: string[] };
+  verification?: { aadhaar?; pan?; docs: {type, name, dataUrl}[]; status: 'pending'|'review'|'verified'|'rejected'|'skipped' };
+  media?: { logo?; cover?; gallery: string[]; videos: string[] };
+  subscription?: { plan: 'trial'|'basic'|'pro'|'premium' };
+  profileStatus: 'draft'|'pending'|'published'|'rejected';
+  completedSteps: string[];
+  // actions: setX, reset, computeCompletion()
+}
 ```
 
-**3b. History Timeline (Tab)**
-```text
-●─ 01 Mar 2025  Joined VIP · Platinum     by Admin
-│
-●─ 15 Jun 2025  Donation ₹50,000          RCP-0012
-│
-●─ 10 Jan 2026  Renewed                   by Trustee
-│
-○─ 28 Feb 2026  Expiry (upcoming)
-```
+Persisted to `localStorage`. `computeCompletion()` returns 0–100 % based on filled sections (weights: info 25, location 15, languages 10, gallery 10, verification 20, subscription 10, type 10).
 
-**3c. Benefits Tab (per-level checklist, driven by `vip/Levels.tsx`)**
-```text
-Platinum benefits
-  ✓ Priority darshan slot (skip queue)
-  ✓ Reserved seating during festivals
-  ✓ Personalized prasad delivery
-  ✓ Annual temple calendar + medallion
-  ✓ Direct line to trustee office
-```
+## 4. Validation
 
-**3d. Renew Dialog**
-```text
-Renew VIP — Ramesh Kumar
-  Current valid till: 28 Feb 2026
-  New validity:       [01 Mar 2026] → [28 Feb 2027]
-  Renewal fee:        [₹ 25,000]
-  Payment mode:       (Cash · UPI · Bank · Waived)
-  Notes:              [_____________]
-  [Cancel]                       [Confirm Renewal]
-```
+Zod schemas per step (`src/lib/bc-schemas.ts`). Submit blocked until valid. Errors shown inline via shadcn `<FormMessage>`. Required fields per spec:
+- Auth: mobile + 6-digit OTP (any digits accepted in mock); email format if provided.
+- Info: businessName, ownerName, phone (10 digit), email.
+- Location: line1, city, district, state, country, pincode (6 digit).
+- Languages: ≥1 language, ≥1 channel.
+- Verification: optional, "Skip for now" button.
+- Gallery: optional, logo recommended (soft warning).
+- Subscription: one plan required.
 
----
+## 5. Wizard shell (`OnboardingLayout.tsx`)
 
-### 4. Status / Level Badge System
+- Top: `WizardStepper` showing 8 numbered steps (Type → Complete).
+- Sticky footer on mobile with Back / Continue.
+- Auto-saves to store on each `Continue`.
+- Direct URL access to a later step redirects to the earliest incomplete step.
+- Exit button → confirm dialog → returns to Landing (state preserved).
 
-| Item | Color token | Use |
-|---|---|---|
-| Active | green | VIP currently valid |
-| Expiring (≤30d) | amber | Triggers renewal CTA |
-| Expired | red | Read-only, requires reactivation |
-| Pending approval | orange | Awaiting admin sign-off |
-| Inactive | gray | Manually deactivated |
-| Platinum | purple gradient | Level chip |
-| Gold | amber gradient | Level chip |
-| Silver | slate gradient | Level chip |
-| Bronze | bronze/brown | Level chip |
-| 🔒 Sensitive | red outline | Restricted profile |
+## 6. Key screen behaviors
 
----
+**Landing (Flow 1):** Hero with "Grow your temple-ecosystem business" headline, CTA buttons (Register / Login / Explore). Sections: benefits (3-up), supported categories grid (12 cards), how-it-works (4 steps), footer.
 
-### 5. Role-Based Actions
+**Auth (Flow 2):** Tabs: Mobile OTP | Email | Google. Mobile flow: enter number → "Send OTP" → OtpInput → "Verify & Continue". Google = mock button that fills mock account. Outcome: account stored, redirect to `/onboarding/type`.
 
-| Action | Super Admin | Trustee | Manager | Staff |
-|---|:-:|:-:|:-:|:-:|
-| View VIPs (non-sensitive) | ✓ | ✓ | ✓ | ✓ |
-| View sensitive VIPs | ✓ | ✓ | — | — |
-| Add VIP | ✓ | ✓ | request | — |
-| Renew | ✓ | ✓ | ✓ | — |
-| Upgrade / Downgrade | ✓ | ✓ | — | — |
-| Deactivate | ✓ | ✓ | — | — |
-| Approve pending | ✓ | ✓ | — | — |
-| Export PII | ✓ | — | — | — |
+**Business Type (Flow 3):** 12 cards grid (4 cols desktop, 2 mobile), selection highlights with primary border; subcategory `<Select>` appears once category is chosen (subcategories defined per category in `businessTypes.ts`).
 
-Hook into existing `usePermissions` (`checkWriteAccess('vip')`).
+**Verification (Flow 7):** Document uploads use `FileDropzone` (drag/drop, accepts pdf/jpg/png, reads to dataURL, shows thumbnail). Status pill defaults to "Pending". Big secondary "Skip for now" button.
 
----
+**Gallery (Flow 8):** Logo (1 file), Cover (1 file), Gallery (multiple), Videos (multiple). All client-side previews only — note shown: "Media is stored locally in this demo."
 
-### 6. Responsive Behavior (mobile-first per project core)
+**Subscription (Flow 9):** 4 `PlanCard`s with features list, price, CTA. Free Trial preselected. No payment integration — selecting just stores the plan.
 
-- **<640px**: KPI strip → horizontal scroll snap; table → swap to Cards view automatically; filters collapse into a Sheet; drawer → full-screen modal.
-- **640–1024px**: 2-col KPI grid; table shows 4 priority columns (Devotee, Level, Valid Till, Status); other columns in row expand.
-- **≥1024px**: full 5-col KPI, full table, drawer pinned right at 520px.
+**Complete (Flow 10):** Confetti-free, brand-aligned success card with business name, completion %, and 2 CTAs → Dashboard / View Profile.
 
----
+**Dashboard (Flow 11):** Grid of widgets — ProfileCompletion ring, VerificationBadge, SubscriptionStatus, VisibilityStatus (Draft/Published toggle), Setup Checklist (7 items linking back to relevant edit screens), Quick Actions row.
 
-### 7. Empty / Edge States
+**Profile (Flow 12):** Tabbed editor (Details / About / Gallery / Hours / Service Areas / Languages / Documents / Subscription / Preview). "Publish Profile" button moves `profileStatus` from `draft` → `pending` (mock auto-advances to `published` after 2 s for demo).
 
-- No VIPs yet → centered crown illustration + "Designate first VIP devotee" CTA.
-- All expired → red-tinted banner above table with "Renew all" bulk action.
-- Filter returns 0 → "No matches — clear filters" link.
-- Sensitive profile without permission → masked name "● ● ● ●" + lock badge.
+## 7. Design
 
----
+- Reuses existing tokens in `src/index.css` (blue primary `221 83% 53%`). No new color palette.
+- Mobile-first: single-column ≤ 768 px, 2- or 3-column from `md:` upward.
+- Icons via `lucide-react`. Cards via shadcn `<Card>`, forms via shadcn `<Form>` + `react-hook-form` + `zod`.
+- Empty / success / error states for each screen (e.g. no docs uploaded, OTP failed, plan selected ✓).
 
-### 8. Data Bindings (no schema change)
+## 8. Out of scope (per requirements)
 
-| UI element | Source |
-|---|---|
-| KPI Total | `devoteesData.filter(d=>d.vip)` |
-| KPI Active | `vip.status==='Active'` |
-| Expiring | `vip.validTill - today ≤ 30d` |
-| Pending | new `vip.status==='Pending'` (add to enum) |
-| Lifetime ₹ | sum of `totalDonations` for VIPs |
-| Benefits checklist | from `vip/Levels.tsx` level config |
-| History timeline | derive from donations + audit (future: `vipAuditLog[]`) |
+No CRM, bookings, leads, marketing, reports, service management. No real OTP / payments / storage / DB. Not wired to existing `TempleHub`.
 
-Only enum extension needed: add `'Pending'` to `VipInfo.status`. No table/route changes.
+## 9. Deliverables
 
----
-
-### 9. Out of Scope (this phase)
-
-- Actual implementation (wireframe-only per your choice).
-- New backend tables; everything sources from existing `devoteesData` mock.
-- Multi-temple switching UI — handled by tenant layout shell already.
-
----
-
-### Next step
-Approve this wireframe and I'll implement the redesigned `src/pages/temple/vip/Devotees.tsx` plus the three new dialogs and the profile drawer, reusing the existing data layer and permission hook.
+~25 new files, 1 edit to `src/App.tsx` for routes. Estimated single implementation pass after plan approval.
