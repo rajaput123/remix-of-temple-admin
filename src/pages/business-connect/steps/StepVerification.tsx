@@ -85,7 +85,7 @@ export default function StepVerification() {
         </div>
 
         <div className="space-y-2">
-          <Label className="text-xs font-medium text-muted-foreground">Upload documents</Label>
+          <Label className="text-xs font-medium">Upload documents</Label>
           <div className="grid gap-2.5 md:grid-cols-3">
             {SLOTS.map((slot) => (
               <FileDropzone
