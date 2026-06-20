@@ -186,32 +186,32 @@ export default function StepBusinessInfo() {
               <div className="space-y-3 border-t bg-background p-3">
                 <div className="grid gap-3 md:grid-cols-3">
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Legal business name</Label>
-                    <Input className="h-9 text-sm" {...register("legalName")} />
+                    <Label className="text-xs font-medium">Legal business name</Label>
+                    <Input className="h-10 text-sm" {...register("legalName")} />
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-xs">WhatsApp number</Label>
+                    <Label className="text-xs font-medium">WhatsApp number</Label>
                     <Input
-                      className="h-9 text-sm"
+                      className="h-10 text-sm"
                       inputMode="numeric"
                       maxLength={10}
                       {...register("whatsapp")}
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Years of experience</Label>
-                    <Input className="h-9 text-sm" placeholder="e.g. 8" {...register("experience")} />
+                    <Label className="text-xs font-medium">Years of experience</Label>
+                    <Input className="h-10 text-sm" placeholder="e.g. 8" {...register("experience")} />
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Website URL</Label>
-                    <Input className="h-9 text-sm" placeholder="https://" {...register("website")} />
+                    <Label className="text-xs font-medium">Website URL</Label>
+                    <Input className="h-10 text-sm" placeholder="https://" {...register("website")} />
                   </div>
                   <div className="space-y-1.5 md:col-span-2">
-                    <Label className="text-xs">GST number</Label>
-                    <Input className="h-9 text-sm" placeholder="Optional" {...register("gst")} />
+                    <Label className="text-xs font-medium">GST number</Label>
+                    <Input className="h-10 text-sm" placeholder="Optional" {...register("gst")} />
                   </div>
                   <div className="space-y-1.5 md:col-span-3">
-                    <Label className="text-xs">Short description</Label>
+                    <Label className="text-xs font-medium">Short description</Label>
                     <Textarea
                       rows={2}
                       className="text-sm"
