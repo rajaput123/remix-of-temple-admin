@@ -28,6 +28,7 @@ import StepComplete from "./pages/business-connect/steps/StepComplete";
 
 import BCDashboard from "./pages/business-connect/Dashboard";
 import BCProfile from "./pages/business-connect/Profile";
+import BCLayout from "./pages/business-connect/BCLayout";
 import BusinessProfilePage from "./pages/business/BusinessProfilePage";
 import BusinessWebsitePage from "./pages/business/BusinessWebsitePage";
 import BusinessServicesPage from "./pages/business/BusinessServicesPage";
@@ -308,9 +309,11 @@ const App = () => {
             <Route path="/business-connect" element={<BCLanding />} />
             <Route path="/business-connect/auth" element={<BCAuth />} />
             <Route path="/business-connect/explore" element={<BCExplore />} />
-            <Route path="/business-connect/dashboard" element={<BCDashboard />} />
-            <Route path="/business-connect/profile" element={<BCProfile />} />
-            <Route path="/business-connect/services" element={<BusinessServicesPage />} />
+            <Route element={<BCLayout />}>
+              <Route path="/business-connect/dashboard" element={<BCDashboard />} />
+              <Route path="/business-connect/profile" element={<BCProfile />} />
+              <Route path="/business-connect/services" element={<BusinessServicesPage />} />
+            </Route>
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
               <Route index element={<Navigate to="business" replace />} />
               <Route path="business" element={<StepBusinessInfo />} />
