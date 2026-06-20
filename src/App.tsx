@@ -308,16 +308,19 @@ const App = () => {
             <Route path="/business-connect/dashboard" element={<BCDashboard />} />
             <Route path="/business-connect/profile" element={<BCProfile />} />
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
-              <Route index element={<Navigate to="type" replace />} />
-              <Route path="type" element={<StepBusinessType />} />
-              <Route path="info" element={<StepBusinessInfo />} />
+              <Route index element={<Navigate to="business" replace />} />
+              <Route path="business" element={<StepBusinessInfo />} />
+              <Route path="type" element={<Navigate to="../business" replace />} />
+              <Route path="info" element={<Navigate to="../business" replace />} />
               <Route path="location" element={<StepLocation />} />
-              <Route path="languages" element={<StepLanguages />} />
+              <Route path="languages" element={<Navigate to="../location" replace />} />
               <Route path="verification" element={<StepVerification />} />
-              <Route path="gallery" element={<StepGallery />} />
-              <Route path="subscription" element={<StepSubscription />} />
+              <Route path="plan" element={<StepSubscription />} />
+              <Route path="gallery" element={<Navigate to="../plan" replace />} />
+              <Route path="subscription" element={<Navigate to="../plan" replace />} />
               <Route path="complete" element={<StepComplete />} />
             </Route>
+
 
 
             {/* Temple Admin Routes */}

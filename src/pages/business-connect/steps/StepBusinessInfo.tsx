@@ -1,19 +1,35 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { StepShell } from "@/components/business-connect/StepShell";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { bcStore, useBCStore } from "@/stores/businessConnectStore";
 import { infoSchema } from "@/lib/bc-schemas";
+import { BUSINESS_TYPES } from "@/data/businessTypes";
+import { toast } from "sonner";
 
 type FormValues = z.infer<typeof infoSchema>;
 
 export default function StepBusinessInfo() {
   const navigate = useNavigate();
   const stored = useBCStore((s) => s.info);
+  const storedType = useBCStore((s) => s.businessType);
+  const [category, setCategory] = useState(storedType?.category ?? "");
+  const [subcategory, setSubcategory] = useState(storedType?.subcategory ?? "");
+
+  const selected = BUSINESS_TYPES.find((t) => t.id === category);
+
   const {
     register,
     handleSubmit,
@@ -29,8 +45,15 @@ export default function StepBusinessInfo() {
   });
 
   function onSubmit(values: FormValues) {
-    bcStore.set({ info: values as unknown as import("@/types/businessConnect").BCInfo });
-    bcStore.markStep("info");
+    if (!category) {
+      toast.error("Please choose a business type");
+      return;
+    }
+    bcStore.set({
+      businessType: { category, subcategory: subcategory || undefined },
+      info: values as unknown as import("@/types/businessConnect").BCInfo,
+    });
+    bcStore.markStep("business");
     navigate("/business-connect/onboarding/location");
   }
 
@@ -59,13 +82,58 @@ export default function StepBusinessInfo() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <StepShell
-        title="Business information"
-        subtitle="Tell us about your business and how to reach you."
-        backTo="/business-connect/onboarding/type"
+        title="Tell us about your business"
+        subtitle="Pick your business type and add your basic details."
         nextLabel="Continue"
         onNext={handleSubmit(onSubmit)}
       >
         <div className="space-y-6">
+          <section className="space-y-3">
+            <h2 className="text-sm font-semibold text-muted-foreground">Business type</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label>
+                  Type <span className="text-destructive">*</span>
+                </Label>
+                <Select
+                  value={category}
+                  onValueChange={(v) => {
+                    setCategory(v);
+                    setSubcategory("");
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select business type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {BUSINESS_TYPES.map((t) => (
+                      <SelectItem key={t.id} value={t.id}>
+                        {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {selected && (
+                <div className="space-y-1.5">
+                  <Label>Subcategory</Label>
+                  <Select value={subcategory} onValueChange={setSubcategory}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select subcategory" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {selected.subcategories.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
+          </section>
+
           <section className="space-y-3">
             <h2 className="text-sm font-semibold text-muted-foreground">Business details</h2>
             <div className="grid gap-4 md:grid-cols-2">
@@ -86,7 +154,7 @@ export default function StepBusinessInfo() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-muted-foreground">Owner details</h2>
+            <h2 className="text-sm font-semibold text-muted-foreground">Owner & contact</h2>
             <div className="grid gap-4 md:grid-cols-2">
               <F name="ownerName" label="Owner name" required>
                 <Input {...register("ownerName")} />
@@ -101,10 +169,6 @@ export default function StepBusinessInfo() {
                 <Input type="email" {...register("email")} />
               </F>
             </div>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-muted-foreground">Business info</h2>
             <div className="grid gap-4 md:grid-cols-3">
               <F name="experience" label="Years of experience">
                 <Input placeholder="e.g. 8" {...register("experience")} />
