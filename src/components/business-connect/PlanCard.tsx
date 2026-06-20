@@ -15,25 +15,25 @@ export function PlanCard({
   return (
     <div
       className={cn(
-        "relative flex flex-col gap-4 rounded-xl border bg-card p-5 transition",
+        "relative flex flex-col gap-2 rounded-lg border bg-card p-3 transition",
         plan.highlight && "border-primary/40 shadow-sm",
         selected && "ring-2 ring-primary",
       )}
     >
       {plan.highlight && (
-        <span className="absolute -top-2 right-4 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
+        <span className="absolute -top-2 right-2 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
           Popular
         </span>
       )}
       <div>
-        <div className="text-sm font-semibold text-muted-foreground">{plan.name}</div>
-        <div className="mt-1 text-2xl font-bold">{plan.price}</div>
-        <div className="text-xs text-muted-foreground">{plan.tagline}</div>
+        <div className="text-xs font-semibold text-muted-foreground">{plan.name}</div>
+        <div className="text-lg font-bold">{plan.price}</div>
+        <div className="text-[10px] text-muted-foreground">{plan.tagline}</div>
       </div>
-      <ul className="space-y-1.5 text-sm">
+      <ul className="space-y-0.5 text-xs">
         {plan.features.map((f) => (
-          <li key={f} className="flex items-start gap-2">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <li key={f} className="flex items-start gap-1.5">
+            <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
             <span>{f}</span>
           </li>
         ))}
@@ -41,6 +41,7 @@ export function PlanCard({
       <Button
         type="button"
         variant={selected ? "default" : "outline"}
+        size="sm"
         className="mt-auto"
         onClick={onSelect}
       >
