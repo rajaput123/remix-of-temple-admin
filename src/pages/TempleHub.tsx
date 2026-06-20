@@ -751,7 +751,7 @@ const TempleHub = () => {
                                     ? "text-primary-foreground"
                                     : "text-foreground group-hover:text-primary-foreground"
                               }`}>
-                                {t(`mod_${module.id}`, lang)}
+                                {module.title}
                               </span>
 
                               {/* Status indicator */}
