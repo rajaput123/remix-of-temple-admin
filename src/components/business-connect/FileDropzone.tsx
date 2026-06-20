@@ -40,10 +40,10 @@ export function FileDropzone({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <div className="flex items-baseline justify-between">
-        <span className="text-sm font-medium">{label}</span>
-        {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
+        <span className="text-xs font-medium">{label}</span>
+        {hint && <span className="text-[10px] text-muted-foreground">{hint}</span>}
       </div>
       <div
         onClick={() => inputRef.current?.click()}
@@ -58,15 +58,15 @@ export function FileDropzone({
           handleFiles(e.dataTransfer.files);
         }}
         className={cn(
-          "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 px-4 py-6 text-center text-sm text-muted-foreground transition hover:border-primary hover:bg-primary/5",
+          "flex cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 px-3 py-3 text-center text-[10px] text-muted-foreground transition hover:border-primary hover:bg-primary/5",
           drag && "border-primary bg-primary/10",
         )}
       >
-        <Upload className="h-5 w-5" />
+        <Upload className="h-4 w-4" />
         <div>
           <span className="font-medium text-foreground">Click to upload</span> or drag & drop
         </div>
-        <div className="text-xs">Stored locally in this demo.</div>
+        <div className="text-[10px]">Stored locally in this demo.</div>
         <input
           ref={inputRef}
           type="file"
@@ -77,20 +77,20 @@ export function FileDropzone({
         />
       </div>
       {values.length > 0 && (
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+        <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-4 md:grid-cols-6">
           {values.map((url, i) => (
             <div key={i} className="group relative overflow-hidden rounded-md border bg-muted">
               {url.startsWith("data:image") ? (
-                <img src={url} alt="" className="h-20 w-full object-cover" />
+                <img src={url} alt="" className="h-14 w-full object-cover" />
               ) : (
-                <div className="grid h-20 w-full place-items-center text-[10px] text-muted-foreground">
+                <div className="grid h-14 w-full place-items-center text-[10px] text-muted-foreground">
                   File
                 </div>
               )}
               <button
                 type="button"
                 onClick={() => onChange(values.filter((_, idx) => idx !== i))}
-                className="absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full bg-background/90 opacity-0 shadow group-hover:opacity-100"
+                className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full bg-background/90 opacity-0 shadow group-hover:opacity-100"
               >
                 <X className="h-3 w-3" />
               </button>
