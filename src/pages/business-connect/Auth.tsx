@@ -32,7 +32,7 @@ export default function BCAuth() {
       return;
     }
     bcStore.set({ account: { mobile, verified: true } });
-    navigate("/business-connect/onboarding/type");
+    navigate("/business-connect/onboarding/business");
   }
 
   function continueEmail() {
@@ -41,12 +41,12 @@ export default function BCAuth() {
       return;
     }
     bcStore.set({ account: { email, verified: true } });
-    navigate("/business-connect/onboarding/type");
+    navigate("/business-connect/onboarding/business");
   }
 
   function googleMock() {
     bcStore.set({ account: { email: "owner@example.com", verified: true } });
-    navigate("/business-connect/onboarding/type");
+    navigate("/business-connect/onboarding/business");
   }
 
   return (

@@ -64,7 +64,7 @@ export default function BCProfile() {
               </div>
               <div className="flex gap-2">
                 <Button asChild variant="outline" size="sm">
-                  <Link to="/business-connect/onboarding/info">
+                  <Link to="/business-connect/onboarding/business">
                     <Edit3 className="mr-1 h-3.5 w-3.5" /> Edit
                   </Link>
                 </Button>
@@ -100,7 +100,7 @@ export default function BCProfile() {
                     {s.info.experience} years
                   </div>
                 )}
-                <EditLink to="/business-connect/onboarding/info" />
+                <EditLink to="/business-connect/onboarding/business" />
               </CardContent>
             </Card>
           </TabsContent>
@@ -112,7 +112,7 @@ export default function BCProfile() {
                 <Row icon={Phone} label="Phone" value={s.info?.phone} />
                 <Row icon={Phone} label="WhatsApp" value={s.info?.whatsapp} />
                 <Row icon={Mail} label="Email" value={s.info?.email} />
-                <EditLink to="/business-connect/onboarding/info" />
+                <EditLink to="/business-connect/onboarding/business" />
               </CardContent>
             </Card>
           </TabsContent>
@@ -156,7 +156,7 @@ export default function BCProfile() {
                     </Badge>
                   ))}
                 </div>
-                <EditLink to="/business-connect/onboarding/languages" />
+                <EditLink to="/business-connect/onboarding/location" />
               </CardContent>
             </Card>
           </TabsContent>
@@ -174,7 +174,7 @@ export default function BCProfile() {
                     ))}
                   </div>
                 )}
-                <EditLink to="/business-connect/onboarding/gallery" />
+                <EditLink to="/business-connect/onboarding/plan" />
               </CardContent>
             </Card>
           </TabsContent>
@@ -213,7 +213,7 @@ export default function BCProfile() {
                     {s.subscription?.plan ?? "trial"}
                   </span>
                 </div>
-                <EditLink to="/business-connect/onboarding/subscription" />
+                <EditLink to="/business-connect/onboarding/plan" />
               </CardContent>
             </Card>
           </TabsContent>

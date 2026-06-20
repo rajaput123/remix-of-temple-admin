@@ -19,14 +19,12 @@ import UpcomingModule from "./pages/temple/UpcomingModule";
 import BCLanding from "./pages/business-connect/Landing";
 import BCAuth from "./pages/business-connect/Auth";
 import BCOnboardingLayout from "./pages/business-connect/OnboardingLayout";
-import StepBusinessType from "./pages/business-connect/steps/StepBusinessType";
 import StepBusinessInfo from "./pages/business-connect/steps/StepBusinessInfo";
 import StepLocation from "./pages/business-connect/steps/StepLocation";
-import StepLanguages from "./pages/business-connect/steps/StepLanguages";
 import StepVerification from "./pages/business-connect/steps/StepVerification";
-import StepGallery from "./pages/business-connect/steps/StepGallery";
 import StepSubscription from "./pages/business-connect/steps/StepSubscription";
 import StepComplete from "./pages/business-connect/steps/StepComplete";
+
 import BCDashboard from "./pages/business-connect/Dashboard";
 import BCProfile from "./pages/business-connect/Profile";
 import BCExplore from "./pages/business-connect/Explore";
@@ -308,16 +306,19 @@ const App = () => {
             <Route path="/business-connect/dashboard" element={<BCDashboard />} />
             <Route path="/business-connect/profile" element={<BCProfile />} />
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
-              <Route index element={<Navigate to="type" replace />} />
-              <Route path="type" element={<StepBusinessType />} />
-              <Route path="info" element={<StepBusinessInfo />} />
+              <Route index element={<Navigate to="business" replace />} />
+              <Route path="business" element={<StepBusinessInfo />} />
+              <Route path="type" element={<Navigate to="../business" replace />} />
+              <Route path="info" element={<Navigate to="../business" replace />} />
               <Route path="location" element={<StepLocation />} />
-              <Route path="languages" element={<StepLanguages />} />
+              <Route path="languages" element={<Navigate to="../location" replace />} />
               <Route path="verification" element={<StepVerification />} />
-              <Route path="gallery" element={<StepGallery />} />
-              <Route path="subscription" element={<StepSubscription />} />
+              <Route path="plan" element={<StepSubscription />} />
+              <Route path="gallery" element={<Navigate to="../plan" replace />} />
+              <Route path="subscription" element={<Navigate to="../plan" replace />} />
               <Route path="complete" element={<StepComplete />} />
             </Route>
+
 
 
             {/* Temple Admin Routes */}

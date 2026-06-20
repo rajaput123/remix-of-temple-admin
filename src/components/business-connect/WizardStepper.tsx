@@ -8,13 +8,10 @@ export interface WizardStep {
 }
 
 export const ONBOARDING_STEPS: WizardStep[] = [
-  { id: "type", label: "Type", path: "/business-connect/onboarding/type" },
-  { id: "info", label: "Information", path: "/business-connect/onboarding/info" },
-  { id: "location", label: "Location", path: "/business-connect/onboarding/location" },
-  { id: "languages", label: "Languages", path: "/business-connect/onboarding/languages" },
-  { id: "verification", label: "Verification", path: "/business-connect/onboarding/verification" },
-  { id: "gallery", label: "Media", path: "/business-connect/onboarding/gallery" },
-  { id: "subscription", label: "Plan", path: "/business-connect/onboarding/subscription" },
+  { id: "business", label: "Business", path: "/business-connect/onboarding/business" },
+  { id: "location", label: "Address", path: "/business-connect/onboarding/location" },
+  { id: "verification", label: "Verify", path: "/business-connect/onboarding/verification" },
+  { id: "plan", label: "Media & Plan", path: "/business-connect/onboarding/plan" },
   { id: "complete", label: "Done", path: "/business-connect/onboarding/complete" },
 ];
 

@@ -43,14 +43,14 @@ export default function StepVerification() {
       verification: { aadhaar, pan, docs, status: nextStatus },
     });
     bcStore.markStep("verification");
-    navigate("/business-connect/onboarding/gallery");
+    navigate("/business-connect/onboarding/plan");
   }
 
   return (
     <StepShell
       title="Verify your business"
       subtitle="Verified businesses get a badge and rank higher in search. You can skip for now."
-      backTo="/business-connect/onboarding/languages"
+      backTo="/business-connect/onboarding/location"
       rightSlot={
         <Button variant="ghost" onClick={() => save("skipped")}>
           Skip for now
@@ -58,6 +58,7 @@ export default function StepVerification() {
       }
       onNext={() => save(docs.length > 0 ? "review" : "pending")}
     >
+
       <div className="space-y-6">
         <div className="flex items-center justify-between rounded-md border bg-muted/30 px-3 py-2">
           <span className="text-sm text-muted-foreground">Current status</span>
