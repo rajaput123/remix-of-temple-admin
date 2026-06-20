@@ -162,6 +162,14 @@ const Login = () => {
               >
                 Sign in <ArrowRight className="h-4 w-4" />
               </Button>
+
+              <button
+                type="button"
+                onClick={handleBypass}
+                className="w-full text-center text-[12px] font-medium text-slate-500 hover:text-[#2563eb] hover:underline"
+              >
+                Bypass → Go to Temple Hub
+              </button>
             </form>
 
             <p className="text-center text-sm text-slate-500 mt-6">
