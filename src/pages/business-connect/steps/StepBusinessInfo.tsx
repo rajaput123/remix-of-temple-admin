@@ -80,19 +80,19 @@ export default function StepBusinessInfo() {
   );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="h-full">
       <StepShell
         title="Tell us about your business"
         subtitle="Pick your business type and add your basic details."
         nextLabel="Continue"
         onNext={handleSubmit(onSubmit)}
       >
-        <div className="space-y-6">
-          <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-muted-foreground">Business type</h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label>
+        <div className="space-y-4">
+          <section className="space-y-2">
+            <h2 className="text-xs font-semibold text-muted-foreground">Business type</h2>
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="space-y-1">
+                <Label className="text-xs">
                   Type <span className="text-destructive">*</span>
                 </Label>
                 <Select
@@ -102,7 +102,7 @@ export default function StepBusinessInfo() {
                     setSubcategory("");
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9 text-sm">
                     <SelectValue placeholder="Select business type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -115,10 +115,10 @@ export default function StepBusinessInfo() {
                 </Select>
               </div>
               {selected && (
-                <div className="space-y-1.5">
-                  <Label>Subcategory</Label>
+                <div className="space-y-1">
+                  <Label className="text-xs">Subcategory</Label>
                   <Select value={subcategory} onValueChange={setSubcategory}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-9 text-sm">
                       <SelectValue placeholder="Select subcategory" />
                     </SelectTrigger>
                     <SelectContent>
@@ -134,50 +134,51 @@ export default function StepBusinessInfo() {
             </div>
           </section>
 
-          <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-muted-foreground">Business details</h2>
-            <div className="grid gap-4 md:grid-cols-2">
+          <section className="space-y-2">
+            <h2 className="text-xs font-semibold text-muted-foreground">Business details</h2>
+            <div className="grid gap-3 md:grid-cols-2">
               <F name="name" label="Business name" required>
-                <Input placeholder="e.g. Sri Ganesh Pooja Services" {...register("name")} />
+                <Input className="h-9 text-sm" placeholder="e.g. Sri Ganesh Pooja Services" {...register("name")} />
               </F>
               <F name="legalName" label="Legal business name">
-                <Input placeholder="Registered name (optional)" {...register("legalName")} />
+                <Input className="h-9 text-sm" placeholder="Registered name (optional)" {...register("legalName")} />
               </F>
             </div>
             <F name="description" label="Business description">
               <Textarea
-                rows={3}
+                rows={2}
+                className="text-sm"
                 placeholder="A short introduction devotees will see on your profile."
                 {...register("description")}
               />
             </F>
           </section>
 
-          <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-muted-foreground">Owner & contact</h2>
-            <div className="grid gap-4 md:grid-cols-2">
+          <section className="space-y-2">
+            <h2 className="text-xs font-semibold text-muted-foreground">Owner & contact</h2>
+            <div className="grid gap-3 md:grid-cols-2">
               <F name="ownerName" label="Owner name" required>
-                <Input {...register("ownerName")} />
+                <Input className="h-9 text-sm" {...register("ownerName")} />
               </F>
               <F name="phone" label="Contact number" required>
-                <Input inputMode="numeric" maxLength={10} {...register("phone")} />
+                <Input className="h-9 text-sm" inputMode="numeric" maxLength={10} {...register("phone")} />
               </F>
               <F name="whatsapp" label="WhatsApp number">
-                <Input inputMode="numeric" maxLength={10} {...register("whatsapp")} />
+                <Input className="h-9 text-sm" inputMode="numeric" maxLength={10} {...register("whatsapp")} />
               </F>
               <F name="email" label="Email address" required>
-                <Input type="email" {...register("email")} />
+                <Input className="h-9 text-sm" type="email" {...register("email")} />
               </F>
             </div>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-3 md:grid-cols-3">
               <F name="experience" label="Years of experience">
-                <Input placeholder="e.g. 8" {...register("experience")} />
+                <Input className="h-9 text-sm" placeholder="e.g. 8" {...register("experience")} />
               </F>
               <F name="website" label="Website URL">
-                <Input placeholder="https://" {...register("website")} />
+                <Input className="h-9 text-sm" placeholder="https://" {...register("website")} />
               </F>
               <F name="gst" label="GST number">
-                <Input placeholder="Optional" {...register("gst")} />
+                <Input className="h-9 text-sm" placeholder="Optional" {...register("gst")} />
               </F>
             </div>
           </section>
