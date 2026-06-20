@@ -214,8 +214,7 @@ export default function BCProfile() {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
-      <BCFooter />
+      </div>
     </div>
   );
 }
