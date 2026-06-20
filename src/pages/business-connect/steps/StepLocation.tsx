@@ -175,17 +175,17 @@ export default function StepLocation() {
 
             <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-1.5">
-                <Label className="text-xs">Address line 2 / landmark</Label>
-                <Input className="h-9 text-sm" {...register("line2")} placeholder="Optional" />
+                <Label className="text-xs font-medium">Address line 2 / landmark</Label>
+                <Input className="h-10 text-sm" {...register("line2")} placeholder="Optional" />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-xs">Service reach</Label>
+                <Label className="text-xs font-medium">Service reach</Label>
                 <Controller
                   name="reach"
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="h-9 text-sm">
+                      <SelectTrigger className="h-10 text-sm">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -204,16 +204,16 @@ export default function StepLocation() {
             {(city || pinHint) && (
               <div className="grid gap-3 md:grid-cols-3">
                 <div className="space-y-1.5">
-                  <Label className="text-xs">City</Label>
-                  <Input className="h-9 text-sm" {...register("city")} />
+                  <Label className="text-xs font-medium">City</Label>
+                  <Input className="h-10 text-sm" {...register("city")} />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs">District</Label>
-                  <Input className="h-9 text-sm" {...register("district")} />
+                  <Label className="text-xs font-medium">District</Label>
+                  <Input className="h-10 text-sm" {...register("district")} />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs">State</Label>
-                  <Input className="h-9 text-sm" {...register("state")} />
+                  <Label className="text-xs font-medium">State</Label>
+                  <Input className="h-10 text-sm" {...register("state")} />
                 </div>
               </div>
             )}
