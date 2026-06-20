@@ -6,7 +6,6 @@ import type { z } from "zod";
 import { StepShell } from "@/components/business-connect/StepShell";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -17,7 +16,7 @@ import {
 import { bcStore, useBCStore } from "@/stores/businessConnectStore";
 import { locationSchema } from "@/lib/bc-schemas";
 import { LANGUAGES, COMM_CHANNELS } from "@/data/businessTypes";
-import { Loader2, MapPin, Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Loader2, MapPin, Check } from "lucide-react";
 import { toast } from "sonner";
 
 type FormValues = z.infer<typeof locationSchema>;
@@ -38,7 +37,6 @@ export default function StepLocation() {
   const [channels, setChannels] = useState<string[]>(storedComms?.channels ?? ["Phone Calls"]);
   const [looking, setLooking] = useState(false);
   const [pinHint, setPinHint] = useState<string | null>(null);
-  const [showPrefs, setShowPrefs] = useState(false);
 
   const {
     register,
@@ -111,7 +109,7 @@ export default function StepLocation() {
         backTo="/business-connect/onboarding/business"
         onNext={handleSubmit(onSubmit)}
       >
-        <div className="space-y-5">
+        <div className="rounded-lg border bg-background p-4 space-y-5">
           {/* Pincode hero */}
           <div className="rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
             <Label className="text-xs font-medium">
@@ -219,77 +217,56 @@ export default function StepLocation() {
             )}
           </div>
 
-          {/* Preferences (collapsed by default) */}
-          <div className="rounded-lg border bg-muted/20">
-            <button
-              type="button"
-              onClick={() => setShowPrefs((v) => !v)}
-              className="flex w-full items-center justify-between px-3 py-2 text-xs font-medium"
-            >
-              <span>
-                Communication preferences
-                <span className="ml-1.5 text-[10px] text-muted-foreground">
-                  ({languages.length} languages · {channels.length} channels)
-                </span>
-              </span>
-              {showPrefs ? (
-                <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" />
-              ) : (
-                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-              )}
-            </button>
-            {showPrefs && (
-              <div className="space-y-3 border-t bg-background p-3">
-                <div>
-                  <Label className="mb-1.5 block text-xs font-medium">
-                    Languages spoken
-                  </Label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {LANGUAGES.map((l) => {
-                      const on = languages.includes(l);
-                      return (
-                        <button
-                          type="button"
-                          key={l}
-                          onClick={() => toggle(languages, setLanguages, l)}
-                          className={`rounded-full border px-2.5 py-1 text-[11px] transition ${
-                            on
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border bg-background text-foreground hover:border-primary/40"
-                          }`}
-                        >
-                          {l}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div>
-                  <Label className="mb-1.5 block text-xs font-medium">
-                    Preferred channels
-                  </Label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {COMM_CHANNELS.map((c) => {
-                      const on = channels.includes(c);
-                      return (
-                        <button
-                          type="button"
-                          key={c}
-                          onClick={() => toggle(channels, setChannels, c)}
-                          className={`rounded-full border px-2.5 py-1 text-[11px] transition ${
-                            on
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border bg-background text-foreground hover:border-primary/40"
-                          }`}
-                        >
-                          {c}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+          {/* Communication preferences */}
+          <div className="space-y-3 border-t pt-3">
+            <div>
+              <Label className="mb-1.5 block text-xs font-medium">
+                Languages spoken
+              </Label>
+              <div className="flex flex-wrap gap-1.5">
+                {LANGUAGES.map((l) => {
+                  const on = languages.includes(l);
+                  return (
+                    <button
+                      type="button"
+                      key={l}
+                      onClick={() => toggle(languages, setLanguages, l)}
+                      className={`rounded-full border px-2.5 py-1 text-[11px] transition ${
+                        on
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-foreground hover:border-primary/40"
+                      }`}
+                    >
+                      {l}
+                    </button>
+                  );
+                })}
               </div>
-            )}
+            </div>
+            <div>
+              <Label className="mb-1.5 block text-xs font-medium">
+                Preferred channels
+              </Label>
+              <div className="flex flex-wrap gap-1.5">
+                {COMM_CHANNELS.map((c) => {
+                  const on = channels.includes(c);
+                  return (
+                    <button
+                      type="button"
+                      key={c}
+                      onClick={() => toggle(channels, setChannels, c)}
+                      className={`rounded-full border px-2.5 py-1 text-[11px] transition ${
+                        on
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-foreground hover:border-primary/40"
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </StepShell>

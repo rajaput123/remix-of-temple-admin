@@ -18,7 +18,6 @@ import { bcStore, useBCStore } from "@/stores/businessConnectStore";
 import { infoSchema } from "@/lib/bc-schemas";
 import { BUSINESS_TYPES } from "@/data/businessTypes";
 import { toast } from "sonner";
-import { ChevronDown, ChevronUp } from "lucide-react";
 
 type FormValues = z.infer<typeof infoSchema>;
 
@@ -28,9 +27,6 @@ export default function StepBusinessInfo() {
   const storedType = useBCStore((s) => s.businessType);
   const [category, setCategory] = useState(storedType?.category ?? "");
   const [subcategory, setSubcategory] = useState(storedType?.subcategory ?? "");
-  const [showMore, setShowMore] = useState(
-    !!(stored?.legalName || stored?.whatsapp || stored?.website || stored?.gst || stored?.experience),
-  );
 
   const selected = BUSINESS_TYPES.find((t) => t.id === category);
 
@@ -70,7 +66,7 @@ export default function StepBusinessInfo() {
         nextLabel="Continue"
         onNext={handleSubmit(onSubmit)}
       >
-        <div className="space-y-4">
+        <div className="rounded-lg border bg-background p-4 space-y-4">
           {/* Row 1: Type + Subcategory + Business Name */}
           <div className="grid gap-3 md:grid-cols-3">
             <div className="space-y-1.5">
@@ -168,60 +164,42 @@ export default function StepBusinessInfo() {
             </div>
           </div>
 
-          {/* Optional, collapsible */}
-          <div className="rounded-lg border bg-muted/20">
-            <button
-              type="button"
-              onClick={() => setShowMore((v) => !v)}
-              className="flex w-full items-center justify-between px-3 py-2 text-xs font-medium text-foreground"
-            >
-              <span>Add more details (optional)</span>
-              {showMore ? (
-                <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" />
-              ) : (
-                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-              )}
-            </button>
-            {showMore && (
-              <div className="space-y-3 border-t bg-background p-3">
-                <div className="grid gap-3 md:grid-cols-3">
-                  <div className="space-y-1.5">
-                    <Label className="text-xs font-medium">Legal business name</Label>
-                    <Input className="h-10 text-sm" {...register("legalName")} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs font-medium">WhatsApp number</Label>
-                    <Input
-                      className="h-10 text-sm"
-                      inputMode="numeric"
-                      maxLength={10}
-                      {...register("whatsapp")}
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs font-medium">Years of experience</Label>
-                    <Input className="h-10 text-sm" placeholder="e.g. 8" {...register("experience")} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs font-medium">Website URL</Label>
-                    <Input className="h-10 text-sm" placeholder="https://" {...register("website")} />
-                  </div>
-                  <div className="space-y-1.5 md:col-span-2">
-                    <Label className="text-xs font-medium">GST number</Label>
-                    <Input className="h-10 text-sm" placeholder="Optional" {...register("gst")} />
-                  </div>
-                  <div className="space-y-1.5 md:col-span-3">
-                    <Label className="text-xs font-medium">Short description</Label>
-                    <Textarea
-                      rows={2}
-                      className="text-sm"
-                      placeholder="A short intro devotees will see on your profile."
-                      {...register("description")}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+          {/* Optional details */}
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Legal business name</Label>
+              <Input className="h-10 text-sm" {...register("legalName")} />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">WhatsApp number</Label>
+              <Input
+                className="h-10 text-sm"
+                inputMode="numeric"
+                maxLength={10}
+                {...register("whatsapp")}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Years of experience</Label>
+              <Input className="h-10 text-sm" placeholder="e.g. 8" {...register("experience")} />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Website URL</Label>
+              <Input className="h-10 text-sm" placeholder="https://" {...register("website")} />
+            </div>
+            <div className="space-y-1.5 md:col-span-2">
+              <Label className="text-xs font-medium">GST number</Label>
+              <Input className="h-10 text-sm" placeholder="Optional" {...register("gst")} />
+            </div>
+            <div className="space-y-1.5 md:col-span-3">
+              <Label className="text-xs font-medium">Short description</Label>
+              <Textarea
+                rows={2}
+                className="text-sm"
+                placeholder="A short intro devotees will see on your profile."
+                {...register("description")}
+              />
+            </div>
           </div>
         </div>
       </StepShell>
