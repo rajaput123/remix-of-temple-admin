@@ -47,7 +47,7 @@ export default function StepLocation() {
   });
 
   function onSubmit(v: FormValues) {
-    bcStore.set({ location: v });
+    bcStore.set({ location: v as unknown as import("@/types/businessConnect").BCLocation });
     bcStore.markStep("location");
     navigate("/business-connect/onboarding/languages");
   }
