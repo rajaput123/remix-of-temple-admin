@@ -18,13 +18,16 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    preparePostLoginOnboarding();
-    navigate(getPostLoginRoute());
+    navigate("/temple-hub");
   };
 
   const handleGoogle = () => {
     preparePostLoginOnboarding();
     navigate(getPostLoginRoute());
+  };
+
+  const handleBypass = () => {
+    navigate("/temple-hub");
   };
 
   return (
