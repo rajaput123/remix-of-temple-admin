@@ -12,8 +12,9 @@ export default function BCOnboardingLayout() {
 
   const current = useMemo(() => {
     const parts = location.pathname.split("/");
-    return parts[parts.length - 1] || "type";
+    return parts[parts.length - 1] || "business";
   }, [location.pathname]);
+
 
   useEffect(() => {
     if (!account.verified) navigate("/business-connect/auth", { replace: true });
