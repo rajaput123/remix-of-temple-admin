@@ -100,7 +100,7 @@ const tenantData = {
 // Categories: setup (Setup & Visibility), operations (Daily Operations), insights (Finance & Insights)
 const allModules = [
   // Setup & Visibility
-  { id: "business-profile", title: "Business Profile", icon: Building2, enabled: true, path: "/business-connect/profile",
+  { id: "business-profile", title: "Business Profile", icon: Building2, enabled: true, path: "/business/profile",
     description: "Onboarding, verification, hours, service areas & marketplace visibility", category: "setup",
     gradient: "from-[hsl(220,70%,50%)] to-[hsl(220,65%,40%)]", bgTint: "bg-[hsl(220,60%,96%)]" },
   { id: "service-listings", title: "Service Listings", icon: Sparkles, enabled: true, path: "/business-connect/services",
