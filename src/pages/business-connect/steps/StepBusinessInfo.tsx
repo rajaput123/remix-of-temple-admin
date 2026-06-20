@@ -18,7 +18,6 @@ import { bcStore, useBCStore } from "@/stores/businessConnectStore";
 import { infoSchema } from "@/lib/bc-schemas";
 import { BUSINESS_TYPES } from "@/data/businessTypes";
 import { toast } from "sonner";
-import { ChevronDown, ChevronUp } from "lucide-react";
 
 type FormValues = z.infer<typeof infoSchema>;
 
