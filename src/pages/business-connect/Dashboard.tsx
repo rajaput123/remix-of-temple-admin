@@ -111,7 +111,7 @@ export default function BCDashboard() {
                 {state.subscription?.plan ?? "trial"}
               </div>
               <Button asChild variant="link" size="sm" className="h-auto p-0 text-xs">
-                <Link to="/business-connect/onboarding/subscription">Change plan</Link>
+                <Link to="/business-connect/onboarding/plan">Change plan</Link>
               </Button>
             </CardContent>
           </Card>
@@ -176,7 +176,7 @@ export default function BCDashboard() {
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full justify-start">
-                <Link to="/business-connect/onboarding/gallery">
+                <Link to="/business-connect/onboarding/plan">
                   <ImageIcon className="mr-2 h-4 w-4" /> Manage gallery
                 </Link>
               </Button>
