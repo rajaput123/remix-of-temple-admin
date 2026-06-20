@@ -119,7 +119,7 @@ export default function StepLocation() {
             </Label>
             <div className="mt-1.5 flex gap-2">
               <Input
-                className="h-10 text-base font-medium tracking-wider"
+                className="h-10 text-sm tracking-wider"
                 inputMode="numeric"
                 maxLength={6}
                 placeholder="6-digit pincode"
