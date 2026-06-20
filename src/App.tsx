@@ -29,6 +29,8 @@ import StepComplete from "./pages/business-connect/steps/StepComplete";
 import BCDashboard from "./pages/business-connect/Dashboard";
 import BCProfile from "./pages/business-connect/Profile";
 import BusinessProfilePage from "./pages/business/BusinessProfilePage";
+import BusinessWebsitePage from "./pages/business/BusinessWebsitePage";
+import BusinessProfileLayout from "./pages/business/BusinessProfileLayout";
 import BCExplore from "./pages/business-connect/Explore";
 import Profile from "./pages/Profile";
 // Temple Admin Module Layouts
@@ -328,9 +330,11 @@ const App = () => {
             <Route path="/business-hub" element={<BusinessHub />} />
             <Route path="/temple/ui-kit" element={<UIKit />} />
 
-            {/* Business Profile Module — single page with accordion */}
-            <Route path="/business/profile" element={<BusinessProfilePage />} />
-            <Route path="/business/profile/*" element={<BusinessProfilePage />} />
+            {/* Business module — sidebar with Profile + Website */}
+            <Route path="/business/profile" element={<BusinessProfileLayout />}>
+              <Route index element={<BusinessProfilePage />} />
+              <Route path="website" element={<BusinessWebsitePage />} />
+            </Route>
 
             {/* Temple Info Module */}
             <Route path="/temple/info" element={<TempleInfoLayout />}>
