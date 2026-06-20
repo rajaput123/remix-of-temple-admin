@@ -671,7 +671,7 @@ const TempleHub = () => {
                     <cat.icon className="h-4 w-4 text-primary" />
                     <h2 className="text-sm font-semibold tracking-wide text-foreground">{cat.label}</h2>
                     <div className="flex-1 h-px ml-2 bg-border" />
-                    {cat.key === "temple" && (
+                    {cat.key === "setup" && (
                       <button
                         onClick={() => setIconStyle(iconStyle === "glass" ? "filled" : "glass")}
                         className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
