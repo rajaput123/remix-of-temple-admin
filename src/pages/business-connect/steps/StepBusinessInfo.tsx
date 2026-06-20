@@ -72,8 +72,8 @@ export default function StepBusinessInfo() {
       >
         <div className="space-y-5">
           {/* Business type */}
-          <div className="grid gap-3 md:grid-cols-2">
-            <div className="space-y-1.5">
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="space-y-1.5 md:col-span-2">
               <Label className="text-xs font-medium">
                 Business type <span className="text-destructive">*</span>
               </Label>
