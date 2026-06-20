@@ -243,7 +243,7 @@ function ProfileFormDialog({
                 className="group relative flex shrink-0 items-center justify-start gap-2 rounded-md px-3 py-2 text-xs font-medium data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm"
               >
                 <t.icon className="h-3.5 w-3.5" />
-                <span className="truncate hidden sm:inline">{t.label}</span>
+                <span className="truncate">{t.label}</span>
                 <span className={`ml-auto h-1.5 w-1.5 shrink-0 rounded-full ${t.done ? "bg-emerald-500" : "bg-amber-400"}`} />
               </TabsTrigger>
             ))}
