@@ -129,7 +129,7 @@ export default function StepBusinessInfo() {
               )}
             </div>
 
-            <div className="grid gap-3 md:grid-cols-2">
+            <div className="grid gap-3 md:grid-cols-3">
               <div className="space-y-1.5">
                 <Label className="text-xs font-medium">
                   Owner name <span className="text-destructive">*</span>
@@ -154,21 +154,20 @@ export default function StepBusinessInfo() {
                   <p className="text-[11px] text-destructive">{errors.phone.message as string}</p>
                 )}
               </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium">
-                Email address <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                className="h-10 text-sm"
-                type="email"
-                placeholder="you@example.com"
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-[11px] text-destructive">{errors.email.message as string}</p>
-              )}
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium">
+                  Email address <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  className="h-10 text-sm"
+                  type="email"
+                  placeholder="you@example.com"
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <p className="text-[11px] text-destructive">{errors.email.message as string}</p>
+                )}
+              </div>
             </div>
           </div>
 
