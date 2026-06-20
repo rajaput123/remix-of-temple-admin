@@ -241,7 +241,7 @@ export default function StepLocation() {
             {showPrefs && (
               <div className="space-y-3 border-t bg-background p-3">
                 <div>
-                  <Label className="mb-1.5 block text-[11px] font-medium text-muted-foreground">
+                  <Label className="mb-1.5 block text-xs font-medium">
                     Languages spoken
                   </Label>
                   <div className="flex flex-wrap gap-1.5">
