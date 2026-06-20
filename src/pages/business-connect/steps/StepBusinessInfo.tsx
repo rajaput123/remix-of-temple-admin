@@ -70,10 +70,10 @@ export default function StepBusinessInfo() {
         nextLabel="Continue"
         onNext={handleSubmit(onSubmit)}
       >
-        <div className="space-y-5">
-          {/* Business type */}
+        <div className="space-y-4">
+          {/* Row 1: Type + Subcategory + Business Name */}
           <div className="grid gap-3 md:grid-cols-3">
-            <div className="space-y-1.5 md:col-span-2">
+            <div className="space-y-1.5">
               <Label className="text-xs font-medium">
                 Business type <span className="text-destructive">*</span>
               </Label>
@@ -111,10 +111,6 @@ export default function StepBusinessInfo() {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          {/* Essentials */}
-          <div className="space-y-3">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">
                 Business name <span className="text-destructive">*</span>
@@ -128,46 +124,47 @@ export default function StepBusinessInfo() {
                 <p className="text-[11px] text-destructive">{errors.name.message as string}</p>
               )}
             </div>
+          </div>
 
-            <div className="grid gap-3 md:grid-cols-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium">
-                  Owner name <span className="text-destructive">*</span>
-                </Label>
-                <Input className="h-10 text-sm" {...register("ownerName")} />
-                {errors.ownerName && (
-                  <p className="text-[11px] text-destructive">{errors.ownerName.message as string}</p>
-                )}
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium">
-                  Contact number <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  className="h-10 text-sm"
-                  inputMode="numeric"
-                  maxLength={10}
-                  placeholder="10-digit mobile"
-                  {...register("phone")}
-                />
-                {errors.phone && (
-                  <p className="text-[11px] text-destructive">{errors.phone.message as string}</p>
-                )}
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium">
-                  Email address <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  className="h-10 text-sm"
-                  type="email"
-                  placeholder="you@example.com"
-                  {...register("email")}
-                />
-                {errors.email && (
-                  <p className="text-[11px] text-destructive">{errors.email.message as string}</p>
-                )}
-              </div>
+          {/* Row 2: Owner + Phone + Email */}
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">
+                Owner name <span className="text-destructive">*</span>
+              </Label>
+              <Input className="h-10 text-sm" {...register("ownerName")} />
+              {errors.ownerName && (
+                <p className="text-[11px] text-destructive">{errors.ownerName.message as string}</p>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">
+                Contact number <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                className="h-10 text-sm"
+                inputMode="numeric"
+                maxLength={10}
+                placeholder="10-digit mobile"
+                {...register("phone")}
+              />
+              {errors.phone && (
+                <p className="text-[11px] text-destructive">{errors.phone.message as string}</p>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">
+                Email address <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                className="h-10 text-sm"
+                type="email"
+                placeholder="you@example.com"
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-[11px] text-destructive">{errors.email.message as string}</p>
+              )}
             </div>
           </div>
 
@@ -187,16 +184,7 @@ export default function StepBusinessInfo() {
             </button>
             {showMore && (
               <div className="space-y-3 border-t bg-background p-3">
-                <div className="space-y-1.5">
-                  <Label className="text-xs">Short description</Label>
-                  <Textarea
-                    rows={2}
-                    className="text-sm"
-                    placeholder="A short intro devotees will see on your profile."
-                    {...register("description")}
-                  />
-                </div>
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid gap-3 md:grid-cols-3">
                   <div className="space-y-1.5">
                     <Label className="text-xs">Legal business name</Label>
                     <Input className="h-9 text-sm" {...register("legalName")} />
@@ -221,6 +209,15 @@ export default function StepBusinessInfo() {
                   <div className="space-y-1.5 md:col-span-2">
                     <Label className="text-xs">GST number</Label>
                     <Input className="h-9 text-sm" placeholder="Optional" {...register("gst")} />
+                  </div>
+                  <div className="space-y-1.5 md:col-span-3">
+                    <Label className="text-xs">Short description</Label>
+                    <Textarea
+                      rows={2}
+                      className="text-sm"
+                      placeholder="A short intro devotees will see on your profile."
+                      {...register("description")}
+                    />
                   </div>
                 </div>
               </div>
