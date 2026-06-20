@@ -164,7 +164,7 @@ const Login = () => {
             <p className="text-center text-sm text-slate-500 mt-6">
               Don't have an account?{" "}
               <button
-                onClick={() => navigate("/temple-register")}
+                onClick={() => navigate("/business-connect/auth?mode=register")}
                 className="text-[#2563eb] font-medium hover:underline"
               >
                 Create one
