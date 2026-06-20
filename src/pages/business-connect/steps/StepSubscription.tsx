@@ -38,10 +38,10 @@ export default function StepSubscription() {
       onNext={next}
       nextLabel="Continue"
     >
-      <div className="space-y-8">
-        <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-muted-foreground">Profile media</h2>
-          <div className="grid gap-4 md:grid-cols-2">
+      <div className="space-y-4">
+        <section className="space-y-2">
+          <h2 className="text-xs font-semibold text-muted-foreground">Profile media</h2>
+          <div className="grid gap-3 md:grid-cols-2">
             <FileDropzone
               label="Business logo"
               hint="Recommended"
@@ -62,9 +62,9 @@ export default function StepSubscription() {
           </div>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-muted-foreground">Choose your plan</h2>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section className="space-y-2">
+          <h2 className="text-xs font-semibold text-muted-foreground">Choose your plan</h2>
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {PLANS.map((p) => (
               <PlanCard key={p.id} plan={p} selected={plan === p.id} onSelect={() => setPlan(p.id)} />
             ))}
