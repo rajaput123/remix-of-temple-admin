@@ -66,6 +66,7 @@ export default function StepBusinessInfo() {
       <StepShell
         title="Tell us about your business"
         subtitle="Just the essentials to get started — you can refine later."
+        backTo="/business-connect/auth"
         nextLabel="Continue"
         onNext={handleSubmit(onSubmit)}
       >
