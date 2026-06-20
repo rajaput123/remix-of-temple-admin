@@ -29,7 +29,7 @@ export default function StepBusinessInfo() {
   });
 
   function onSubmit(values: FormValues) {
-    bcStore.set({ info: values });
+    bcStore.set({ info: values as unknown as import("@/types/businessConnect").BCInfo });
     bcStore.markStep("info");
     navigate("/business-connect/onboarding/location");
   }
