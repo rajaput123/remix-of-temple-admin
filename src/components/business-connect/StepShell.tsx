@@ -23,7 +23,7 @@ export function StepShell({
 }: Props) {
   return (
     <div className="flex h-full flex-col">
-      <header className="shrink-0 border-b px-5 py-4 md:px-7 md:py-5">
+      <header className="shrink-0 px-5 py-4 md:px-7 md:py-5">
         <h1 className="text-lg font-semibold tracking-tight md:text-xl">{title}</h1>
         {subtitle && (
           <p className="mt-0.5 text-xs text-muted-foreground md:text-[13px]">{subtitle}</p>
@@ -32,7 +32,7 @@ export function StepShell({
       <div className="flex-1 overflow-y-auto px-5 py-4 md:px-7 md:py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {children}
       </div>
-      <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 border-t bg-muted/20 px-5 py-3 md:px-7">
+      <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-5 py-3 md:px-7">
         {backTo ? (
           <Button asChild variant="ghost" size="sm">
             <Link to={backTo}>
