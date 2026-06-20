@@ -9,6 +9,7 @@ import ForgotMpin from "./pages/ForgotMpin";
 import TempleRegister from "./pages/TempleRegister";
 import Pricing from "./pages/Pricing";
 import TempleHub from "./pages/TempleHub";
+import BusinessHub from "./pages/BusinessHub";
 import ApplicationStatus from "./pages/ApplicationStatus";
 import FirstLoginSetup from "./pages/FirstLoginSetup";
 import Welcome from "./pages/Welcome";
@@ -322,7 +323,9 @@ const App = () => {
 
 
             {/* Temple Admin Routes */}
-            <Route path="/temple-hub" element={<TempleHub />} />
+            <Route path="/temple-hub" element={<BusinessHub />} />
+            <Route path="/business-hub" element={<BusinessHub />} />
+            <Route path="/temple-hub-legacy" element={<TempleHub />} />
             <Route path="/temple/ui-kit" element={<UIKit />} />
 
             {/* Temple Info Module */}
