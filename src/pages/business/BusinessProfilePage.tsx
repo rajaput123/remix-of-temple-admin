@@ -225,9 +225,9 @@ function ProfileFormDialog({
           <Progress value={completion} className="mt-3 h-1.5" />
         </DialogHeader>
 
-        <Tabs defaultValue="basic" className="flex flex-1 flex-col overflow-hidden sm:flex-row">
-          {/* Tab rail */}
-          <TabsList className="flex h-auto w-full shrink-0 flex-row gap-1 overflow-x-auto rounded-none border-b bg-muted/30 p-2 sm:w-56 sm:flex-col sm:border-b-0 sm:border-r sm:overflow-y-auto">
+        <Tabs defaultValue="basic" className="flex flex-1 flex-col overflow-hidden">
+          {/* Horizontal Tab rail */}
+          <TabsList className="flex h-auto w-full shrink-0 flex-row gap-1 overflow-x-auto rounded-none border-b bg-muted/30 p-2">
             {[
               { v: "basic", icon: Building2, label: "Basic Info", done: sec.basic },
               { v: "owner", icon: User, label: "Owner", done: sec.owner },
@@ -240,10 +240,10 @@ function ProfileFormDialog({
               <TabsTrigger
                 key={t.v}
                 value={t.v}
-                className="group relative flex shrink-0 items-center justify-start gap-2 rounded-md px-3 py-2 text-xs font-medium data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm sm:w-full"
+                className="group relative flex shrink-0 items-center justify-start gap-2 rounded-md px-3 py-2 text-xs font-medium data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm"
               >
                 <t.icon className="h-3.5 w-3.5" />
-                <span className="truncate">{t.label}</span>
+                <span className="truncate hidden sm:inline">{t.label}</span>
                 <span className={`ml-auto h-1.5 w-1.5 shrink-0 rounded-full ${t.done ? "bg-emerald-500" : "bg-amber-400"}`} />
               </TabsTrigger>
             ))}
