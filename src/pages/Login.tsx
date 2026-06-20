@@ -1,12 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import heroImage from "@/assets/hero-temple.jpg";
 import { getPostLoginRoute, preparePostLoginOnboarding } from "@/lib/onboardingFlow";
 
 type LoginRole = "super-admin" | "temple-admin";
@@ -17,7 +13,8 @@ const Login = () => {
   const roleParam = searchParams.get("role") as LoginRole | null;
   const role: LoginRole = roleParam === "temple-admin" ? "temple-admin" : "super-admin";
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [mpin, setMpin] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,141 +22,164 @@ const Login = () => {
     navigate(getPostLoginRoute());
   };
 
-  const isTemple = role === "temple-admin";
+  const handleGoogle = () => {
+    preparePostLoginOnboarding();
+    navigate(getPostLoginRoute());
+  };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left Panel */}
-      <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center p-12">
-        <img src={heroImage} alt="Temple" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/30" />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="relative z-10 max-w-md text-center"
+    <div className="min-h-screen flex flex-col bg-[#f7f8fb] text-slate-900 relative overflow-hidden">
+      {/* Grid background */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(15,23,42,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.05) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage:
+            "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+        }}
+      />
+      {/* Soft gradient wash */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white via-[#f7f8fb] to-[#eef2ff]"
+      />
+
+      {/* Top bar */}
+      <header className="relative z-10 flex items-center justify-between px-6 sm:px-10 py-5">
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2.5 group"
         >
-          <div className="mb-8">
-            <h1 className="text-5xl font-bold text-white mb-2 tracking-tight">Digi Devalaya</h1>
-            <div className="w-12 h-0.5 bg-white/60 mx-auto" />
-          </div>
-          <h2 className="text-2xl font-semibold text-white/95 mb-4">
-            Digital Governance for Temples
-          </h2>
-          <p className="text-white/75 text-base leading-relaxed">
-            {isTemple
-              ? "Manage your temple operations digitally"
-              : "Manage temple directory and onboarding at scale"
-            }
-          </p>
-          <div className="mt-12 flex items-center justify-center gap-8 text-white/50 text-sm">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white/80">10K+</div>
-              <div>Temples</div>
-            </div>
-            <div className="w-px h-10 bg-white/20" />
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white/80">500+</div>
-              <div>Organizations</div>
-            </div>
-            <div className="w-px h-10 bg-white/20" />
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white/80">99.9%</div>
-              <div>Uptime</div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#2563eb] shadow-sm">
+            <span className="block h-3.5 w-3.5 rounded-sm bg-white/90" />
+          </span>
+          <span className="text-[15px] font-semibold tracking-tight">
+            Digi Devalaya <span className="font-normal text-slate-500">Business</span>
+          </span>
+        </button>
 
-      {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 bg-background">
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="w-full max-w-md"
-        >
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to website
-          </button>
+        <div className="hidden sm:flex items-center gap-4 text-[11px] font-mono uppercase tracking-wider text-slate-500">
+          <span className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]" />
+            All Systems Operational
+          </span>
+          <span className="text-slate-300">·</span>
+          <span>v2.4.1</span>
+          <span className="text-slate-300">·</span>
+          <span>EU-WEST</span>
+        </div>
+      </header>
 
-          <div className="lg:hidden text-center mb-8">
-            <h1 className="text-3xl font-bold text-primary">Digi Devalaya</h1>
-            <p className="text-sm text-muted-foreground mt-1">Digital Governance for Temples</p>
-          </div>
-
-          <div className="bg-card rounded-2xl card-shadow-lg p-8">
-            <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-foreground">
-                {isTemple ? "Temple Login" : "Welcome back"}
-              </h2>
-              <p className="text-muted-foreground text-sm mt-1">
-                {isTemple
-                  ? "Access your temple management dashboard"
-                  : "Sign in to your admin dashboard"
-                }
+      {/* Main card */}
+      <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-md">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-[0_10px_40px_-12px_rgba(15,23,42,0.12)] p-8 sm:p-10">
+            <div className="text-center mb-7">
+              <h1 className="text-[22px] font-semibold tracking-tight text-slate-900">
+                Sign in to your workspace
+              </h1>
+              <p className="text-sm text-slate-500 mt-1.5">
+                Use your mobile number and MPIN to continue.
               </p>
+            </div>
+
+            {/* Google */}
+            <button
+              type="button"
+              onClick={handleGoogle}
+              className="w-full h-11 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center gap-2.5 text-sm font-medium text-slate-700 shadow-sm"
+            >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden>
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.07 5.07 0 0 1-2.2 3.32v2.77h3.56c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.65l-3.56-2.77c-.99.66-2.26 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.11A6.6 6.6 0 0 1 5.5 12c0-.73.13-1.44.34-2.11V7.05H2.18A11 11 0 0 0 1 12c0 1.77.42 3.45 1.18 4.95l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.05l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
+              </svg>
+              Continue with Google
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-6">
+              <div className="h-px flex-1 bg-slate-200" />
+              <span className="text-[10px] font-medium tracking-[0.14em] text-slate-400">
+                OR WITH MOBILE
+              </span>
+              <div className="h-px flex-1 bg-slate-200" />
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="mobile">Mobile Number</Label>
-                <div className="flex">
-                  <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-input bg-muted text-muted-foreground text-sm">
-                    +91
-                  </span>
-                  <Input id="mobile" type="tel" placeholder="98765 43210" className="h-10 rounded-l-none" />
-                </div>
+              <div className="space-y-1.5">
+                <label htmlFor="phone" className="block text-[11px] font-semibold tracking-wider text-slate-500">
+                  PHONE NO
+                </label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="98765 43210"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="h-11 rounded-lg border-slate-200 bg-white focus-visible:ring-[#2563eb]/20 focus-visible:border-[#2563eb] text-[15px]"
+                />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="mpin">MPIN</Label>
-                <div className="relative">
-                  <Input
-                    id="mpin"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••"
-                    className="h-10 pr-10 tracking-widest text-center"
-                    maxLength={4}
-                  />
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="mpin" className="block text-[11px] font-semibold tracking-wider text-slate-500">
+                    MPIN
+                  </label>
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    onClick={() => navigate("/forgot-mpin")}
+                    className="text-[12px] font-medium text-[#2563eb] hover:underline"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    Forgot?
                   </button>
                 </div>
+                <Input
+                  id="mpin"
+                  type="password"
+                  inputMode="numeric"
+                  maxLength={4}
+                  placeholder="Enter 4-digit MPIN"
+                  value={mpin}
+                  onChange={(e) => setMpin(e.target.value.replace(/\D/g, ""))}
+                  className="h-11 rounded-lg border-slate-200 bg-white focus-visible:ring-[#2563eb]/20 focus-visible:border-[#2563eb] text-[15px]"
+                />
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Checkbox id="remember" />
-                  <Label htmlFor="remember" className="text-sm font-normal cursor-pointer">Remember me</Label>
-                </div>
-                <button type="button" onClick={() => navigate("/forgot-mpin")} className="text-sm text-primary hover:text-accent transition-colors">
-                  Forgot MPIN?
-                </button>
-              </div>
-
-              <Button type="submit" className="w-full h-10 font-medium">Sign In</Button>
+              <Button
+                type="submit"
+                className="w-full h-11 rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-medium shadow-sm gap-2"
+              >
+                Sign in <ArrowRight className="h-4 w-4" />
+              </Button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground">
-                {isTemple ? "New temple?" : "Don't have an account?"}{" "}
-                <button onClick={() => navigate("/temple-register")} className="text-primary hover:text-accent font-medium transition-colors">
-                  Register your temple
-                </button>
-              </p>
-            </div>
+            <p className="text-center text-sm text-slate-500 mt-6">
+              Don't have an account?{" "}
+              <button
+                onClick={() => navigate("/temple-register")}
+                className="text-[#2563eb] font-medium hover:underline"
+              >
+                Create one
+              </button>
+            </p>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-2 px-6 sm:px-10 py-5 text-[12px] text-slate-500">
+        <span>© Keehoo Industries · Enterprise platform</span>
+        <span>Trusted across 84 entities · 23 countries</span>
+        <span className="sr-only">{role}</span>
+      </footer>
     </div>
   );
 };
