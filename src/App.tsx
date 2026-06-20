@@ -323,9 +323,8 @@ const App = () => {
 
 
             {/* Temple Admin Routes */}
-            <Route path="/temple-hub" element={<BusinessHub />} />
+            <Route path="/temple-hub" element={<TempleHub />} />
             <Route path="/business-hub" element={<BusinessHub />} />
-            <Route path="/temple-hub-legacy" element={<TempleHub />} />
             <Route path="/temple/ui-kit" element={<UIKit />} />
 
             {/* Temple Info Module */}
