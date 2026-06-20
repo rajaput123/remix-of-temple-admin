@@ -9,22 +9,22 @@ export default function StepComplete() {
   const completion = computeCompletion(state);
 
   return (
-    <Card className="border-primary/30">
-      <CardContent className="space-y-5 p-8 text-center">
-        <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-primary/10 text-primary">
-          <CheckCircle2 className="h-7 w-7" />
+    <Card className="h-full border-primary/30">
+      <CardContent className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
+        <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
+          <CheckCircle2 className="h-6 w-6" />
         </span>
         <div>
-          <h1 className="text-2xl font-bold md:text-3xl">Congratulations!</h1>
-          <p className="mt-1 text-muted-foreground">
+          <h1 className="text-xl font-bold md:text-2xl">Congratulations!</h1>
+          <p className="mt-0.5 text-sm text-muted-foreground">
             Your business profile has been created successfully.
           </p>
         </div>
 
-        <div className="mx-auto max-w-sm rounded-lg border bg-muted/30 p-4 text-left">
-          <div className="text-xs uppercase tracking-wider text-muted-foreground">Business</div>
-          <div className="mt-1 font-semibold">{state.info?.name ?? "Your business"}</div>
-          <div className="mt-3 text-xs uppercase tracking-wider text-muted-foreground">
+        <div className="mx-auto w-full max-w-sm rounded-lg border bg-muted/30 p-3 text-left">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Business</div>
+          <div className="mt-0.5 text-sm font-semibold">{state.info?.name ?? "Your business"}</div>
+          <div className="mt-2 text-[10px] uppercase tracking-wider text-muted-foreground">
             Profile completion
           </div>
           <div className="mt-1 flex items-center gap-3">
@@ -34,15 +34,15 @@ export default function StepComplete() {
                 style={{ width: `${completion}%` }}
               />
             </div>
-            <span className="text-sm font-semibold">{completion}%</span>
+            <span className="text-xs font-semibold">{completion}%</span>
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3">
-          <Button asChild>
+        <div className="flex flex-wrap justify-center gap-2">
+          <Button size="sm" asChild>
             <Link to="/business-connect/dashboard">Go to dashboard</Link>
           </Button>
-          <Button asChild variant="outline">
+          <Button size="sm" asChild variant="outline">
             <Link to="/business-connect/profile">View profile</Link>
           </Button>
         </div>

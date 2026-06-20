@@ -25,7 +25,7 @@ export function WizardStepper({
   const currentIdx = ONBOARDING_STEPS.findIndex((s) => s.id === currentId);
   return (
     <div className="w-full overflow-x-auto">
-      <ol className="flex min-w-max items-center gap-2 px-1 py-3">
+      <ol className="flex min-w-max items-center gap-2 px-1 py-2">
         {ONBOARDING_STEPS.map((step, i) => {
           const isDone = completed.includes(step.id) || i < currentIdx;
           const isCurrent = step.id === currentId;
@@ -33,13 +33,13 @@ export function WizardStepper({
             <li key={step.id} className="flex items-center gap-2">
               <div
                 className={cn(
-                  "grid h-7 w-7 place-items-center rounded-full border text-xs font-semibold",
+                  "grid h-6 w-6 place-items-center rounded-full border text-[10px] font-semibold",
                   isCurrent && "border-primary bg-primary text-primary-foreground",
                   !isCurrent && isDone && "border-primary bg-primary/10 text-primary",
                   !isCurrent && !isDone && "border-muted text-muted-foreground",
                 )}
               >
-                {isDone && !isCurrent ? <Check className="h-3.5 w-3.5" /> : i + 1}
+                {isDone && !isCurrent ? <Check className="h-3 w-3" /> : i + 1}
               </div>
               <span
                 className={cn(

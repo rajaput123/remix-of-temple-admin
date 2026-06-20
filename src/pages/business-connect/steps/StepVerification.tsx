@@ -52,31 +52,32 @@ export default function StepVerification() {
       subtitle="Verified businesses get a badge and rank higher in search. You can skip for now."
       backTo="/business-connect/onboarding/location"
       rightSlot={
-        <Button variant="ghost" onClick={() => save("skipped")}>
+        <Button variant="ghost" size="sm" onClick={() => save("skipped")}>
           Skip for now
         </Button>
       }
       onNext={() => save(docs.length > 0 ? "review" : "pending")}
     >
-
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center justify-between rounded-md border bg-muted/30 px-3 py-2">
-          <span className="text-sm text-muted-foreground">Current status</span>
+          <span className="text-xs text-muted-foreground">Current status</span>
           <VerificationBadge status={status} />
         </div>
 
-        <section className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-1.5">
-            <Label>Aadhaar number</Label>
+        <section className="grid gap-3 md:grid-cols-2">
+          <div className="space-y-1">
+            <Label className="text-xs">Aadhaar number</Label>
             <Input
+              className="h-9 text-sm"
               placeholder="XXXX XXXX XXXX"
               value={aadhaar}
               onChange={(e) => setAadhaar(e.target.value)}
             />
           </div>
-          <div className="space-y-1.5">
-            <Label>PAN number</Label>
+          <div className="space-y-1">
+            <Label className="text-xs">PAN number</Label>
             <Input
+              className="h-9 text-sm"
               placeholder="ABCDE1234F"
               value={pan}
               onChange={(e) => setPan(e.target.value.toUpperCase())}
@@ -84,19 +85,21 @@ export default function StepVerification() {
           </div>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-muted-foreground">Document uploads</h2>
-          {SLOTS.map((slot) => (
-            <FileDropzone
-              key={slot.type}
-              label={slot.label}
-              hint={slot.type === "other" ? "Optional" : ""}
-              multiple={slot.type === "other"}
-              max={slot.type === "other" ? 6 : 1}
-              values={docs.filter((d) => d.type === slot.type).map((d) => d.dataUrl)}
-              onChange={(urls) => setDocsFor(slot.type, urls)}
-            />
-          ))}
+        <section>
+          <h2 className="mb-2 text-xs font-semibold text-muted-foreground">Document uploads</h2>
+          <div className="grid gap-3 md:grid-cols-2">
+            {SLOTS.map((slot) => (
+              <FileDropzone
+                key={slot.type}
+                label={slot.label}
+                hint={slot.type === "other" ? "Optional" : ""}
+                multiple={slot.type === "other"}
+                max={slot.type === "other" ? 6 : 1}
+                values={docs.filter((d) => d.type === slot.type).map((d) => d.dataUrl)}
+                onChange={(urls) => setDocsFor(slot.type, urls)}
+              />
+            ))}
+          </div>
         </section>
       </div>
     </StepShell>

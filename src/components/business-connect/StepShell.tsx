@@ -22,15 +22,17 @@ export function StepShell({
   rightSlot,
 }: Props) {
   return (
-    <div className="space-y-6">
-      <header>
-        <h1 className="text-2xl font-bold tracking-tight md:text-3xl">{title}</h1>
-        {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
+    <div className="flex h-full flex-col gap-3">
+      <header className="shrink-0">
+        <h1 className="text-xl font-bold tracking-tight md:text-2xl">{title}</h1>
+        {subtitle && <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>}
       </header>
-      <div className="rounded-xl border bg-card p-5 md:p-6">{children}</div>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex-1 overflow-y-auto rounded-xl border bg-card p-3 md:p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {children}
+      </div>
+      <div className="shrink-0 flex flex-wrap items-center justify-between gap-2">
         {backTo ? (
-          <Button asChild variant="ghost">
+          <Button asChild variant="ghost" size="sm">
             <Link to={backTo}>
               <ArrowLeft className="mr-1 h-4 w-4" /> Back
             </Link>
@@ -41,7 +43,7 @@ export function StepShell({
         <div className="flex items-center gap-2">
           {rightSlot}
           {onNext && (
-            <Button onClick={onNext}>
+            <Button size="sm" onClick={onNext}>
               {nextLabel} <ArrowRight className="ml-1 h-4 w-4" />
             </Button>
           )}

@@ -117,23 +117,24 @@ export default function StepLocation() {
     ) : null;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="h-full">
       <StepShell
         title="Address & communication"
         subtitle="Enter your pincode first — we'll auto-fill the rest."
         backTo="/business-connect/onboarding/business"
         onNext={handleSubmit(onSubmit)}
       >
-        <div className="space-y-6">
-          <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-muted-foreground">Business address</h2>
+        <div className="space-y-4">
+          <section className="space-y-2">
+            <h2 className="text-xs font-semibold text-muted-foreground">Business address</h2>
 
-            <div className="rounded-lg border bg-primary/5 p-3">
-              <Label className="text-sm font-medium">
+            <div className="rounded-lg border bg-primary/5 p-2">
+              <Label className="text-xs font-medium">
                 Pincode <span className="text-destructive">*</span>
               </Label>
-              <div className="mt-1.5 flex gap-2">
+              <div className="mt-1 flex gap-2">
                 <Input
+                  className="h-9 text-sm"
                   inputMode="numeric"
                   maxLength={6}
                   placeholder="Enter 6-digit pincode"
@@ -148,76 +149,76 @@ export default function StepLocation() {
                   type="button"
                   onClick={() => lookupPincode(pincode || "")}
                   disabled={looking}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-primary bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                  className="inline-flex items-center gap-1 rounded-md border border-primary bg-primary px-2.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
                 >
                   {looking ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-3 w-3 animate-spin" />
                   ) : (
-                    <MapPin className="h-4 w-4" />
+                    <MapPin className="h-3 w-3" />
                   )}
                   Lookup
                 </button>
               </div>
               {err("pincode")}
               {pinHint && (
-                <p className="mt-1.5 text-xs text-muted-foreground">
+                <p className="mt-1 text-[10px] text-muted-foreground">
                   Found: <span className="font-medium text-foreground">{pinHint}</span>
                 </p>
               )}
             </div>
 
-            <div className="space-y-1.5">
-              <Label>
+            <div className="space-y-1">
+              <Label className="text-xs">
                 Address line 1 <span className="text-destructive">*</span>
               </Label>
-              <Input {...register("line1")} placeholder="Building / street" />
+              <Input className="h-9 text-sm" {...register("line1")} placeholder="Building / street" />
               {err("line1")}
             </div>
-            <div className="space-y-1.5">
-              <Label>Address line 2</Label>
-              <Input {...register("line2")} placeholder="Area / locality (optional)" />
+            <div className="space-y-1">
+              <Label className="text-xs">Address line 2</Label>
+              <Input className="h-9 text-sm" {...register("line2")} placeholder="Area / locality (optional)" />
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label>Landmark</Label>
-                <Input {...register("landmark")} />
+            <div className="grid gap-2 md:grid-cols-2">
+              <div className="space-y-1">
+                <Label className="text-xs">Landmark</Label>
+                <Input className="h-9 text-sm" {...register("landmark")} />
               </div>
-              <div className="space-y-1.5">
-                <Label>
+              <div className="space-y-1">
+                <Label className="text-xs">
                   City <span className="text-destructive">*</span>
                 </Label>
-                <Input {...register("city")} />
+                <Input className="h-9 text-sm" {...register("city")} />
                 {err("city")}
               </div>
-              <div className="space-y-1.5">
-                <Label>
+              <div className="space-y-1">
+                <Label className="text-xs">
                   District <span className="text-destructive">*</span>
                 </Label>
-                <Input {...register("district")} />
+                <Input className="h-9 text-sm" {...register("district")} />
                 {err("district")}
               </div>
-              <div className="space-y-1.5">
-                <Label>
+              <div className="space-y-1">
+                <Label className="text-xs">
                   State <span className="text-destructive">*</span>
                 </Label>
-                <Input {...register("state")} />
+                <Input className="h-9 text-sm" {...register("state")} />
                 {err("state")}
               </div>
-              <div className="space-y-1.5">
-                <Label>
+              <div className="space-y-1">
+                <Label className="text-xs">
                   Country <span className="text-destructive">*</span>
                 </Label>
-                <Input {...register("country")} />
+                <Input className="h-9 text-sm" {...register("country")} />
                 {err("country")}
               </div>
-              <div className="space-y-1.5">
-                <Label>Service reach</Label>
+              <div className="space-y-1">
+                <Label className="text-xs">Service reach</Label>
                 <Controller
                   name="reach"
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-9 text-sm">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -235,40 +236,40 @@ export default function StepLocation() {
           </section>
 
           <section>
-            <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
+            <h2 className="mb-2 text-xs font-semibold text-muted-foreground">
               Languages supported
             </h2>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 md:grid-cols-4">
               {LANGUAGES.map((l) => (
                 <Label
                   key={l}
-                  className="flex cursor-pointer items-center gap-2 rounded-md border bg-card px-3 py-2 hover:border-primary"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-md border bg-card px-2 py-1.5 text-xs hover:border-primary"
                 >
                   <Checkbox
                     checked={languages.includes(l)}
                     onCheckedChange={() => toggle(languages, setLanguages, l)}
                   />
-                  <span className="text-sm">{l}</span>
+                  <span>{l}</span>
                 </Label>
               ))}
             </div>
           </section>
 
           <section>
-            <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
+            <h2 className="mb-2 text-xs font-semibold text-muted-foreground">
               Communication preferences
             </h2>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
               {COMM_CHANNELS.map((c) => (
                 <Label
                   key={c}
-                  className="flex cursor-pointer items-center gap-2 rounded-md border bg-card px-3 py-2 hover:border-primary"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-md border bg-card px-2 py-1.5 text-xs hover:border-primary"
                 >
                   <Checkbox
                     checked={channels.includes(c)}
                     onCheckedChange={() => toggle(channels, setChannels, c)}
                   />
-                  <span className="text-sm">{c}</span>
+                  <span>{c}</span>
                 </Label>
               ))}
             </div>

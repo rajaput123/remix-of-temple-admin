@@ -21,14 +21,14 @@ export default function BCOnboardingLayout() {
   }, [account.verified, navigate]);
 
   return (
-    <div className="flex min-h-screen flex-col bg-muted/30">
+    <div className="flex h-screen flex-col overflow-hidden bg-muted/30">
       <BCHeader showCta={false} />
       <div className="border-b bg-background">
         <div className="container mx-auto px-4">
           <WizardStepper currentId={current} completed={completed} />
         </div>
       </div>
-      <main className="container mx-auto w-full max-w-3xl flex-1 px-4 py-6 md:py-10">
+      <main className="container mx-auto w-full max-w-3xl flex-1 overflow-hidden px-4 py-3 md:py-4">
         <Outlet />
       </main>
     </div>
