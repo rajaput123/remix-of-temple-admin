@@ -330,9 +330,11 @@ const App = () => {
             <Route path="/business-hub" element={<BusinessHub />} />
             <Route path="/temple/ui-kit" element={<UIKit />} />
 
-            {/* Business Profile Module — single page with accordion */}
-            <Route path="/business/profile" element={<BusinessProfilePage />} />
-            <Route path="/business/profile/*" element={<BusinessProfilePage />} />
+            {/* Business module — sidebar with Profile + Website */}
+            <Route path="/business/profile" element={<BusinessProfileLayout />}>
+              <Route index element={<BusinessProfilePage />} />
+              <Route path="website" element={<BusinessWebsitePage />} />
+            </Route>
 
             {/* Temple Info Module */}
             <Route path="/temple/info" element={<TempleInfoLayout />}>
