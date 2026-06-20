@@ -12,12 +12,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -230,143 +225,145 @@ function ProfileFormDialog({
           <Progress value={completion} className="mt-3 h-1.5" />
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto px-2 py-2 sm:px-4">
-          <Accordion type="multiple" defaultValue={["basic"]} className="divide-y">
-            <AccordionItem value="basic" className="border-0">
-              <AccordionTrigger className="px-2 py-3 hover:no-underline"><SectionHeader icon={Building2} title="Basic Information" subtitle="Name, type, category & about" complete={sec.basic} /></AccordionTrigger>
-              <AccordionContent className="px-2 pb-5 pt-1">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <Field label="Business Name" required><Input value={draft.businessName} onChange={e => update("businessName", e.target.value)} maxLength={120} placeholder="e.g. Shree Krishna Pooja Services" /></Field>
-                  <Field label="Business Type" required>
-                    <Select value={draft.businessType} onValueChange={v => update("businessType", v)}>
-                      <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="priest">Priest Services</SelectItem>
-                        <SelectItem value="flowers">Flowers & Garlands</SelectItem>
-                        <SelectItem value="catering">Catering / Prasadam</SelectItem>
-                        <SelectItem value="decor">Decoration</SelectItem>
-                        <SelectItem value="transport">Transport</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <Field label="Business Category" required>
-                    <Select value={draft.businessCategory} onValueChange={v => update("businessCategory", v)}>
-                      <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="services">Services</SelectItem>
-                        <SelectItem value="products">Products</SelectItem>
-                        <SelectItem value="both">Services & Products</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <Field label="Years of Experience"><Input type="number" min={0} value={draft.yearsExp} onChange={e => update("yearsExp", e.target.value)} placeholder="e.g. 15" /></Field>
-                  <div className="md:col-span-2"><Field label="About Business" required><Textarea rows={4} maxLength={1000} value={draft.about} onChange={e => update("about", e.target.value)} placeholder="Describe your business…" /></Field></div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+        <Tabs defaultValue="basic" className="flex flex-1 flex-col overflow-hidden sm:flex-row">
+          {/* Tab rail */}
+          <TabsList className="flex h-auto w-full shrink-0 flex-row gap-1 overflow-x-auto rounded-none border-b bg-muted/30 p-2 sm:w-56 sm:flex-col sm:border-b-0 sm:border-r sm:overflow-y-auto">
+            {[
+              { v: "basic", icon: Building2, label: "Basic Info", done: sec.basic },
+              { v: "owner", icon: User, label: "Owner", done: sec.owner },
+              { v: "address", icon: MapPin, label: "Address", done: sec.address },
+              { v: "hours", icon: Clock, label: "Hours", done: sec.hours },
+              { v: "languages", icon: Languages, label: "Languages", done: sec.languages },
+              { v: "media", icon: ImageIcon, label: "Media", done: sec.media },
+              { v: "verification", icon: ShieldCheck, label: "Verification", done: sec.verification },
+            ].map((t) => (
+              <TabsTrigger
+                key={t.v}
+                value={t.v}
+                className="group relative flex shrink-0 items-center justify-start gap-2 rounded-md px-3 py-2 text-xs font-medium data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm sm:w-full"
+              >
+                <t.icon className="h-3.5 w-3.5" />
+                <span className="truncate">{t.label}</span>
+                <span className={`ml-auto h-1.5 w-1.5 shrink-0 rounded-full ${t.done ? "bg-emerald-500" : "bg-amber-400"}`} />
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
-            <AccordionItem value="owner" className="border-0">
-              <AccordionTrigger className="px-2 py-3 hover:no-underline"><SectionHeader icon={User} title="Owner Information" subtitle="Contact person details" complete={sec.owner} /></AccordionTrigger>
-              <AccordionContent className="px-2 pb-5 pt-1">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <Field label="Owner Name" required><Input value={draft.ownerName} onChange={e => update("ownerName", e.target.value)} maxLength={100} /></Field>
-                  <Field label="Mobile Number" required><Input value={draft.mobile} onChange={e => update("mobile", e.target.value)} maxLength={15} placeholder="+91 98765 43210" /></Field>
-                  <Field label="WhatsApp Number"><Input value={draft.whatsapp} onChange={e => update("whatsapp", e.target.value)} maxLength={15} placeholder="+91 98765 43210" /></Field>
-                  <Field label="Email Address" required><Input type="email" value={draft.email} onChange={e => update("email", e.target.value)} maxLength={255} placeholder="name@example.com" /></Field>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+          {/* Tab content */}
+          <div className="flex-1 overflow-y-auto px-5 py-5">
+            <TabsContent value="basic" className="mt-0 space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <Field label="Business Name" required><Input value={draft.businessName} onChange={e => update("businessName", e.target.value)} maxLength={120} placeholder="e.g. Shree Krishna Pooja Services" /></Field>
+                <Field label="Business Type" required>
+                  <Select value={draft.businessType} onValueChange={v => update("businessType", v)}>
+                    <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="priest">Priest Services</SelectItem>
+                      <SelectItem value="flowers">Flowers & Garlands</SelectItem>
+                      <SelectItem value="catering">Catering / Prasadam</SelectItem>
+                      <SelectItem value="decor">Decoration</SelectItem>
+                      <SelectItem value="transport">Transport</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+                <Field label="Business Category" required>
+                  <Select value={draft.businessCategory} onValueChange={v => update("businessCategory", v)}>
+                    <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="services">Services</SelectItem>
+                      <SelectItem value="products">Products</SelectItem>
+                      <SelectItem value="both">Services & Products</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+                <Field label="Years of Experience"><Input type="number" min={0} value={draft.yearsExp} onChange={e => update("yearsExp", e.target.value)} placeholder="e.g. 15" /></Field>
+                <div className="md:col-span-2"><Field label="About Business" required><Textarea rows={4} maxLength={1000} value={draft.about} onChange={e => update("about", e.target.value)} placeholder="Describe your business…" /></Field></div>
+              </div>
+            </TabsContent>
 
-            <AccordionItem value="address" className="border-0">
-              <AccordionTrigger className="px-2 py-3 hover:no-underline"><SectionHeader icon={MapPin} title="Business Address" subtitle="Where customers find you" complete={sec.address} /></AccordionTrigger>
-              <AccordionContent className="px-2 pb-5 pt-1">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="md:col-span-2"><Field label="Address Line 1" required><Input value={draft.addr1} onChange={e => update("addr1", e.target.value)} /></Field></div>
-                  <div className="md:col-span-2"><Field label="Address Line 2"><Input value={draft.addr2} onChange={e => update("addr2", e.target.value)} /></Field></div>
-                  <Field label="City" required><Input value={draft.city} onChange={e => update("city", e.target.value)} /></Field>
-                  <Field label="District" required><Input value={draft.district} onChange={e => update("district", e.target.value)} /></Field>
-                  <Field label="State" required><Input value={draft.state} onChange={e => update("state", e.target.value)} /></Field>
-                  <Field label="Pincode" required><Input value={draft.pincode} onChange={e => update("pincode", e.target.value)} maxLength={6} /></Field>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+            <TabsContent value="owner" className="mt-0 space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <Field label="Owner Name" required><Input value={draft.ownerName} onChange={e => update("ownerName", e.target.value)} maxLength={100} /></Field>
+                <Field label="Mobile Number" required><Input value={draft.mobile} onChange={e => update("mobile", e.target.value)} maxLength={15} placeholder="+91 98765 43210" /></Field>
+                <Field label="WhatsApp Number"><Input value={draft.whatsapp} onChange={e => update("whatsapp", e.target.value)} maxLength={15} placeholder="+91 98765 43210" /></Field>
+                <Field label="Email Address" required><Input type="email" value={draft.email} onChange={e => update("email", e.target.value)} maxLength={255} placeholder="name@example.com" /></Field>
+              </div>
+            </TabsContent>
 
-            <AccordionItem value="hours" className="border-0">
-              <AccordionTrigger className="px-2 py-3 hover:no-underline"><SectionHeader icon={Clock} title="Business Hours" subtitle="Working days & timings" complete={sec.hours} /></AccordionTrigger>
-              <AccordionContent className="px-2 pb-5 pt-1">
-                <div className="space-y-4">
-                  <div>
-                    <Label className="text-sm font-medium">Working Days</Label>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {DAYS.map(d => {
-                        const on = draft.workingDays.includes(d);
-                        return (
-                          <button key={d} type="button" onClick={() => toggleDay(d)} className={`rounded-md border px-3 py-1.5 text-xs font-medium transition ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-muted-foreground hover:bg-muted"}`}>{d}</button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <Field label="Opening Time"><Input type="time" value={draft.openTime} onChange={e => update("openTime", e.target.value)} /></Field>
-                    <Field label="Closing Time"><Input type="time" value={draft.closeTime} onChange={e => update("closeTime", e.target.value)} /></Field>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+            <TabsContent value="address" className="mt-0 space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="md:col-span-2"><Field label="Address Line 1" required><Input value={draft.addr1} onChange={e => update("addr1", e.target.value)} /></Field></div>
+                <div className="md:col-span-2"><Field label="Address Line 2"><Input value={draft.addr2} onChange={e => update("addr2", e.target.value)} /></Field></div>
+                <Field label="City" required><Input value={draft.city} onChange={e => update("city", e.target.value)} /></Field>
+                <Field label="District" required><Input value={draft.district} onChange={e => update("district", e.target.value)} /></Field>
+                <Field label="State" required><Input value={draft.state} onChange={e => update("state", e.target.value)} /></Field>
+                <Field label="Pincode" required><Input value={draft.pincode} onChange={e => update("pincode", e.target.value)} maxLength={6} /></Field>
+              </div>
+            </TabsContent>
 
-            <AccordionItem value="languages" className="border-0">
-              <AccordionTrigger className="px-2 py-3 hover:no-underline"><SectionHeader icon={Languages} title="Languages Supported" subtitle="Languages you can serve customers in" complete={sec.languages} /></AccordionTrigger>
-              <AccordionContent className="px-2 pb-5 pt-1">
-                <div className="flex flex-wrap gap-2">
-                  {LANGUAGES.map(l => {
-                    const on = draft.languages.includes(l);
+            <TabsContent value="hours" className="mt-0 space-y-4">
+              <div>
+                <Label className="text-sm font-medium">Working Days</Label>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {DAYS.map(d => {
+                    const on = draft.workingDays.includes(d);
                     return (
-                      <button key={l} type="button" onClick={() => toggleLang(l)} className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-muted-foreground hover:bg-muted"}`}>
-                        <Checkbox checked={on} className="pointer-events-none h-3 w-3" />
-                        {l}
-                      </button>
+                      <button key={d} type="button" onClick={() => toggleDay(d)} className={`rounded-md border px-3 py-1.5 text-xs font-medium transition ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-muted-foreground hover:bg-muted"}`}>{d}</button>
                     );
                   })}
                 </div>
-              </AccordionContent>
-            </AccordionItem>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Opening Time"><Input type="time" value={draft.openTime} onChange={e => update("openTime", e.target.value)} /></Field>
+                <Field label="Closing Time"><Input type="time" value={draft.closeTime} onChange={e => update("closeTime", e.target.value)} /></Field>
+              </div>
+            </TabsContent>
 
-            <AccordionItem value="media" className="border-0">
-              <AccordionTrigger className="px-2 py-3 hover:no-underline"><SectionHeader icon={ImageIcon} title="Media" subtitle="Logo, cover & photo gallery" complete={sec.media} /></AccordionTrigger>
-              <AccordionContent className="px-2 pb-5 pt-1">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <UploadTile label="Business Logo *" hint="PNG / JPG, min 512×512" aspect="aspect-square" value={draft.logo} onUpload={() => update("logo", "/placeholder.svg")} />
-                  <UploadTile label="Cover Image" hint="JPG / PNG, 1600×600" value={draft.cover} onUpload={() => update("cover", "/placeholder.svg")} />
-                  <div className="md:col-span-2">
-                    <Label className="text-sm font-medium">Photo Gallery</Label>
-                    <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-                      {draft.gallery.map((g, i) => (
-                        <div key={i} className="aspect-square overflow-hidden rounded-md border bg-muted/40"><img src={g} alt="" className="h-full w-full object-cover" /></div>
-                      ))}
-                      <button onClick={() => update("gallery", [...draft.gallery, "/placeholder.svg"])} className="flex aspect-square items-center justify-center rounded-md border-2 border-dashed border-border text-muted-foreground transition hover:border-primary hover:text-primary"><Plus className="h-5 w-5" /></button>
-                    </div>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+            <TabsContent value="languages" className="mt-0 space-y-4">
+              <p className="text-sm text-muted-foreground">Select all languages you can serve customers in.</p>
+              <div className="flex flex-wrap gap-2">
+                {LANGUAGES.map(l => {
+                  const on = draft.languages.includes(l);
+                  return (
+                    <button key={l} type="button" onClick={() => toggleLang(l)} className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-muted-foreground hover:bg-muted"}`}>
+                      <Checkbox checked={on} className="pointer-events-none h-3 w-3" />
+                      {l}
+                    </button>
+                  );
+                })}
+              </div>
+            </TabsContent>
 
-            <AccordionItem value="verification" className="border-0">
-              <AccordionTrigger className="px-2 py-3 hover:no-underline"><SectionHeader icon={ShieldCheck} title="Verification" subtitle="KYC documents to build trust" complete={sec.verification} /></AccordionTrigger>
-              <AccordionContent className="px-2 pb-5 pt-1">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  <Field label="Aadhaar Number"><Input value={draft.aadhaar} onChange={e => update("aadhaar", e.target.value)} maxLength={14} /></Field>
-                  <Field label="PAN Number"><Input value={draft.pan} onChange={e => update("pan", e.target.value.toUpperCase())} maxLength={10} /></Field>
-                  <Field label="GST Number"><Input value={draft.gst} onChange={e => update("gst", e.target.value.toUpperCase())} maxLength={15} /></Field>
+            <TabsContent value="media" className="mt-0 space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <UploadTile label="Business Logo *" hint="PNG / JPG, min 512×512" aspect="aspect-square" value={draft.logo} onUpload={() => update("logo", "/placeholder.svg")} />
+                <UploadTile label="Cover Image" hint="JPG / PNG, 1600×600" value={draft.cover} onUpload={() => update("cover", "/placeholder.svg")} />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">Photo Gallery</Label>
+                <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
+                  {draft.gallery.map((g, i) => (
+                    <div key={i} className="aspect-square overflow-hidden rounded-md border bg-muted/40"><img src={g} alt="" className="h-full w-full object-cover" /></div>
+                  ))}
+                  <button onClick={() => update("gallery", [...draft.gallery, "/placeholder.svg"])} className="flex aspect-square items-center justify-center rounded-md border-2 border-dashed border-border text-muted-foreground transition hover:border-primary hover:text-primary"><Plus className="h-5 w-5" /></button>
                 </div>
-                <div className="mt-4 space-y-2">
-                  <DocRow label="Aadhaar Copy" uploaded={!!draft.aadhaarDoc} onUpload={() => update("aadhaarDoc", "doc.pdf")} />
-                  <DocRow label="PAN Copy" uploaded={!!draft.panDoc} onUpload={() => update("panDoc", "doc.pdf")} />
-                  <DocRow label="GST Certificate" uploaded={!!draft.gstDoc} onUpload={() => update("gstDoc", "doc.pdf")} />
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="verification" className="mt-0 space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <Field label="Aadhaar Number"><Input value={draft.aadhaar} onChange={e => update("aadhaar", e.target.value)} maxLength={14} /></Field>
+                <Field label="PAN Number"><Input value={draft.pan} onChange={e => update("pan", e.target.value.toUpperCase())} maxLength={10} /></Field>
+                <Field label="GST Number"><Input value={draft.gst} onChange={e => update("gst", e.target.value.toUpperCase())} maxLength={15} /></Field>
+              </div>
+              <div className="space-y-2">
+                <DocRow label="Aadhaar Copy" uploaded={!!draft.aadhaarDoc} onUpload={() => update("aadhaarDoc", "doc.pdf")} />
+                <DocRow label="PAN Copy" uploaded={!!draft.panDoc} onUpload={() => update("panDoc", "doc.pdf")} />
+                <DocRow label="GST Certificate" uploaded={!!draft.gstDoc} onUpload={() => update("gstDoc", "doc.pdf")} />
+              </div>
+            </TabsContent>
+          </div>
+        </Tabs>
 
         <DialogFooter className="border-t bg-muted/30 px-6 py-3">
           <Button variant="outline" onClick={() => { setData(draft); toast.success("Draft saved"); onOpenChange(false); }} className="gap-1.5">
