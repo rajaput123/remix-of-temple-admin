@@ -96,88 +96,47 @@ const tenantData = {
   nextRenewalDate: "12 Apr 2026",
 };
 
-// All Temple Management Modules matching reference image
+// Business Hub modules — 11 modules for temple ecosystem businesses
+// Categories: setup (Setup & Visibility), operations (Daily Operations), insights (Finance & Insights)
 const allModules = [
-  // Temple & Worship
-  { id: "temple-structure", title: "Temple Structure", icon: Landmark, enabled: true, path: "/temple/structure",
-    description: "Temple hierarchy, shrines, halls and counters", category: "temple",
-    gradient: "from-[hsl(16,85%,35%)] to-[hsl(16,70%,25%)]", bgTint: "bg-[hsl(16,60%,95%)]" },
-  { id: "offerings", title: "Offerings", icon: Sparkles, enabled: true, path: "/temple/offerings",
-    description: "Rituals, darshan, slots, bookings, pricing", category: "temple",
-    gradient: "from-[hsl(45,90%,45%)] to-[hsl(35,85%,38%)]", bgTint: "bg-[hsl(45,80%,95%)]" },
-  { id: "bookings", title: "Bookings", icon: Calendar, enabled: true, path: "/temple/bookings",
-    description: "Online & counter bookings, attendance, reports", category: "temple",
+  // Setup & Visibility
+  { id: "business-profile", title: "Business Profile", icon: Building2, enabled: true, path: "/business-connect/profile",
+    description: "Onboarding, verification, hours, service areas & marketplace visibility", category: "setup",
+    gradient: "from-[hsl(220,70%,50%)] to-[hsl(220,65%,40%)]", bgTint: "bg-[hsl(220,60%,96%)]" },
+  { id: "service-listings", title: "Service Listings", icon: Sparkles, enabled: true, path: "/business-connect/services",
+    description: "Services, packages, pricing, availability & categories", category: "setup",
+    gradient: "from-[hsl(265,60%,55%)] to-[hsl(265,55%,42%)]", bgTint: "bg-[hsl(265,50%,96%)]" },
+  { id: "marketing", title: "Marketing Services", icon: Megaphone, enabled: true, path: "/business-connect/marketing",
+    description: "Campaigns, promotions, social media & content requests", category: "setup",
+    gradient: "from-[hsl(330,65%,55%)] to-[hsl(330,60%,42%)]", bgTint: "bg-[hsl(330,50%,96%)]" },
+
+  // Daily Operations
+  { id: "bookings", title: "Booking Management", icon: Calendar, enabled: true, path: "/temple/bookings",
+    description: "Appointments, consultations, reservations & service bookings", category: "operations",
     gradient: "from-[hsl(142,60%,40%)] to-[hsl(142,55%,30%)]", bgTint: "bg-[hsl(142,50%,95%)]" },
-  { id: "donations", title: "Donations", icon: Heart, enabled: true, path: "/temple/donations",
-    description: "Donor records, receipts, fund tracking", category: "temple",
-    gradient: "from-[hsl(350,65%,50%)] to-[hsl(350,60%,38%)]", bgTint: "bg-[hsl(350,50%,96%)]" },
-  { id: "prasadam-kitchen", title: "Prasadam & Kitchen", icon: UtensilsCrossed, enabled: true, path: "/temple/prasadam",
-    description: "Prasadam production, Annadanam, kitchen operations", category: "temple",
-    gradient: "from-[hsl(340,60%,50%)] to-[hsl(340,55%,38%)]", bgTint: "bg-[hsl(340,45%,96%)]" },
-  { id: "crowd", title: "Crowd Management", icon: MapPin, enabled: true, path: "/temple/crowd",
-    description: "Real-time crowd monitoring", category: "temple",
-    gradient: "from-[hsl(0,60%,50%)] to-[hsl(0,55%,38%)]", bgTint: "bg-[hsl(0,45%,96%)]" },
-  { id: "devotees", title: "Devotees", icon: UserCheck, enabled: true, path: "/temple/devotees",
-    description: "Devotee database and volunteer management", category: "temple",
-    gradient: "from-[hsl(142,55%,45%)] to-[hsl(142,50%,33%)]", bgTint: "bg-[hsl(142,45%,95%)]" },
-  { id: "vip-devotee", title: "VIP Devotees", icon: Crown, enabled: true, path: "/temple/vip",
-    description: "VIP devotee tracking and services", category: "temple",
-    gradient: "from-[hsl(45,90%,48%)] to-[hsl(38,85%,38%)]", bgTint: "bg-[hsl(45,75%,95%)]" },
-
-  // People & Management
-  { id: "people-hr", title: "People & HR", icon: Users, enabled: true, path: "/temple/people",
-    description: "Employee management, attendance, payroll", category: "management",
-    gradient: "from-[hsl(200,60%,50%)] to-[hsl(200,55%,38%)]", bgTint: "bg-[hsl(200,50%,95%)]" },
-  { id: "finance", title: "Finance & Accounts", icon: IndianRupee, enabled: true, path: "/temple/finance",
-    description: "Income, expenses, vouchers, ledger, payments & audit", category: "management",
-    gradient: "from-[hsl(142,60%,38%)] to-[hsl(142,55%,28%)]", bgTint: "bg-[hsl(142,45%,95%)]" },
-  { id: "suppliers", title: "Inventory", icon: Boxes, enabled: true, path: "/temple/inventory/items",
-    description: "Stock management, items, transactions", category: "management",
-    gradient: "from-[hsl(30,80%,50%)] to-[hsl(25,75%,38%)]", bgTint: "bg-[hsl(30,65%,95%)]" },
-  { id: "tasks", title: "Tasks", icon: ClipboardList, enabled: true, path: "/temple/tasks",
-    description: "Operational task coordination & tracking", category: "management",
-    gradient: "from-[hsl(220,60%,55%)] to-[hsl(220,55%,42%)]", bgTint: "bg-[hsl(220,50%,96%)]" },
-  { id: "freelancer", title: "Freelancer", icon: Briefcase, enabled: true, path: "/temple/freelancers",
-    description: "Manage freelance workers", category: "management",
-    gradient: "from-[hsl(35,80%,50%)] to-[hsl(30,75%,38%)]", bgTint: "bg-[hsl(35,65%,95%)]" },
+  { id: "crm", title: "CRM", icon: UserCheck, enabled: true, path: "/temple/devotees",
+    description: "Customers, leads, enquiries & relationship management", category: "operations",
+    gradient: "from-[hsl(200,65%,48%)] to-[hsl(200,60%,36%)]", bgTint: "bg-[hsl(200,55%,95%)]" },
   { id: "communication", title: "Communication", icon: Megaphone, enabled: true, path: "/temple/communication",
-    description: "Announcements, notifications, media", category: "management",
+    description: "Inbox, SMS, email, WhatsApp & announcements", category: "operations",
     gradient: "from-[hsl(280,50%,55%)] to-[hsl(280,45%,42%)]", bgTint: "bg-[hsl(280,40%,96%)]" },
-  { id: "assets", title: "Assets", icon: Package, enabled: true, path: "/temple/assets",
-    description: "Temple asset tracking and maintenance", category: "management",
-    gradient: "from-[hsl(160,50%,45%)] to-[hsl(160,45%,33%)]", bgTint: "bg-[hsl(160,40%,95%)]" },
+  { id: "live-services", title: "Live Services", icon: Video, enabled: true, path: "/business-connect/live",
+    description: "Live streaming, video consultations & recordings", category: "operations",
+    gradient: "from-[hsl(0,65%,55%)] to-[hsl(0,60%,42%)]", bgTint: "bg-[hsl(0,55%,96%)]" },
+  { id: "inventory", title: "Inventory & Assets", icon: Boxes, enabled: true, path: "/temple/inventory/items",
+    description: "Stock, items, suppliers and asset maintenance", category: "operations",
+    gradient: "from-[hsl(30,80%,50%)] to-[hsl(25,75%,38%)]", bgTint: "bg-[hsl(30,65%,95%)]" },
 
-  // Growth & Intelligence
-  { id: "events", title: "Events", icon: CalendarDays, enabled: true, path: "/temple/events",
-    description: "Event creation, registration, capacity", category: "growth",
-    gradient: "from-[hsl(260,55%,55%)] to-[hsl(260,50%,42%)]", bgTint: "bg-[hsl(260,45%,96%)]" },
-  { id: "projects", title: "Projects", icon: FolderKanban, enabled: true, path: "/temple/projects",
-    description: "Strategic projects, milestones, budget governance", category: "growth",
-    gradient: "from-[hsl(220,55%,50%)] to-[hsl(220,50%,38%)]", bgTint: "bg-[hsl(220,45%,96%)]" },
-  { id: "branches", title: "Branches", icon: GitBranch, enabled: true, path: "/temple/branches",
-    description: "Multi-branch temple management", category: "growth",
-    gradient: "from-[hsl(170,50%,45%)] to-[hsl(170,45%,33%)]", bgTint: "bg-[hsl(170,40%,95%)]" },
-  { id: "institution", title: "Institutions", icon: Building2, enabled: true, path: "/temple/institutions",
-    description: "Schools, hospitals, goshalas & trust entities", category: "growth",
-    gradient: "from-[hsl(250,50%,55%)] to-[hsl(250,45%,42%)]", bgTint: "bg-[hsl(250,40%,96%)]" },
-  { id: "feedback", title: "Feedback", icon: BarChart3, enabled: true, path: "/temple/feedback",
-    description: "Devotee feedback, ratings, sentiment analysis", category: "growth",
-    gradient: "from-[hsl(310,50%,50%)] to-[hsl(310,45%,38%)]", bgTint: "bg-[hsl(310,40%,96%)]" },
-  { id: "knowledge", title: "Knowledge Base", icon: BookOpen, enabled: true, path: "/temple/knowledge",
-    description: "Documents, SOPs, and knowledge base", category: "growth",
-    gradient: "from-[hsl(190,60%,45%)] to-[hsl(190,55%,33%)]", bgTint: "bg-[hsl(190,50%,95%)]" },
-  { id: "reports", title: "Reports Center", icon: BarChart3, enabled: true, path: "/temple/reports",
-    description: "Consolidated reports across all modules", category: "management",
+  // Finance & Insights
+  { id: "finance", title: "Finance & Accounts", icon: IndianRupee, enabled: true, path: "/temple/finance",
+    description: "Income, expenses, invoices, payouts, GST & ledger", category: "insights",
+    gradient: "from-[hsl(142,60%,38%)] to-[hsl(142,55%,28%)]", bgTint: "bg-[hsl(142,45%,95%)]" },
+  { id: "reports", title: "Reports & Analytics", icon: BarChart3, enabled: true, path: "/temple/reports",
+    description: "Business, booking, customer & revenue insights", category: "insights",
     gradient: "from-[hsl(270,55%,55%)] to-[hsl(270,50%,42%)]", bgTint: "bg-[hsl(270,45%,96%)]" },
-  { id: "planner", title: "Planner", icon: Calendar, enabled: true, path: "/temple/planner",
-    description: "Calendar and scheduling planner", category: "growth",
-    gradient: "from-[hsl(200,50%,50%)] to-[hsl(200,45%,38%)]", bgTint: "bg-[hsl(200,40%,95%)]" },
   { id: "settings", title: "Settings", icon: Settings, enabled: true, path: "/temple/settings",
-    description: "Temple profile, subscription, users", category: "growth",
+    description: "Profile, users, roles, billing & integrations", category: "insights",
     gradient: "from-[hsl(220,10%,50%)] to-[hsl(220,10%,38%)]", bgTint: "bg-[hsl(220,8%,96%)]" },
-  { id: "help", title: "Help & Support", icon: HelpCircle, enabled: true, path: "/temple/help",
-    description: "FAQs, contact support and guides", category: "growth",
-    gradient: "from-[hsl(195,60%,45%)] to-[hsl(195,55%,33%)]", bgTint: "bg-[hsl(195,50%,95%)]" },
 ];
 
 const containerVariants = {
@@ -700,9 +659,9 @@ const TempleHub = () => {
         {!isSuspended && (
           <div className="space-y-7">
             {[
-              { key: "temple", label: t("cat_temple", lang), icon: Landmark },
-              { key: "management", label: t("cat_management", lang), icon: Users },
-              { key: "growth", label: t("cat_growth", lang), icon: BarChart3 },
+              { key: "setup", label: "Setup & Visibility", icon: Building2 },
+              { key: "operations", label: "Daily Operations", icon: Briefcase },
+              { key: "insights", label: "Finance & Insights", icon: BarChart3 },
             ].map((cat) => {
               const catModules = allModules.filter(m => m.category === cat.key);
               if (catModules.length === 0) return null;
@@ -712,7 +671,7 @@ const TempleHub = () => {
                     <cat.icon className="h-4 w-4 text-primary" />
                     <h2 className="text-sm font-semibold tracking-wide text-foreground">{cat.label}</h2>
                     <div className="flex-1 h-px ml-2 bg-border" />
-                    {cat.key === "temple" && (
+                    {cat.key === "setup" && (
                       <button
                         onClick={() => setIconStyle(iconStyle === "glass" ? "filled" : "glass")}
                         className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
