@@ -265,7 +265,7 @@ export default function StepLocation() {
                   </div>
                 </div>
                 <div>
-                  <Label className="mb-1.5 block text-[11px] font-medium text-muted-foreground">
+                  <Label className="mb-1.5 block text-xs font-medium">
                     Preferred channels
                   </Label>
                   <div className="flex flex-wrap gap-1.5">
