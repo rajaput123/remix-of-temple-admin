@@ -92,9 +92,9 @@ export default function BCOnboardingLayout() {
         </aside>
 
         {/* Form area */}
-        <main className="flex flex-1 overflow-hidden p-4 md:p-6 lg:p-8">
-          <div className="mx-auto flex h-full w-full max-w-2xl flex-col">
-            <div className="mb-3 hidden text-[11px] uppercase tracking-wider text-muted-foreground lg:block">
+        <main className="flex flex-1 overflow-hidden p-3 md:p-4 lg:p-5">
+          <div className="mx-auto flex h-full w-full max-w-5xl flex-col">
+            <div className="mb-2 hidden text-[11px] uppercase tracking-wider text-muted-foreground lg:block">
               Step {currentIdx + 1} of {ONBOARDING_STEPS.length} · {currentStep.label}
             </div>
             <div className="flex h-full flex-1 flex-col overflow-hidden">
