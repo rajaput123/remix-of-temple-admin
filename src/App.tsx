@@ -30,6 +30,7 @@ import BCDashboard from "./pages/business-connect/Dashboard";
 import BCProfile from "./pages/business-connect/Profile";
 import BusinessProfilePage from "./pages/business/BusinessProfilePage";
 import BusinessWebsitePage from "./pages/business/BusinessWebsitePage";
+import BusinessServicesPage from "./pages/business/BusinessServicesPage";
 import BusinessProfileLayout from "./pages/business/BusinessProfileLayout";
 import BCExplore from "./pages/business-connect/Explore";
 import Profile from "./pages/Profile";
@@ -333,8 +334,10 @@ const App = () => {
             {/* Business module — sidebar with Profile + Website */}
             <Route path="/business/profile" element={<BusinessProfileLayout />}>
               <Route index element={<BusinessProfilePage />} />
+              <Route path="services" element={<BusinessServicesPage />} />
               <Route path="website" element={<BusinessWebsitePage />} />
             </Route>
+
 
             {/* Temple Info Module */}
             <Route path="/temple/info" element={<TempleInfoLayout />}>
