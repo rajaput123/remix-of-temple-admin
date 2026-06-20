@@ -213,7 +213,7 @@ function ProfileFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[90vh] max-w-3xl flex-col gap-0 overflow-hidden p-0">
+      <DialogContent className="flex max-h-[90vh] max-w-5xl flex-col gap-0 overflow-hidden p-0">
         <DialogHeader className="border-b px-6 py-4">
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -227,7 +227,7 @@ function ProfileFormDialog({
 
         <Tabs defaultValue="basic" className="flex flex-1 flex-col overflow-hidden">
           {/* Horizontal Tab rail */}
-          <TabsList className="flex h-auto w-full shrink-0 flex-row gap-1 overflow-x-auto rounded-none border-b bg-muted/30 p-2">
+          <TabsList className="flex h-auto w-full shrink-0 flex-row gap-1 rounded-none border-b bg-muted/30 p-2">
             {[
               { v: "basic", icon: Building2, label: "Basic Info", done: sec.basic },
               { v: "owner", icon: User, label: "Owner", done: sec.owner },
@@ -243,7 +243,7 @@ function ProfileFormDialog({
                 className="group relative flex shrink-0 items-center justify-start gap-2 rounded-md px-3 py-2 text-xs font-medium data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm"
               >
                 <t.icon className="h-3.5 w-3.5" />
-                <span className="truncate hidden sm:inline">{t.label}</span>
+                <span className="truncate">{t.label}</span>
                 <span className={`ml-auto h-1.5 w-1.5 shrink-0 rounded-full ${t.done ? "bg-emerald-500" : "bg-amber-400"}`} />
               </TabsTrigger>
             ))}
