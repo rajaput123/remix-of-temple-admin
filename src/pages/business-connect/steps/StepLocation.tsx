@@ -17,7 +17,7 @@ import {
 import { bcStore, useBCStore } from "@/stores/businessConnectStore";
 import { locationSchema } from "@/lib/bc-schemas";
 import { LANGUAGES, COMM_CHANNELS } from "@/data/businessTypes";
-import { Loader2, MapPin } from "lucide-react";
+import { Loader2, MapPin, Check, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 
 type FormValues = z.infer<typeof locationSchema>;
@@ -34,14 +34,11 @@ export default function StepLocation() {
   const stored = useBCStore((s) => s.location);
   const storedComms = useBCStore((s) => s.comms);
 
-  const [languages, setLanguages] = useState<string[]>(
-    storedComms?.languages ?? ["English"],
-  );
-  const [channels, setChannels] = useState<string[]>(
-    storedComms?.channels ?? ["Phone Calls"],
-  );
+  const [languages, setLanguages] = useState<string[]>(storedComms?.languages ?? ["English"]);
+  const [channels, setChannels] = useState<string[]>(storedComms?.channels ?? ["Phone Calls"]);
   const [looking, setLooking] = useState(false);
   const [pinHint, setPinHint] = useState<string | null>(null);
+  const [showPrefs, setShowPrefs] = useState(false);
 
   const {
     register,
@@ -64,12 +61,10 @@ export default function StepLocation() {
   });
 
   const pincode = watch("pincode");
+  const city = watch("city");
 
   async function lookupPincode(pin: string) {
-    if (!/^\d{6}$/.test(pin)) {
-      toast.error("Enter a valid 6-digit pincode");
-      return;
-    }
+    if (!/^\d{6}$/.test(pin)) return;
     setLooking(true);
     setPinHint(null);
     try {
@@ -81,16 +76,13 @@ export default function StepLocation() {
         return;
       }
       const po = entry.PostOffice[0];
-      setValue("city", po.Block && po.Block !== "NA" ? po.Block : po.Name, {
-        shouldValidate: true,
-      });
+      setValue("city", po.Block && po.Block !== "NA" ? po.Block : po.Name, { shouldValidate: true });
       setValue("district", po.District ?? "", { shouldValidate: true });
       setValue("state", po.State ?? "", { shouldValidate: true });
       setValue("country", po.Country ?? "India", { shouldValidate: true });
       setPinHint(`${po.Name}, ${po.District}, ${po.State}`);
-      toast.success("Address auto-filled from pincode");
     } catch {
-      toast.error("Couldn't fetch pincode details. Please fill manually.");
+      toast.error("Couldn't fetch pincode. Please fill manually.");
     } finally {
       setLooking(false);
     }
@@ -111,107 +103,82 @@ export default function StepLocation() {
     navigate("/business-connect/onboarding/verification");
   }
 
-  const err = (name: keyof FormValues) =>
-    errors[name] ? (
-      <p className="text-xs text-destructive">{errors[name]?.message as string}</p>
-    ) : null;
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="h-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="contents">
       <StepShell
-        title="Address & communication"
-        subtitle="Enter your pincode first — we'll auto-fill the rest."
+        title="Where do you operate?"
+        subtitle="Enter your pincode — we'll fill in the rest."
         backTo="/business-connect/onboarding/business"
         onNext={handleSubmit(onSubmit)}
       >
-        <div className="space-y-4">
-          <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-muted-foreground">Business address</h2>
-
-            <div className="rounded-lg border bg-primary/5 p-2">
-              <Label className="text-xs font-medium">
-                Pincode <span className="text-destructive">*</span>
-              </Label>
-              <div className="mt-1 flex gap-2">
-                <Input
-                  className="h-9 text-sm"
-                  inputMode="numeric"
-                  maxLength={6}
-                  placeholder="Enter 6-digit pincode"
-                  {...register("pincode")}
-                  onChange={(e) => {
-                    const v = e.target.value.replace(/\D/g, "").slice(0, 6);
-                    setValue("pincode", v, { shouldValidate: true });
-                    if (v.length === 6) lookupPincode(v);
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => lookupPincode(pincode || "")}
-                  disabled={looking}
-                  className="inline-flex items-center gap-1 rounded-md border border-primary bg-primary px-2.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
-                >
-                  {looking ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : (
-                    <MapPin className="h-3 w-3" />
-                  )}
-                  Lookup
-                </button>
+        <div className="space-y-5">
+          {/* Pincode hero */}
+          <div className="rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
+            <Label className="text-xs font-medium">
+              Pincode <span className="text-destructive">*</span>
+            </Label>
+            <div className="mt-1.5 flex gap-2">
+              <Input
+                className="h-10 text-base font-medium tracking-wider"
+                inputMode="numeric"
+                maxLength={6}
+                placeholder="6-digit pincode"
+                {...register("pincode")}
+                onChange={(e) => {
+                  const v = e.target.value.replace(/\D/g, "").slice(0, 6);
+                  setValue("pincode", v, { shouldValidate: true });
+                  if (v.length === 6) lookupPincode(v);
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => lookupPincode(pincode || "")}
+                disabled={looking || (pincode?.length ?? 0) !== 6}
+                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground transition hover:bg-primary/90 disabled:opacity-50"
+              >
+                {looking ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <MapPin className="h-3.5 w-3.5" />
+                )}
+                Lookup
+              </button>
+            </div>
+            {errors.pincode && (
+              <p className="mt-1 text-[11px] text-destructive">{errors.pincode.message as string}</p>
+            )}
+            {pinHint && (
+              <div className="mt-2 flex items-center gap-1.5 text-[11px] text-primary">
+                <Check className="h-3 w-3" />
+                <span>
+                  Found: <span className="font-medium">{pinHint}</span>
+                </span>
               </div>
-              {err("pincode")}
-              {pinHint && (
-                <p className="mt-1 text-[10px] text-muted-foreground">
-                  Found: <span className="font-medium text-foreground">{pinHint}</span>
-                </p>
+            )}
+          </div>
+
+          {/* Address details */}
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">
+                Address line 1 <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                className="h-10 text-sm"
+                {...register("line1")}
+                placeholder="Building, street"
+              />
+              {errors.line1 && (
+                <p className="text-[11px] text-destructive">{errors.line1.message as string}</p>
               )}
             </div>
 
-            <div className="space-y-1">
-              <Label className="text-xs">
-                Address line 1 <span className="text-destructive">*</span>
-              </Label>
-              <Input className="h-9 text-sm" {...register("line1")} placeholder="Building / street" />
-              {err("line1")}
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs">Address line 2</Label>
-              <Input className="h-9 text-sm" {...register("line2")} placeholder="Area / locality (optional)" />
-            </div>
-            <div className="grid gap-2 md:grid-cols-2">
-              <div className="space-y-1">
-                <Label className="text-xs">Landmark</Label>
-                <Input className="h-9 text-sm" {...register("landmark")} />
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label className="text-xs">Address line 2 / landmark</Label>
+                <Input className="h-9 text-sm" {...register("line2")} placeholder="Optional" />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs">
-                  City <span className="text-destructive">*</span>
-                </Label>
-                <Input className="h-9 text-sm" {...register("city")} />
-                {err("city")}
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">
-                  District <span className="text-destructive">*</span>
-                </Label>
-                <Input className="h-9 text-sm" {...register("district")} />
-                {err("district")}
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">
-                  State <span className="text-destructive">*</span>
-                </Label>
-                <Input className="h-9 text-sm" {...register("state")} />
-                {err("state")}
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">
-                  Country <span className="text-destructive">*</span>
-                </Label>
-                <Input className="h-9 text-sm" {...register("country")} />
-                {err("country")}
-              </div>
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <Label className="text-xs">Service reach</Label>
                 <Controller
                   name="reach"
@@ -233,47 +200,97 @@ export default function StepLocation() {
                 />
               </div>
             </div>
-          </section>
 
-          <section>
-            <h2 className="mb-2 text-xs font-semibold text-muted-foreground">
-              Languages supported
-            </h2>
-            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 md:grid-cols-4">
-              {LANGUAGES.map((l) => (
-                <Label
-                  key={l}
-                  className="flex cursor-pointer items-center gap-1.5 rounded-md border bg-card px-2 py-1.5 text-xs hover:border-primary"
-                >
-                  <Checkbox
-                    checked={languages.includes(l)}
-                    onCheckedChange={() => toggle(languages, setLanguages, l)}
-                  />
-                  <span>{l}</span>
-                </Label>
-              ))}
-            </div>
-          </section>
+            {(city || pinHint) && (
+              <div className="grid gap-3 md:grid-cols-3">
+                <div className="space-y-1.5">
+                  <Label className="text-xs">City</Label>
+                  <Input className="h-9 text-sm" {...register("city")} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">District</Label>
+                  <Input className="h-9 text-sm" {...register("district")} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">State</Label>
+                  <Input className="h-9 text-sm" {...register("state")} />
+                </div>
+              </div>
+            )}
+          </div>
 
-          <section>
-            <h2 className="mb-2 text-xs font-semibold text-muted-foreground">
-              Communication preferences
-            </h2>
-            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
-              {COMM_CHANNELS.map((c) => (
-                <Label
-                  key={c}
-                  className="flex cursor-pointer items-center gap-1.5 rounded-md border bg-card px-2 py-1.5 text-xs hover:border-primary"
-                >
-                  <Checkbox
-                    checked={channels.includes(c)}
-                    onCheckedChange={() => toggle(channels, setChannels, c)}
-                  />
-                  <span>{c}</span>
-                </Label>
-              ))}
-            </div>
-          </section>
+          {/* Preferences (collapsed by default) */}
+          <div className="rounded-lg border bg-muted/20">
+            <button
+              type="button"
+              onClick={() => setShowPrefs((v) => !v)}
+              className="flex w-full items-center justify-between px-3 py-2 text-xs font-medium"
+            >
+              <span>
+                Communication preferences
+                <span className="ml-1.5 text-[10px] text-muted-foreground">
+                  ({languages.length} languages · {channels.length} channels)
+                </span>
+              </span>
+              {showPrefs ? (
+                <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" />
+              ) : (
+                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+              )}
+            </button>
+            {showPrefs && (
+              <div className="space-y-3 border-t bg-background p-3">
+                <div>
+                  <Label className="mb-1.5 block text-[11px] font-medium text-muted-foreground">
+                    Languages spoken
+                  </Label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {LANGUAGES.map((l) => {
+                      const on = languages.includes(l);
+                      return (
+                        <button
+                          type="button"
+                          key={l}
+                          onClick={() => toggle(languages, setLanguages, l)}
+                          className={`rounded-full border px-2.5 py-1 text-[11px] transition ${
+                            on
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border bg-background text-foreground hover:border-primary/40"
+                          }`}
+                        >
+                          {l}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <Label className="mb-1.5 block text-[11px] font-medium text-muted-foreground">
+                    Preferred channels
+                  </Label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {COMM_CHANNELS.map((c) => {
+                      const on = channels.includes(c);
+                      return (
+                        <button
+                          type="button"
+                          key={c}
+                          onClick={() => toggle(channels, setChannels, c)}
+                          className={`rounded-full border px-2.5 py-1 text-[11px] transition ${
+                            on
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border bg-background text-foreground hover:border-primary/40"
+                          }`}
+                        >
+                          {c}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </StepShell>
     </form>
