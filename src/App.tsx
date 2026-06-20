@@ -15,6 +15,21 @@ import Welcome from "./pages/Welcome";
 import OnboardingSubscription from "./pages/OnboardingSubscription";
 import OutOfCreditScreen from "./pages/OutOfCreditScreen";
 import UpcomingModule from "./pages/temple/UpcomingModule";
+// Business Connect (B2B onboarding)
+import BCLanding from "./pages/business-connect/Landing";
+import BCAuth from "./pages/business-connect/Auth";
+import BCOnboardingLayout from "./pages/business-connect/OnboardingLayout";
+import StepBusinessType from "./pages/business-connect/steps/StepBusinessType";
+import StepBusinessInfo from "./pages/business-connect/steps/StepBusinessInfo";
+import StepLocation from "./pages/business-connect/steps/StepLocation";
+import StepLanguages from "./pages/business-connect/steps/StepLanguages";
+import StepVerification from "./pages/business-connect/steps/StepVerification";
+import StepGallery from "./pages/business-connect/steps/StepGallery";
+import StepSubscription from "./pages/business-connect/steps/StepSubscription";
+import StepComplete from "./pages/business-connect/steps/StepComplete";
+import BCDashboard from "./pages/business-connect/Dashboard";
+import BCProfile from "./pages/business-connect/Profile";
+import BCExplore from "./pages/business-connect/Explore";
 import Profile from "./pages/Profile";
 // Temple Admin Module Layouts
 import TempleInfoLayout from "./pages/temple/TempleInfoLayout";
@@ -285,6 +300,25 @@ const App = () => {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/onboarding/subscription" element={<OnboardingSubscription />} />
             <Route path="/out-of-credits" element={<OutOfCreditScreen />} />
+
+            {/* Business Connect */}
+            <Route path="/business-connect" element={<BCLanding />} />
+            <Route path="/business-connect/auth" element={<BCAuth />} />
+            <Route path="/business-connect/explore" element={<BCExplore />} />
+            <Route path="/business-connect/dashboard" element={<BCDashboard />} />
+            <Route path="/business-connect/profile" element={<BCProfile />} />
+            <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
+              <Route index element={<Navigate to="type" replace />} />
+              <Route path="type" element={<StepBusinessType />} />
+              <Route path="info" element={<StepBusinessInfo />} />
+              <Route path="location" element={<StepLocation />} />
+              <Route path="languages" element={<StepLanguages />} />
+              <Route path="verification" element={<StepVerification />} />
+              <Route path="gallery" element={<StepGallery />} />
+              <Route path="subscription" element={<StepSubscription />} />
+              <Route path="complete" element={<StepComplete />} />
+            </Route>
+
 
             {/* Temple Admin Routes */}
             <Route path="/temple-hub" element={<TempleHub />} />
