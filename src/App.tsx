@@ -29,6 +29,8 @@ import StepComplete from "./pages/business-connect/steps/StepComplete";
 import BCDashboard from "./pages/business-connect/Dashboard";
 import BCProfile from "./pages/business-connect/Profile";
 import BusinessProfilePage from "./pages/business/BusinessProfilePage";
+import BusinessWebsitePage from "./pages/business/BusinessWebsitePage";
+import BusinessProfileLayout from "./pages/business/BusinessProfileLayout";
 import BCExplore from "./pages/business-connect/Explore";
 import Profile from "./pages/Profile";
 // Temple Admin Module Layouts
