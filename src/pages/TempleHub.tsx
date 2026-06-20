@@ -659,9 +659,9 @@ const TempleHub = () => {
         {!isSuspended && (
           <div className="space-y-7">
             {[
-              { key: "temple", label: t("cat_temple", lang), icon: Landmark },
-              { key: "management", label: t("cat_management", lang), icon: Users },
-              { key: "growth", label: t("cat_growth", lang), icon: BarChart3 },
+              { key: "setup", label: "Setup & Visibility", icon: Building2 },
+              { key: "operations", label: "Daily Operations", icon: Briefcase },
+              { key: "insights", label: "Finance & Insights", icon: BarChart3 },
             ].map((cat) => {
               const catModules = allModules.filter(m => m.category === cat.key);
               if (catModules.length === 0) return null;
