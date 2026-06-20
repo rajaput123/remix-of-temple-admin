@@ -227,24 +227,22 @@ function ProfileFormDialog({
 
         <Tabs defaultValue="basic" className="flex flex-1 flex-col overflow-hidden">
           {/* Horizontal Tab rail */}
-          <TabsList className="flex h-auto w-full shrink-0 flex-row gap-1 rounded-none border-b bg-muted/30 p-2">
+          <TabsList className="flex h-auto w-full shrink-0 flex-row gap-0 rounded-none border-b bg-transparent p-0">
             {[
-              { v: "basic", icon: Building2, label: "Basic Info", done: sec.basic },
-              { v: "owner", icon: User, label: "Owner", done: sec.owner },
-              { v: "address", icon: MapPin, label: "Address", done: sec.address },
-              { v: "hours", icon: Clock, label: "Hours", done: sec.hours },
-              { v: "languages", icon: Languages, label: "Languages", done: sec.languages },
-              { v: "media", icon: ImageIcon, label: "Media", done: sec.media },
-              { v: "verification", icon: ShieldCheck, label: "Verification", done: sec.verification },
+              { v: "basic", label: "Basic Info" },
+              { v: "owner", label: "Owner" },
+              { v: "address", label: "Address" },
+              { v: "hours", label: "Hours" },
+              { v: "languages", label: "Languages" },
+              { v: "media", label: "Media" },
+              { v: "verification", label: "Verification" },
             ].map((t) => (
               <TabsTrigger
                 key={t.v}
                 value={t.v}
-                className="group relative flex shrink-0 items-center justify-start gap-2 rounded-md px-3 py-2 text-xs font-medium data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm"
+                className="relative shrink-0 rounded-none border-b-2 border-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground data-[state=active]:border-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
-                <t.icon className="h-3.5 w-3.5" />
-                <span className="truncate">{t.label}</span>
-                <span className={`ml-auto h-1.5 w-1.5 shrink-0 rounded-full ${t.done ? "bg-emerald-500" : "bg-amber-400"}`} />
+                {t.label}
               </TabsTrigger>
             ))}
           </TabsList>
