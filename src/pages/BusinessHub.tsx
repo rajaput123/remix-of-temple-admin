@@ -740,7 +740,7 @@ const BusinessHub = () => {
                             </span>
                             <button
                               onClick={() => handleOpen(m)}
-                              className="text-[12px] font-medium text-[#2b62ef] hover:underline flex items-center gap-1"
+                              className="text-[12px] font-medium text-primary hover:underline flex items-center gap-1"
                             >
                               Open <ChevronRight className="h-3.5 w-3.5" />
                             </button>
