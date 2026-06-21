@@ -26,13 +26,13 @@
     --color-fg-disabled: oklch(0.72 0.015 260);
     --color-fg-inverse: oklch(0.99 0 0);
 
-    /* Brand & semantic — primary #2B62EF */
-    --color-primary: oklch(0.498 0.333 258);
-    --color-primary-hover: oklch(0.455 0.300 258);
+    /* Brand & semantic — primary #6498FF */
+    --color-primary: oklch(0.68 0.21 260);
+    --color-primary-hover: oklch(0.64 0.21 260);
     --color-primary-fg: oklch(0.99 0 0);
     --color-primary-subtle: oklch(0.97 0.03 258);
 
-    --color-ai: oklch(0.498 0.333 258);
+    --color-ai: oklch(0.68 0.21 260);
     --color-ai-subtle: oklch(0.97 0.03 258);
 
     --color-success: oklch(0.62 0.17 155);
@@ -51,10 +51,10 @@
     --color-divider: oklch(0.9 0.008 260);
 
     /* Focus ring */
-    --color-ring: oklch(0.498 0.333 258 / 0.45);
+    --color-ring: oklch(0.68 0.21 260 / 0.45);
 
     /* Chart / data viz (categorical, colorblind-safe) */
-    --color-chart-1: oklch(0.498 0.333 258);
+    --color-chart-1: oklch(0.68 0.21 260);
     --color-chart-2: oklch(0.62 0.17 155);
     --color-chart-3: oklch(0.72 0.16 75);
     --color-chart-4: oklch(0.58 0.18 295);
