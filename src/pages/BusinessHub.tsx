@@ -519,7 +519,7 @@ const BusinessHub = () => {
                   <Shield className="h-3.5 w-3.5 mr-2 text-slate-400" />
                   {r.label}
                   {role === r.id && (
-                    <span className="ml-auto text-[10px] text-[#2b62ef] font-semibold">ACTIVE</span>
+                    <span className="ml-auto text-[10px] text-primary font-semibold">ACTIVE</span>
                   )}
                 </DropdownMenuItem>
               ))}
