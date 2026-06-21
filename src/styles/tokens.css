@@ -6,7 +6,7 @@
  * Prefer semantic utility classes; never hardcode hex in components.
  */
 
-@layer base {
+
   /* ─── Light theme — Operational Command (default) ─── */
   :root {
     color-scheme: light;
