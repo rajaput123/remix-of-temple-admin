@@ -26,7 +26,7 @@ const tabs = [
 
 const renderStatusBadge = (cell: string) => {
   if (["Active", "Completed"].includes(cell)) return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">{cell}</Badge>;
-  if (["Platinum"].includes(cell)) return <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">{cell}</Badge>;
+  if (["Platinum"].includes(cell)) return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">{cell}</Badge>;
   if (["Gold"].includes(cell)) return <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">{cell}</Badge>;
   if (["Silver"].includes(cell)) return <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">{cell}</Badge>;
   return cell;

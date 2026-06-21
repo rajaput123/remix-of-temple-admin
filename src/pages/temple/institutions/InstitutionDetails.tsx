@@ -52,10 +52,10 @@ const InstitutionDetails = () => {
 
   const typeColor: Record<string, string> = {
     "School": "bg-blue-50 text-blue-700 border-blue-200",
-    "College": "bg-indigo-50 text-indigo-700 border-indigo-200",
+    "College": "bg-blue-50 text-blue-700 border-blue-200",
     "Hospital": "bg-red-50 text-red-700 border-red-200",
     "Goshala": "bg-green-50 text-green-700 border-green-200",
-    "Cultural Center": "bg-purple-50 text-purple-700 border-purple-200",
+    "Cultural Center": "bg-blue-50 text-blue-700 border-blue-200",
     "NGO": "bg-teal-50 text-teal-700 border-teal-200",
     "Veda Pathashala": "bg-amber-50 text-amber-700 border-amber-200",
     "Annadanam Foundation": "bg-orange-50 text-orange-700 border-orange-200",
@@ -263,7 +263,7 @@ const InstitutionDetails = () => {
                     { label: "Donations", value: `₹${(latest.donationsReceived / 1000).toFixed(0)}K`, icon: Heart, color: "text-red-500" },
                     { label: "Expenses", value: `₹${(latest.operationalExpenses / 1000).toFixed(0)}K`, icon: IndianRupee, color: "text-amber-600" },
                     { label: "Grants", value: `₹${(latest.grants / 1000).toFixed(0)}K`, icon: Award, color: "text-green-600" },
-                    { label: "Sponsorship", value: `₹${(latest.sponsorship / 1000).toFixed(0)}K`, icon: Heart, color: "text-purple-600" },
+                    { label: "Sponsorship", value: `₹${(latest.sponsorship / 1000).toFixed(0)}K`, icon: Heart, color: "text-blue-600" },
                     { label: "Surplus", value: `₹${(latest.surplus / 1000).toFixed(0)}K`, icon: IndianRupee, color: latest.surplus >= 0 ? "text-green-600" : "text-red-600" },
                   ].map((kpi, i) => (
                     <Card key={i}><CardContent className="p-4"><kpi.icon className={`h-5 w-5 ${kpi.color} mb-2`} /><p className="text-2xl font-bold">{kpi.value}</p><p className="text-[11px] text-muted-foreground">{kpi.label}</p></CardContent></Card>

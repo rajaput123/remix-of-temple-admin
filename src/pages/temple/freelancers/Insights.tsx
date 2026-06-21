@@ -436,7 +436,7 @@ const Insights = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <PieChart className="h-5 w-5 text-purple-500" />
+                  <PieChart className="h-5 w-5 text-blue-500" />
                   Financial Overview
                 </CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
@@ -483,7 +483,7 @@ const Insights = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <BarChart3 className="h-5 w-5 text-indigo-500" />
+                    <BarChart3 className="h-5 w-5 text-blue-500" />
                     Category Analysis
                   </CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">

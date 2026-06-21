@@ -47,7 +47,7 @@ const BranchReports = () => {
           { label: "Total Branches", value: branches.length, icon: GitBranch, color: "text-teal-600" },
           { label: "Total Revenue", value: `₹${(totalRevenue / 100000).toFixed(1)}L`, icon: IndianRupee, color: "text-green-600" },
           { label: "Total Expense", value: `₹${(totalExpense / 100000).toFixed(1)}L`, icon: TrendingUp, color: "text-amber-600" },
-          { label: "Volunteers", value: totalVolunteers, icon: Users, color: "text-purple-600" },
+          { label: "Volunteers", value: totalVolunteers, icon: Users, color: "text-blue-600" },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><kpi.icon className={`h-4 w-4 ${kpi.color}`} /><span className="text-xs text-muted-foreground">{kpi.label}</span></div><p className="text-xl font-bold">{kpi.value}</p></CardContent></Card>
         ))}

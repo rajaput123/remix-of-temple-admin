@@ -236,7 +236,7 @@ export default function Panchang() {
           {/* Main Panchang Details */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: 'Tithi', value: panchang.tithi, icon: Moon, color: 'text-indigo-500' },
+              { label: 'Tithi', value: panchang.tithi, icon: Moon, color: 'text-blue-500' },
               { label: 'Nakshatra', value: panchang.nakshatra, icon: Star, color: 'text-amber-500' },
               { label: 'Yoga', value: panchang.yoga, icon: Sun, color: 'text-orange-500' },
               { label: 'Karana', value: panchang.karana, icon: Calendar, color: 'text-primary' },
@@ -263,7 +263,7 @@ export default function Panchang() {
               </CardContent>
             </Card>
             <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Moon className="h-4 w-4 text-indigo-500" />Moon</CardTitle></CardHeader>
+              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Moon className="h-4 w-4 text-blue-500" />Moon</CardTitle></CardHeader>
               <CardContent className="space-y-2">
                 <div className="flex justify-between text-sm"><span className="text-muted-foreground">Moonrise</span><span className="font-medium text-foreground">{panchang.moonrise}</span></div>
                 {(panchang as any).moonset && <div className="flex justify-between text-sm"><span className="text-muted-foreground">Moonset</span><span className="font-medium text-foreground">{(panchang as any).moonset}</span></div>}

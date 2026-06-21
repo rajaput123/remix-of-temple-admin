@@ -26,7 +26,7 @@ const statusColor: Record<string, string> = {
 const typeColor: Record<string, string> = {
   "Consumable": "bg-blue-50 text-blue-700 border-blue-200",
   "Perishable": "bg-orange-50 text-orange-700 border-orange-200",
-  "Asset": "bg-purple-50 text-purple-700 border-purple-200",
+  "Asset": "bg-blue-50 text-blue-700 border-blue-200",
   "Donation Item": "bg-pink-50 text-pink-700 border-pink-200",
 };
 
@@ -280,8 +280,8 @@ const Items = () => {
                 </div>
               )}
               {form.itemType === "Asset" && (
-                <div className="space-y-4 p-4 border rounded-lg bg-purple-50/30">
-                  <p className="text-sm font-medium text-purple-700">Asset Details</p>
+                <div className="space-y-4 p-4 border rounded-lg bg-blue-50/30">
+                  <p className="text-sm font-medium text-blue-700">Asset Details</p>
                   <div className="grid grid-cols-2 gap-4">
                     <div><Label>Serial Number</Label><Input value={form.serialNumber} onChange={e => setForm({...form, serialNumber: e.target.value})} /></div>
                     <div>

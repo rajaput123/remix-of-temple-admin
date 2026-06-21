@@ -24,7 +24,7 @@ const AVAILABLE_SEVAS: Omit<SevaItem, "selected">[] = [
 ];
 
 const categoryColors: Record<string, string> = {
-  Ritual: "bg-purple-100 text-purple-700 border-purple-200",
+  Ritual: "bg-blue-100 text-blue-700 border-blue-200",
   Darshan: "bg-blue-100 text-blue-700 border-blue-200",
   Special: "bg-amber-100 text-amber-700 border-amber-200",
 };

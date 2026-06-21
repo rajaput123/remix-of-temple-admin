@@ -8,7 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { getSevaBookings } from "@/modules/sevas/sevaStore";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(16,85%,23%)", "hsl(217,91%,60%)", "hsl(142,60%,40%)", "hsl(45,90%,45%)", "hsl(280,50%,55%)", "hsl(350,65%,50%)", "hsl(190,60%,45%)"];
+const COLORS = ["hsl(16,85%,23%)", "hsl(217,91%,60%)", "hsl(142,60%,40%)", "hsl(45,90%,45%)", "hsl(221,83%,53%)", "hsl(350,65%,50%)", "hsl(190,60%,45%)"];
 
 // Fallback mock so every chart in this report always renders something.
 const MOCK_BOOKINGS = (() => {
@@ -134,7 +134,7 @@ const OfferingReports = () => {
           { label: "Total Revenue", value: `₹${totalRevenue.toLocaleString("en-IN")}`, icon: IndianRupee, color: "text-green-600" },
           { label: "Total Bookings", value: totalBookings.toString(), icon: Sparkles, color: "text-amber-600" },
           { label: "Completed", value: completedBookings.toString(), icon: TrendingUp, color: "text-blue-600" },
-          { label: "Avg per Seva", value: `₹${avgRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, icon: Clock, color: "text-purple-600" },
+          { label: "Avg per Seva", value: `₹${avgRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, icon: Clock, color: "text-blue-600" },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><kpi.icon className={`h-4 w-4 ${kpi.color}`} /><span className="text-xs text-muted-foreground">{kpi.label}</span></div><p className="text-xl font-bold">{kpi.value}</p></CardContent></Card>
         ))}

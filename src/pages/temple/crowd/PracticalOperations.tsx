@@ -188,7 +188,7 @@ const PracticalOperations = () => {
               {/* Method 3: Density Estimation */}
               <div className="p-4 rounded-lg border bg-muted/30">
                 <div className="flex items-center gap-2 mb-3">
-                  <Calculator className="h-5 w-5 text-purple-600" />
+                  <Calculator className="h-5 w-5 text-blue-600" />
                   <h3 className="font-semibold">Method 3: Density Level Estimation</h3>
                   <Badge variant="outline">Quick Method</Badge>
                 </div>
@@ -219,9 +219,9 @@ const PracticalOperations = () => {
                       System converts density level to estimated count: Low = 30% capacity, Medium = 65% capacity, High = 90% capacity
                     </p>
                   </div>
-                  <div className="p-3 rounded bg-purple-50 border border-purple-200">
-                    <p className="text-xs font-medium text-purple-900 mb-1">When to Use:</p>
-                    <p className="text-xs text-purple-700">
+                  <div className="p-3 rounded bg-blue-50 border border-blue-200">
+                    <p className="text-xs font-medium text-blue-900 mb-1">When to Use:</p>
+                    <p className="text-xs text-blue-700">
                       Quick updates when exact count is not critical. Useful for <strong>rapid status updates</strong> 
                       during peak hours when counting is difficult.
                     </p>

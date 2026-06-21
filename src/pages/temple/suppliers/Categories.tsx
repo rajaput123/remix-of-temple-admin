@@ -15,7 +15,7 @@ const categories = [
   { id: 2, name: "Grocery", materialCount: 15, suppliers: 2, status: "Active", color: "bg-green-500" },
   { id: 3, name: "Pooja Materials", materialCount: 12, suppliers: 4, status: "Active", color: "bg-orange-500" },
   { id: 4, name: "Oil & Ghee", materialCount: 6, suppliers: 2, status: "Active", color: "bg-amber-500" },
-  { id: 5, name: "Decoration", materialCount: 10, suppliers: 1, status: "Active", color: "bg-purple-500" },
+  { id: 5, name: "Decoration", materialCount: 10, suppliers: 1, status: "Active", color: "bg-blue-500" },
   { id: 6, name: "Electrical", materialCount: 5, suppliers: 1, status: "Inactive", color: "bg-blue-500" },
   { id: 7, name: "Milk & Dairy", materialCount: 4, suppliers: 1, status: "Active", color: "bg-cyan-500" },
   { id: 8, name: "Printing & Media", materialCount: 3, suppliers: 1, status: "Active", color: "bg-slate-500" },

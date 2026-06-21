@@ -735,7 +735,7 @@ const FinanceLedgerPage = () => {
 
                   let particularsColor = "bg-slate-100 text-slate-700";
                   if (group.particulars === "Donation") particularsColor = "bg-emerald-50 text-emerald-700";
-                  else if (group.particulars === "Journal Voucher") particularsColor = "bg-purple-50 text-purple-700";
+                  else if (group.particulars === "Journal Voucher") particularsColor = "bg-blue-50 text-blue-700";
                   else if (group.particulars === "Vendor Payment") particularsColor = "bg-blue-50 text-blue-700";
                   else if (group.particulars === "Transfer") particularsColor = "bg-orange-50 text-orange-700";
 
@@ -850,10 +850,10 @@ const FinanceLedgerPage = () => {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => handleQuickMatch(group.donationId, sIdx)}
-                                  className="h-6 px-1.5 text-[10px] gap-1 text-indigo-700 bg-indigo-50 border-none hover:bg-indigo-100 hover:text-indigo-800"
+                                  className="h-6 px-1.5 text-[10px] gap-1 text-blue-700 bg-blue-50 border-none hover:bg-blue-100 hover:text-blue-800"
                                   title="Suggested match found. Click to link."
                                 >
-                                  <ChevronDown className="h-3 w-3 text-indigo-600" /> Suggest Match
+                                  <ChevronDown className="h-3 w-3 text-blue-600" /> Suggest Match
                                 </Button>
                               )}
 

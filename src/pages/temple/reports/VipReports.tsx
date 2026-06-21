@@ -59,7 +59,7 @@ const VipReports = () => {
         {[
           { label: "Active VIPs", value: totalVIPs, icon: Users, color: "text-amber-600" },
           { label: "Total Contribution", value: `₹${(totalContribution / 100000).toFixed(1)}L`, icon: IndianRupee, color: "text-green-600" },
-          { label: "Avg per VIP", value: `₹${Math.round(totalContribution / totalVIPs).toLocaleString()}`, icon: Crown, color: "text-purple-600" },
+          { label: "Avg per VIP", value: `₹${Math.round(totalContribution / totalVIPs).toLocaleString()}`, icon: Crown, color: "text-blue-600" },
           { label: "Sensitive Profiles", value: "6", icon: Shield, color: "text-red-500" },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><kpi.icon className={`h-4 w-4 ${kpi.color}`} /><span className="text-xs text-muted-foreground">{kpi.label}</span></div><p className="text-xl font-bold">{kpi.value}</p></CardContent></Card>

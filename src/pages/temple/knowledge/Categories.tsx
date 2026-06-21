@@ -24,7 +24,7 @@ const KnowledgeCategories = () => {
     { id: "CAT-003", name: "Events & Festivals", description: "Event planning guides and festival checklists", documentCount: 32, subcategories: ["Annual Festivals", "Special Events", "Planning"], color: "bg-emerald-100 text-emerald-700" },
     { id: "CAT-004", name: "HR & People", description: "Employee policies, training materials, guidelines", documentCount: 28, subcategories: ["Policies", "Training", "Onboarding"], color: "bg-blue-100 text-blue-700" },
     { id: "CAT-005", name: "Safety & Compliance", description: "Safety protocols and regulatory compliance", documentCount: 22, subcategories: ["Fire Safety", "Emergency", "Legal"], color: "bg-red-100 text-red-700" },
-    { id: "CAT-006", name: "Rituals & Traditions", description: "Religious procedures, mantras, and traditions", documentCount: 56, subcategories: ["Daily Pujas", "Special Rituals", "Mantras"], color: "bg-purple-100 text-purple-700" },
+    { id: "CAT-006", name: "Rituals & Traditions", description: "Religious procedures, mantras, and traditions", documentCount: 56, subcategories: ["Daily Pujas", "Special Rituals", "Mantras"], color: "bg-blue-100 text-blue-700" },
   ]);
 
   const [showAddCategory, setShowAddCategory] = useState(false);

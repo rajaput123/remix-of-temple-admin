@@ -63,8 +63,8 @@ const SevaLinkingSection = ({ onSevasChange }: SevaLinkingSectionProps) => {
 
     const getSevaTypeBadge = (type: "Ritual" | "Darshan" | "Special") => {
         const colors = {
-            Ritual: "bg-purple-100 text-purple-700 border-purple-300",
-            Darshan: "bg-blue-100 text-blue-700 border-purple-300",
+            Ritual: "bg-blue-100 text-blue-700 border-blue-300",
+            Darshan: "bg-blue-100 text-blue-700 border-blue-300",
             Special: "bg-amber-100 text-amber-700 border-amber-300",
         };
         return colors[type];

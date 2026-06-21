@@ -262,7 +262,7 @@ const ManpowerAssignmentSection = ({ onManpowerChange }: ManpowerAssignmentSecti
                                 "freelancers",
                                 searchFreelancers,
                                 Briefcase,
-                                "bg-purple-100 text-purple-700"
+                                "bg-blue-100 text-blue-700"
                             )}
                         </div>
                     </TabsContent>

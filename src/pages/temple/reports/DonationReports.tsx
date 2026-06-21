@@ -8,7 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useDonations, useDonors, useAllocations } from "@/modules/donations/hooks";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(16, 85%, 23%)", "hsl(217, 91%, 60%)", "hsl(142, 60%, 40%)", "hsl(45, 90%, 45%)", "hsl(280, 50%, 55%)", "hsl(350, 65%, 50%)"];
+const COLORS = ["hsl(16, 85%, 23%)", "hsl(217, 91%, 60%)", "hsl(142, 60%, 40%)", "hsl(45, 90%, 45%)", "hsl(221, 83%, 53%)", "hsl(350, 65%, 50%)"];
 
 const DonationReports = () => {
   const donations = useDonations();
@@ -70,7 +70,7 @@ const DonationReports = () => {
           { label: "Total Donations", value: `₹${(totalAmount / 100000).toFixed(1)}L`, icon: IndianRupee, color: "text-green-600" },
           { label: "Total Count", value: donations.length.toString(), icon: Heart, color: "text-rose-600" },
           { label: "Unique Donors", value: uniqueDonors.toString(), icon: Users, color: "text-blue-600" },
-          { label: "Avg Donation", value: `₹${avgDonation.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, icon: TrendingUp, color: "text-purple-600" },
+          { label: "Avg Donation", value: `₹${avgDonation.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, icon: TrendingUp, color: "text-blue-600" },
         ].map((kpi) => (
           <Card key={kpi.label}>
             <CardContent className="p-4">

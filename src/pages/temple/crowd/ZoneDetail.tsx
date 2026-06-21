@@ -257,7 +257,7 @@ const ZoneDetail = () => {
             </div>
             <div className="p-4 rounded-lg border bg-muted/30">
               <div className="flex items-center gap-2 mb-2">
-                <Clock className="h-4 w-4 text-purple-600" />
+                <Clock className="h-4 w-4 text-blue-600" />
                 <span className="text-sm font-medium">Time to Full</span>
               </div>
               <p className="text-2xl font-bold">

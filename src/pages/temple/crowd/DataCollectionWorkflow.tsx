@@ -68,7 +68,7 @@ const DataCollectionWorkflow = () => {
             </div>
             <div className="p-4 rounded-lg border bg-background">
               <div className="flex items-center gap-2 mb-2">
-                <Brain className="h-5 w-5 text-purple-600" />
+                <Brain className="h-5 w-5 text-blue-600" />
                 <span className="font-semibold">Predictive Intelligence</span>
               </div>
               <p className="text-sm text-muted-foreground">Booking forecasts, event schedules, historical patterns</p>
@@ -159,7 +159,7 @@ const DataCollectionWorkflow = () => {
                 {/* CCTV/Sensors (Optional) */}
                 <div className="p-4 rounded-lg border bg-muted/30 border-dashed">
                   <div className="flex items-center gap-2 mb-3">
-                    <Camera className="h-5 w-5 text-purple-600" />
+                    <Camera className="h-5 w-5 text-blue-600" />
                     <h3 className="font-semibold">CCTV Analytics / Sensors</h3>
                     <Badge variant="outline" className="text-xs">Optional</Badge>
                   </div>
@@ -288,7 +288,7 @@ const DataCollectionWorkflow = () => {
                       <span><strong>Report temporary blockages</strong> or diversions</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-purple-600 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5" />
                       <span><strong>Emergency updates</strong> take priority over automatic data</span>
                     </li>
                   </ul>
@@ -342,7 +342,7 @@ const DataCollectionWorkflow = () => {
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Brain className="h-4 w-4 text-purple-600" /> Predictive Input Sources
+                <Brain className="h-4 w-4 text-blue-600" /> Predictive Input Sources
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-2">System intelligence for forecasting crowd surges</p>
             </CardHeader>
@@ -446,9 +446,9 @@ const DataCollectionWorkflow = () => {
               </div>
 
               {/* Prediction Display */}
-              <Card className="bg-purple-50 border-purple-200">
+              <Card className="bg-blue-50 border-blue-200">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2 text-purple-900">
+                  <CardTitle className="text-sm flex items-center gap-2 text-blue-900">
                     <AlertTriangle className="h-4 w-4" /> Predicted Congestion Warnings
                   </CardTitle>
                 </CardHeader>
@@ -503,8 +503,8 @@ const DataCollectionWorkflow = () => {
                     <p className="font-semibold text-sm">Entry Scan Confirmations</p>
                     <p className="text-xs text-muted-foreground mt-1">Real-time counts</p>
                   </div>
-                  <div className="p-4 rounded-lg border bg-purple-50 border-purple-200 text-center">
-                    <Smartphone className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+                  <div className="p-4 rounded-lg border bg-blue-50 border-blue-200 text-center">
+                    <Smartphone className="h-8 w-8 mx-auto mb-2 text-blue-600" />
                     <p className="font-semibold text-sm">Volunteer Updates</p>
                     <p className="text-xs text-muted-foreground mt-1">Manual adjustments</p>
                   </div>
@@ -834,9 +834,9 @@ const DataCollectionWorkflow = () => {
             </TabsContent>
 
             <TabsContent value="3" className="mt-4">
-              <div className="p-4 rounded-lg border bg-purple-50 border-purple-200">
+              <div className="p-4 rounded-lg border bg-blue-50 border-blue-200">
                 <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle2 className="h-5 w-5 text-purple-600" />
+                  <CheckCircle2 className="h-5 w-5 text-blue-600" />
                   <h3 className="font-semibold text-lg">Phase 3: CCTV/Sensor AI Integration</h3>
                 </div>
                 <div className="space-y-3">
@@ -844,19 +844,19 @@ const DataCollectionWorkflow = () => {
                     <p className="font-medium text-sm mb-2">Features:</p>
                     <ul className="space-y-1 text-sm">
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-3 w-3 text-purple-600 mt-1" />
+                        <CheckCircle2 className="h-3 w-3 text-blue-600 mt-1" />
                         <span>AI-powered people counting from CCTV</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-3 w-3 text-purple-600 mt-1" />
+                        <CheckCircle2 className="h-3 w-3 text-blue-600 mt-1" />
                         <span>Thermal sensors for density detection</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-3 w-3 text-purple-600 mt-1" />
+                        <CheckCircle2 className="h-3 w-3 text-blue-600 mt-1" />
                         <span>Motion detection for queue monitoring</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="h-3 w-3 text-purple-600 mt-1" />
+                        <CheckCircle2 className="h-3 w-3 text-blue-600 mt-1" />
                         <span>Advanced predictive analytics</span>
                       </li>
                     </ul>

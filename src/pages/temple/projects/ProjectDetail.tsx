@@ -576,13 +576,13 @@ const ProjectDetail = () => {
                                         <div className={`mt-1 p-1.5 rounded-full ${log.type === 'donation' ? 'bg-green-100' :
                                             log.type === 'expense' ? 'bg-amber-100' :
                                                 log.type === 'milestone' ? 'bg-primary/10' :
-                                                    log.type === 'status' ? 'bg-purple-100' :
+                                                    log.type === 'status' ? 'bg-blue-100' :
                                                         'bg-muted'
                                             }`}>
                                             {log.type === 'donation' && <IndianRupee className="h-3 w-3 text-green-600" />}
                                             {log.type === 'expense' && <TrendingUp className="h-3 w-3 text-amber-600" />}
                                             {log.type === 'milestone' && <CheckCircle className="h-3 w-3 text-primary" />}
-                                            {log.type === 'status' && <Activity className="h-3 w-3 text-purple-600" />}
+                                            {log.type === 'status' && <Activity className="h-3 w-3 text-blue-600" />}
                                             {log.type === 'update' && <FileText className="h-3 w-3 text-muted-foreground" />}
                                         </div>
                                         <div className="flex-1">

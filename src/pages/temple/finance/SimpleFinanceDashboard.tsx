@@ -15,7 +15,7 @@ const incomeData = [
   { name: "Counter Donations", value: 650000, color: "hsl(45, 90%, 50%)" },
   { name: "Seva Bookings", value: 2100000, color: "hsl(142, 60%, 40%)" },
   { name: "Event Income", value: 350000, color: "hsl(200, 60%, 50%)" },
-  { name: "Project Funds", value: 500000, color: "hsl(280, 50%, 55%)" },
+  { name: "Project Funds", value: 500000, color: "hsl(221, 83%, 53%)" },
 ];
 
 // Expense categories
@@ -25,7 +25,7 @@ const expenseData = [
   { name: "Maintenance", value: 650000, color: "hsl(45, 90%, 50%)" },
   { name: "Utilities", value: 380000, color: "hsl(200, 60%, 50%)" },
   { name: "Staff Salaries", value: 1600000, color: "hsl(142, 60%, 40%)" },
-  { name: "Priest Honorarium", value: 480000, color: "hsl(280, 50%, 55%)" },
+  { name: "Priest Honorarium", value: 480000, color: "hsl(221, 83%, 53%)" },
   { name: "Security", value: 360000, color: "hsl(0, 50%, 50%)" },
   { name: "Admin Staff", value: 420000, color: "hsl(16, 50%, 40%)" },
 ];

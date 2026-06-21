@@ -24,7 +24,7 @@ const mediaRecords = [
 const typeColors: Record<string, string> = {
   "Press Release": "text-blue-700 bg-blue-50 border-blue-200",
   "Media Coverage": "text-green-700 bg-green-50 border-green-200",
-  "Social Media Post": "text-purple-700 bg-purple-50 border-purple-200",
+  "Social Media Post": "text-blue-700 bg-blue-50 border-blue-200",
   "TV Interview": "text-orange-700 bg-orange-50 border-orange-200",
 };
 

@@ -32,7 +32,7 @@ interface ResourceAllocationSectionProps {
 }
 
 const CATEGORY_META: Record<ResourceCategory, { label: string; color: string; icon: typeof Building2 }> = {
-  venue: { label: "Venue / Hall", color: "bg-indigo-100 text-indigo-700 border-indigo-300", icon: Building2 },
+  venue: { label: "Venue / Hall", color: "bg-blue-100 text-blue-700 border-blue-300", icon: Building2 },
   material: { label: "Material / Item", color: "bg-amber-100 text-amber-700 border-amber-300", icon: Package },
 };
 
@@ -132,7 +132,7 @@ const ResourceAllocationSection = ({ onResourcesChange }: ResourceAllocationSect
             </p>
           </div>
           <div className="flex gap-2 flex-wrap items-center">
-            {venueCount > 0 && <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-300">{venueCount} venues</Badge>}
+            {venueCount > 0 && <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">{venueCount} venues</Badge>}
             {materialCount > 0 && <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-300">{materialCount} materials</Badge>}
             
             {shortages > 0 && <Badge variant="destructive" className="gap-1"><AlertTriangle className="h-3 w-3" />{shortages} shortage</Badge>}

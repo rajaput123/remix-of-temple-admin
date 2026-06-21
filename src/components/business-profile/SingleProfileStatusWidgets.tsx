@@ -16,7 +16,7 @@ export function SingleProfileStatusWidgets({ profile }: SingleProfileStatusWidge
   const items = [
     { label: "Profile Status", icon: Award, tint: "bg-blue-500/10 text-blue-600", content: <ProfileStatusBadge status={profile.status} /> },
     { label: "Verification", icon: ShieldCheck, tint: "bg-emerald-500/10 text-emerald-600", content: <VerificationStatusBadge status={profile.verificationStatus} /> },
-    { label: "Completion", icon: CheckCircle2, tint: "bg-violet-500/10 text-violet-600", content: <span className="text-2xl font-bold tabular-nums">{completion}%</span> },
+    { label: "Completion", icon: CheckCircle2, tint: "bg-blue-500/10 text-blue-600", content: <span className="text-2xl font-bold tabular-nums">{completion}%</span> },
     { label: "Last Updated", icon: Clock, tint: "bg-amber-500/10 text-amber-600", content: <span className="text-sm font-semibold">{formatUpdatedAt(profile.updatedAt)}</span> },
   ];
 

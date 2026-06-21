@@ -16,8 +16,8 @@ const formatCurrency = (val: number) => `₹${val.toLocaleString("en-IN")}`;
 
 const COLORS = [
   "hsl(16, 85%, 35%)", "hsl(142, 60%, 40%)", "hsl(200, 60%, 50%)",
-  "hsl(45, 90%, 45%)", "hsl(280, 50%, 55%)", "hsl(350, 65%, 50%)",
-  "hsl(180, 50%, 40%)", "hsl(30, 80%, 50%)", "hsl(260, 50%, 50%)",
+  "hsl(45, 90%, 45%)", "hsl(221, 83%, 53%)", "hsl(350, 65%, 50%)",
+  "hsl(180, 50%, 40%)", "hsl(30, 80%, 50%)", "hsl(215, 60%, 45%)",
 ];
 
 const reportTypes = [

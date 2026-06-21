@@ -31,7 +31,7 @@ const allSlots = [
 const calendarOfferings = [
   { id: "1", name: "Suprabhatam", type: "Ritual" as const, structure: "Main Temple", time: "5:30 AM", price: 500, free: false, capacity: 50, booked: 38, frequency: "Daily" as const, color: "hsl(16, 85%, 35%)" },
   { id: "2", name: "Archana", type: "Ritual" as const, structure: "Padmavathi Shrine", time: "7:00 AM", price: 200, free: false, capacity: 30, booked: 22, frequency: "Daily" as const, color: "hsl(30, 80%, 50%)" },
-  { id: "3", name: "Abhishekam", type: "Ritual" as const, structure: "Main Temple", time: "9:00 AM", price: 2000, free: false, capacity: 25, booked: 25, frequency: "Daily" as const, color: "hsl(280, 50%, 55%)" },
+  { id: "3", name: "Abhishekam", type: "Ritual" as const, structure: "Main Temple", time: "9:00 AM", price: 2000, free: false, capacity: 25, booked: 25, frequency: "Daily" as const, color: "hsl(221, 83%, 53%)" },
   { id: "4", name: "Morning Darshan", type: "Darshan" as const, structure: "Main Temple", time: "6:00 AM", price: 0, free: true, capacity: 500, booked: 312, frequency: "Daily" as const, color: "hsl(142, 60%, 40%)" },
   { id: "5", name: "VIP Darshan", type: "Darshan" as const, structure: "Main Temple", time: "8:00 AM", price: 300, free: false, capacity: 100, booked: 67, frequency: "Daily" as const, color: "hsl(200, 60%, 50%)" },
   { id: "6", name: "Sahasranama", type: "Ritual" as const, structure: "Varadaraja Shrine", time: "11:00 AM", price: 1500, free: false, capacity: 40, booked: 15, frequency: "Weekly" as const, daysOfWeek: [5], color: "hsl(45, 90%, 45%)" },
@@ -375,7 +375,7 @@ const Today = () => {
                             r.frequency === "Daily" ? "text-green-700 border-green-300 bg-green-50"
                             : r.frequency === "Weekly" ? "text-blue-700 border-blue-300 bg-blue-50"
                             : r.frequency === "Monthly" ? "text-amber-700 border-amber-300 bg-amber-50"
-                            : "text-purple-700 border-purple-300 bg-purple-50"
+                            : "text-blue-700 border-blue-300 bg-blue-50"
                           }`}>{r.frequency}</Badge>
                         </TableCell>
                         <TableCell className="text-muted-foreground text-sm">{r.structure}</TableCell>

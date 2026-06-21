@@ -373,7 +373,7 @@ export default function BusinessServicesPage() {
               label="Most Viewed"
               value={stats.mostViewed?.name || "—"}
               sub={stats.mostViewed ? `${stats.mostViewed.views} views` : ""}
-              tint="bg-indigo-100 text-indigo-700"
+              tint="bg-blue-100 text-blue-700"
               valueClass="text-sm font-semibold truncate"
             />
             <StatCard icon={TrendingUp} label="Enquiries" value={stats.enquiries} tint="bg-rose-100 text-rose-700" />

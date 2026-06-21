@@ -216,7 +216,7 @@ const AllBookings = () => {
                   <TableCell>
                     <Badge variant="outline" className={`text-[10px] ${
                       booking.sevaCategory?.toLowerCase().includes("daily") ? "text-green-700 border-green-300 bg-green-50"
-                      : booking.sevaCategory?.toLowerCase().includes("festival") ? "text-purple-700 border-purple-300 bg-purple-50"
+                      : booking.sevaCategory?.toLowerCase().includes("festival") ? "text-blue-700 border-blue-300 bg-blue-50"
                       : booking.sevaCategory?.toLowerCase().includes("special") ? "text-blue-700 border-blue-300 bg-blue-50"
                       : booking.sevaCategory?.toLowerCase().includes("vip") ? "text-amber-700 border-amber-300 bg-amber-50"
                       : "text-muted-foreground border-border"

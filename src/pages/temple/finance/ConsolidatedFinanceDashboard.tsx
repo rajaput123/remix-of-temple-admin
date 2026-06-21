@@ -30,7 +30,7 @@ import { financeIntegration } from "@/modules/finance/integration";
 
 const COLORS = [
   "hsl(16, 85%, 35%)", "hsl(142, 60%, 40%)", "hsl(200, 60%, 50%)",
-  "hsl(280, 50%, 55%)", "hsl(45, 90%, 45%)", "hsl(0, 50%, 50%)",
+  "hsl(221, 83%, 53%)", "hsl(45, 90%, 45%)", "hsl(0, 50%, 50%)",
   "hsl(30, 80%, 50%)",
 ];
 

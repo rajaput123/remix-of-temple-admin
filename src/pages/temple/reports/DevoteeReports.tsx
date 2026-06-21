@@ -8,7 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { devoteesData } from "@/data/devotees";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(280,50%,55%)", "hsl(16,85%,23%)", "hsl(190,60%,45%)"];
+const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(221,83%,53%)", "hsl(16,85%,23%)", "hsl(190,60%,45%)"];
 
 const DevoteeReports = () => {
   const [period, setPeriod] = useState("year");
@@ -81,7 +81,7 @@ const DevoteeReports = () => {
           { label: "Active", value: activeDevotees, icon: TrendingUp, color: "text-green-600" },
           { label: "Volunteers", value: volunteers, icon: Heart, color: "text-rose-600" },
           { label: "Total Bookings", value: totalBookings, icon: Calendar, color: "text-amber-600" },
-          { label: "Total Donations", value: totalDonations, icon: Heart, color: "text-purple-600" },
+          { label: "Total Donations", value: totalDonations, icon: Heart, color: "text-blue-600" },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><kpi.icon className={`h-4 w-4 ${kpi.color}`} /><span className="text-xs text-muted-foreground">{kpi.label}</span></div><p className="text-xl font-bold">{kpi.value}</p></CardContent></Card>
         ))}

@@ -12,7 +12,7 @@ import { stockRequests, StockRequest, RequestStatus } from "@/data/inventoryData
 const sourceConfig: Record<string, { icon: any; color: string }> = {
   Kitchen: { icon: ChefHat, color: "bg-orange-50 text-orange-700 border-orange-200" },
   Event: { icon: Calendar, color: "bg-blue-50 text-blue-700 border-blue-200" },
-  Seva: { icon: Sparkles, color: "bg-violet-50 text-violet-700 border-violet-200" },
+  Seva: { icon: Sparkles, color: "bg-blue-50 text-blue-700 border-blue-200" },
   Darshan: { icon: Eye, color: "bg-cyan-50 text-cyan-700 border-cyan-200" },
   Freelancer: { icon: Users, color: "bg-green-50 text-green-700 border-green-200" },
 };

@@ -8,7 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { stockItems } from "@/data/inventoryData";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(280,50%,55%)", "hsl(16,85%,23%)", "hsl(190,60%,45%)"];
+const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(221,83%,53%)", "hsl(16,85%,23%)", "hsl(190,60%,45%)"];
 
 const InventoryReports = () => {
   const [period, setPeriod] = useState("month");
@@ -88,7 +88,7 @@ const InventoryReports = () => {
           { label: "Low Stock", value: lowStock, icon: AlertTriangle, color: "text-amber-600" },
           { label: "Out of Stock", value: outOfStock, icon: AlertTriangle, color: "text-red-500" },
           { label: "Stock Value", value: `₹${(totalValue / 100000).toFixed(1)}L`, icon: IndianRupee, color: "text-teal-600" },
-          { label: "Ritual Items", value: ritualItems, icon: BarChart3, color: "text-purple-600" },
+          { label: "Ritual Items", value: ritualItems, icon: BarChart3, color: "text-blue-600" },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><kpi.icon className={`h-4 w-4 ${kpi.color}`} /><span className="text-xs text-muted-foreground">{kpi.label}</span></div><p className="text-xl font-bold">{kpi.value}</p></CardContent></Card>
         ))}

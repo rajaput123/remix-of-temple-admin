@@ -14,7 +14,7 @@ import { financeSelectors, getFinanceState } from "@/modules/finance/financeStor
 import { getDonationsState } from "@/modules/donations/donationsStore";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(16,85%,23%)", "hsl(217,91%,60%)", "hsl(142,60%,40%)", "hsl(45,90%,45%)", "hsl(280,50%,55%)", "hsl(350,65%,50%)", "hsl(190,70%,40%)", "hsl(320,60%,50%)"];
+const COLORS = ["hsl(16,85%,23%)", "hsl(217,91%,60%)", "hsl(142,60%,40%)", "hsl(45,90%,45%)", "hsl(221,83%,53%)", "hsl(350,65%,50%)", "hsl(190,70%,40%)", "hsl(24,90%,50%)"];
 
 const fmt = (v: number) => {
   if (v >= 10000000) return `₹${(v / 10000000).toFixed(2)}Cr`;
@@ -62,7 +62,7 @@ const FinanceReports = () => {
   ];
 
   const balanceBreakdown = [
-    { name: "Bank", value: summary.bankBalance, fill: "hsl(280,50%,55%)" },
+    { name: "Bank", value: summary.bankBalance, fill: "hsl(221,83%,53%)" },
     { name: "Cash", value: cashBalance, fill: "hsl(142,60%,40%)" },
     { name: "UPI/Wallet", value: upiBalance, fill: "hsl(217,91%,60%)" },
   ];
@@ -199,10 +199,10 @@ const FinanceReports = () => {
             <ResponsiveContainer width="100%" height={180}>
               <PieChart><Pie data={[
                 { name: "Seva", value: summary.totalSevaIncome, fill: "hsl(142,60%,40%)" },
-                { name: "Events", value: summary.totalEventCollections, fill: "hsl(280,50%,55%)" },
+                { name: "Events", value: summary.totalEventCollections, fill: "hsl(221,83%,53%)" },
                 { name: "Other", value: Math.max(0, summary.totalRevenue - summary.totalSevaIncome - summary.totalEventCollections), fill: "hsl(45,90%,45%)" },
               ]} cx="50%" cy="50%" outerRadius={70} innerRadius={35} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
-                <Cell fill="hsl(142,60%,40%)" /><Cell fill="hsl(280,50%,55%)" /><Cell fill="hsl(45,90%,45%)" />
+                <Cell fill="hsl(142,60%,40%)" /><Cell fill="hsl(221,83%,53%)" /><Cell fill="hsl(45,90%,45%)" />
               </Pie><Tooltip formatter={(v: number) => fmt(v)} /></PieChart>
             </ResponsiveContainer>
           </CardContent>

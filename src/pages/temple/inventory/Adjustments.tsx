@@ -20,7 +20,7 @@ const reasonColor: Record<AdjustmentReason, string> = {
   Expired: "bg-orange-50 text-orange-700 border-orange-200",
   Correction: "bg-green-50 text-green-700 border-green-200",
   "Theft / Loss": "bg-red-50 text-red-700 border-red-200",
-  "System Error": "bg-purple-50 text-purple-700 border-purple-200",
+  "System Error": "bg-blue-50 text-blue-700 border-blue-200",
 };
 
 const Adjustments = () => {

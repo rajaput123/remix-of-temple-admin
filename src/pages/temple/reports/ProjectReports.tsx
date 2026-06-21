@@ -8,7 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { projects } from "@/data/projectData";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(280,50%,55%)", "hsl(16,85%,23%)"];
+const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(221,83%,53%)", "hsl(16,85%,23%)"];
 
 const ProjectReports = () => {
   const [period, setPeriod] = useState("month");
@@ -69,7 +69,7 @@ const ProjectReports = () => {
         {[
           { label: "Total Projects", value: projects.length, icon: FolderKanban, color: "text-blue-600" },
           { label: "Active", value: activeProjects, icon: Clock, color: "text-green-600" },
-          { label: "Goal Amount", value: `₹${(totalGoal / 10000000).toFixed(1)}Cr`, icon: IndianRupee, color: "text-purple-600" },
+          { label: "Goal Amount", value: `₹${(totalGoal / 10000000).toFixed(1)}Cr`, icon: IndianRupee, color: "text-blue-600" },
           { label: "Raised", value: `₹${(totalRaised / 10000000).toFixed(2)}Cr`, icon: TrendingUp, color: "text-teal-600" },
           { label: "Avg Completion", value: `${avgCompletion.toFixed(0)}%`, icon: CheckCircle2, color: "text-amber-600" },
         ].map(kpi => (

@@ -83,8 +83,8 @@ const Dashboard = () => {
       value: totalEvents.toString(),
       icon: Calendar,
       sub: "Ongoing events",
-      color: "text-purple-600",
-      bg: "bg-purple-50",
+      color: "text-blue-600",
+      bg: "bg-blue-50",
     },
     {
       label: "Stock Value",

@@ -19,7 +19,7 @@ const txnTypeConfig: Record<TransactionType, { icon: any; color: string }> = {
   "Purchase In": { icon: ArrowDownToLine, color: "bg-green-50 text-green-700 border-green-200" },
   "Donation In": { icon: Gift, color: "bg-pink-50 text-pink-700 border-pink-200" },
   "Usage Out": { icon: ArrowUpFromLine, color: "bg-blue-50 text-blue-700 border-blue-200" },
-  "Transfer": { icon: ArrowLeftRight, color: "bg-purple-50 text-purple-700 border-purple-200" },
+  "Transfer": { icon: ArrowLeftRight, color: "bg-blue-50 text-blue-700 border-blue-200" },
   "Return": { icon: RotateCcw, color: "bg-cyan-50 text-cyan-700 border-cyan-200" },
   "Damage / Waste": { icon: Trash2, color: "bg-red-50 text-red-700 border-red-200" },
 };

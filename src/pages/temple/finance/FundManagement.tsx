@@ -77,7 +77,7 @@ const FundManagement = () => {
               fund.type === "Donation" ? "bg-green-500" :
               fund.type === "Event" ? "bg-amber-500" :
               fund.type === "Construction" ? "bg-orange-500" :
-              "bg-purple-500"
+              "bg-blue-500"
             }`} />
             <CardHeader className="pb-2">
               <div className="flex justify-between items-start">

@@ -37,7 +37,7 @@ const MOCK_DATA: Record<string, Person[]> = {
 const CATEGORY_META = [
   { key: "devotees", label: "Devotees", icon: Users, color: "bg-blue-100 text-blue-700" },
   { key: "volunteers", label: "Volunteers", icon: UserCheck, color: "bg-green-100 text-green-700" },
-  { key: "freelancers", label: "Freelancers", icon: Briefcase, color: "bg-purple-100 text-purple-700" },
+  { key: "freelancers", label: "Freelancers", icon: Briefcase, color: "bg-blue-100 text-blue-700" },
   { key: "employees", label: "Employees", icon: UserCog, color: "bg-amber-100 text-amber-700" },
 ];
 

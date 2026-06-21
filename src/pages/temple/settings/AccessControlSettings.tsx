@@ -54,7 +54,7 @@ const MODULES: Module[] = [
 ];
 
 const INITIAL_SYSTEM_ROLES: Role[] = [
-    { id: 'owner', name: 'Owner', description: 'Full system access', color: 'bg-purple-500' },
+    { id: 'owner', name: 'Owner', description: 'Full system access', color: 'bg-blue-500' },
     { id: 'admin', name: 'Admin', description: 'Administrative privileges', color: 'bg-blue-500' },
     { id: 'operations', name: 'Operations', description: 'Day-to-day operations', color: 'bg-green-500' },
     { id: 'finance', name: 'Finance', description: 'Financial management', color: 'bg-amber-500' },
@@ -62,7 +62,7 @@ const INITIAL_SYSTEM_ROLES: Role[] = [
 ];
 
 const COLOR_OPTIONS = [
-    { value: 'bg-purple-500', label: 'Purple' },
+    { value: 'bg-blue-500', label: 'Purple' },
     { value: 'bg-blue-500', label: 'Blue' },
     { value: 'bg-green-500', label: 'Green' },
     { value: 'bg-amber-500', label: 'Amber' },

@@ -45,10 +45,10 @@ const AllInstitutions = () => {
   const typeColor = (t: string) => {
     const map: Record<string, string> = {
       "School": "bg-blue-50 text-blue-700 border-blue-200",
-      "College": "bg-indigo-50 text-indigo-700 border-indigo-200",
+      "College": "bg-blue-50 text-blue-700 border-blue-200",
       "Hospital": "bg-red-50 text-red-700 border-red-200",
       "Goshala": "bg-green-50 text-green-700 border-green-200",
-      "Cultural Center": "bg-purple-50 text-purple-700 border-purple-200",
+      "Cultural Center": "bg-blue-50 text-blue-700 border-blue-200",
       "NGO": "bg-teal-50 text-teal-700 border-teal-200",
       "Veda Pathashala": "bg-amber-50 text-amber-700 border-amber-200",
       "Annadanam Foundation": "bg-orange-50 text-orange-700 border-orange-200",

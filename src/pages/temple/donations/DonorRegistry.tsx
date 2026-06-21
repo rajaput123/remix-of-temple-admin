@@ -26,7 +26,7 @@ const formatCurrency = (val: number | undefined | null): string => {
 };
 
 const categoryBadgeClass: Record<string, string> = {
-  Patron: "bg-purple-100 text-purple-700",
+  Patron: "bg-blue-100 text-blue-700",
   Trust: "bg-blue-100 text-blue-700",
   Organization: "bg-slate-100 text-slate-700",
   Anonymous: "bg-gray-100 text-gray-600",

@@ -9,7 +9,7 @@ import { useEvents } from "@/modules/events/hooks";
 import { eventExpenses, getEventTasks, getEventFreelancers, getEventVolunteers, getEventMaterials } from "@/data/eventData";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(280,50%,55%)", "hsl(16,85%,23%)"];
+const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(221,83%,53%)", "hsl(16,85%,23%)"];
 
 const EventReports = () => {
   const events = useEvents();
@@ -72,7 +72,7 @@ const EventReports = () => {
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: "Total Events", value: events.length, icon: CalendarDays, color: "text-purple-600" },
+          { label: "Total Events", value: events.length, icon: CalendarDays, color: "text-blue-600" },
           { label: "Active/Published", value: activeEventsCount, icon: Clock, color: "text-blue-600" },
           { label: "Total Budget", value: `₹${(totalBudget / 100000).toFixed(1)}L`, icon: IndianRupee, color: "text-green-600" },
           { label: "Total Spend", value: `₹${(totalSpend / 100000).toFixed(1)}L`, icon: TrendingUp, color: "text-amber-600" },
@@ -85,7 +85,7 @@ const EventReports = () => {
       {/* Overview Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card><CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2">Events by Status<Badge variant="secondary" className="ml-auto text-[10px] font-normal">Pie Chart</Badge></CardTitle></CardHeader><CardContent><ResponsiveContainer width="100%" height={250}><PieChart><Pie data={statusData} cx="50%" cy="50%" outerRadius={90} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>{statusData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><Tooltip /></PieChart></ResponsiveContainer></CardContent></Card>
-        <Card><CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2">Events by Type<Badge variant="secondary" className="ml-auto text-[10px] font-normal">Bar Chart</Badge></CardTitle></CardHeader><CardContent><ResponsiveContainer width="100%" height={250}><BarChart data={typeData}><CartesianGrid strokeDasharray="3 3" stroke="hsl(0,0%,90%)" /><XAxis dataKey="name" tick={{ fontSize: 10 }} /><YAxis tick={{ fontSize: 11 }} /><Tooltip /><Bar dataKey="value" fill="hsl(260,55%,55%)" radius={[4,4,0,0]} /></BarChart></ResponsiveContainer></CardContent></Card>
+        <Card><CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2">Events by Type<Badge variant="secondary" className="ml-auto text-[10px] font-normal">Bar Chart</Badge></CardTitle></CardHeader><CardContent><ResponsiveContainer width="100%" height={250}><BarChart data={typeData}><CartesianGrid strokeDasharray="3 3" stroke="hsl(0,0%,90%)" /><XAxis dataKey="name" tick={{ fontSize: 10 }} /><YAxis tick={{ fontSize: 11 }} /><Tooltip /><Bar dataKey="value" fill="hsl(221,83%,53%)" radius={[4,4,0,0]} /></BarChart></ResponsiveContainer></CardContent></Card>
       </div>
 
       {/* Budget Analysis */}

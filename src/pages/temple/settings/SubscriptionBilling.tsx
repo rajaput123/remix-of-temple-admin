@@ -63,9 +63,9 @@ const planMeta: Record<string, {
   },
   sampoorna: {
     icon: Shield,
-    gradient: "from-[hsl(260,50%,95%)] to-[hsl(260,40%,88%)]",
-    iconBg: "bg-[hsl(260,55%,52%)]",
-    accent: "hsl(260, 55%, 52%)",
+    gradient: "from-[hsl(214,100%,97%)] to-[hsl(214,90%,92%)]",
+    iconBg: "bg-[hsl(221,83%,53%)]",
+    accent: "hsl(221, 83%, 53%)",
   },
   sanskriti: {
     icon: Building2,

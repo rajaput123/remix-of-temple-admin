@@ -15,7 +15,7 @@ import {
 const categories = [
   { id: 1, name: "Daily Sevas", sevaCount: 5, status: "Active", color: "bg-green-500" },
   { id: 2, name: "Special Sevas", sevaCount: 8, status: "Active", color: "bg-blue-500" },
-  { id: 3, name: "Festival Sevas", sevaCount: 4, status: "Active", color: "bg-purple-500" },
+  { id: 3, name: "Festival Sevas", sevaCount: 4, status: "Active", color: "bg-blue-500" },
   { id: 4, name: "VIP Darshan", sevaCount: 3, status: "Active", color: "bg-amber-500" },
   { id: 5, name: "Prasadam", sevaCount: 6, status: "Active", color: "bg-pink-500" },
 ];

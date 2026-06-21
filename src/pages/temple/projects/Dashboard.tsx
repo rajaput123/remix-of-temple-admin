@@ -72,7 +72,7 @@ const Dashboard = () => {
                                     across all projects
                                 </p>
                             </div>
-                            <Clock className="h-8 w-8 text-purple-600" />
+                            <Clock className="h-8 w-8 text-blue-600" />
                         </div>
                     </Card>
                 </div>

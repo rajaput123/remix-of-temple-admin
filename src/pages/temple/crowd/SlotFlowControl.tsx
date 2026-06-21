@@ -31,7 +31,7 @@ const stats = [
   { label: "Active Slots", value: "3", icon: Clock, color: "text-primary" },
   { label: "Total Capacity", value: "2,050", icon: Users, color: "text-blue-600" },
   { label: "Entry Gates Open", value: "4/5", icon: DoorOpen, color: "text-green-600" },
-  { label: "Avg Flow Rate", value: "150/min", icon: ArrowRightLeft, color: "text-purple-600" },
+  { label: "Avg Flow Rate", value: "150/min", icon: ArrowRightLeft, color: "text-blue-600" },
 ];
 
 const SlotFlowControl = () => {

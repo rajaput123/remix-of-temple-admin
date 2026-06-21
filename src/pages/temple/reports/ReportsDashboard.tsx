@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 
 const moduleCards = [
   { title: "Donations", icon: Heart, path: "/temple/reports/donations", description: "Donor analytics, fund allocation, 80G receipts", gradient: "from-[hsl(350,65%,50%)] to-[hsl(350,60%,38%)]" },
-  { title: "Events", icon: CalendarDays, path: "/temple/reports/events", description: "Event-wise budget, spend, resources & tasks", gradient: "from-[hsl(260,55%,55%)] to-[hsl(260,50%,42%)]" },
+  { title: "Events", icon: CalendarDays, path: "/temple/reports/events", description: "Event-wise budget, spend, resources & tasks", gradient: "from-[hsl(221,83%,53%)] to-[hsl(224,76%,48%)]" },
   { title: "Finance", icon: IndianRupee, path: "/temple/reports/finance", description: "Revenue trends, expense breakdown, audit trail", gradient: "from-[hsl(142,60%,38%)] to-[hsl(142,55%,28%)]" },
   { title: "Bookings", icon: Calendar, path: "/temple/reports/bookings", description: "Booking trends, cancellations, revenue", gradient: "from-[hsl(142,60%,40%)] to-[hsl(142,55%,30%)]" },
   { title: "Offerings", icon: Sparkles, path: "/temple/reports/offerings", description: "Seva bookings, category revenue, performance", gradient: "from-[hsl(45,90%,45%)] to-[hsl(35,85%,38%)]" },
@@ -19,7 +19,7 @@ const moduleCards = [
   { title: "People & HR", icon: Users, path: "/temple/reports/hr", description: "Employee analytics, salary, shift & dept insights", gradient: "from-[hsl(200,60%,50%)] to-[hsl(200,55%,38%)]" },
   { title: "Devotees", icon: Users, path: "/temple/reports/devotees", description: "Demographics, engagement, volunteer analytics", gradient: "from-[hsl(142,55%,45%)] to-[hsl(142,50%,33%)]" },
   { title: "Communication", icon: MessageSquare, path: "/temple/reports/communication", description: "Outreach analytics, delivery & engagement", gradient: "from-[hsl(190,60%,45%)] to-[hsl(190,55%,33%)]" },
-  { title: "Feedback", icon: MessageSquare, path: "/temple/reports/feedback", description: "Sentiment analysis, ratings, improvements", gradient: "from-[hsl(310,50%,50%)] to-[hsl(310,45%,38%)]" },
+  { title: "Feedback", icon: MessageSquare, path: "/temple/reports/feedback", description: "Sentiment analysis, ratings, improvements", gradient: "from-[hsl(199,70%,45%)] to-[hsl(205,65%,38%)]" },
 ];
 
 

@@ -189,7 +189,7 @@ const TIER_BENEFITS: Record<Tier, string[]> = {
 const tierTone: Record<Tier, string> = {
   Silver: "bg-slate-500/10 text-slate-700 border-slate-200",
   Gold: "bg-amber-500/10 text-amber-700 border-amber-200",
-  Platinum: "bg-violet-500/10 text-violet-700 border-violet-200",
+  Platinum: "bg-blue-500/10 text-blue-700 border-blue-200",
   Diamond: "bg-sky-500/10 text-sky-700 border-sky-200",
 };
 
@@ -365,7 +365,7 @@ const Eligibility = () => {
           {/* Trustee rule */}
           <div className="rounded-lg border bg-muted/20 p-4">
             <div className="flex items-center gap-2 mb-3">
-              <HandHelping className="h-4 w-4 text-violet-700" />
+              <HandHelping className="h-4 w-4 text-blue-700" />
               <h3 className="text-sm font-semibold">Trustee / Honorary Rule</h3>
               <span className="text-[11px] text-muted-foreground">— auto-promote devotees with these tags</span>
             </div>

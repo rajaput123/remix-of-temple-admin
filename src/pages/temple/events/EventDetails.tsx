@@ -41,7 +41,7 @@ const priorityColors: Record<string, string> = {
 };
 
 const sevaTypeColors: Record<string, string> = {
-  Ritual: "bg-purple-100 text-purple-700",
+  Ritual: "bg-blue-100 text-blue-700",
   Darshan: "bg-blue-100 text-blue-700",
   Special: "bg-amber-100 text-amber-700",
 };
@@ -71,7 +71,7 @@ const mockLinkedSevas = [
 const categoryColors: Record<string, string> = {
   Devotee: "bg-blue-100 text-blue-700",
   Volunteer: "bg-green-100 text-green-700",
-  Freelancer: "bg-purple-100 text-purple-700",
+  Freelancer: "bg-blue-100 text-blue-700",
   Employee: "bg-amber-100 text-amber-700",
 };
 

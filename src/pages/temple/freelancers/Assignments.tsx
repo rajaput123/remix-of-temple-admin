@@ -351,7 +351,7 @@ const Assignments = () => {
                 {a.taskId ? (
                   <>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-8 text-sm">
-                      <div><span className="text-muted-foreground">Task ID:</span> <span className="ml-2 font-medium font-mono text-xs flex items-center gap-1"><Zap className="h-3 w-3 text-purple-500" />{a.taskId}</span></div>
+                      <div><span className="text-muted-foreground">Task ID:</span> <span className="ml-2 font-medium font-mono text-xs flex items-center gap-1"><Zap className="h-3 w-3 text-blue-500" />{a.taskId}</span></div>
                       <div><span className="text-muted-foreground">Status:</span> <span className="ml-2 font-medium">Auto-generated task</span></div>
                     </div>
                     <div className="mt-4">
@@ -468,7 +468,7 @@ const Assignments = () => {
                   <TableCell>
                     {a.taskId ? (
                       <span className="text-xs font-mono text-primary flex items-center gap-1">
-                        <Zap className="h-3 w-3 text-purple-500" />{a.taskId}
+                        <Zap className="h-3 w-3 text-blue-500" />{a.taskId}
                       </span>
                     ) : <span className="text-xs text-muted-foreground">—</span>}
                   </TableCell>
@@ -593,7 +593,7 @@ const Assignments = () => {
 
             <TabsContent value="task" className="space-y-4 py-4 mt-4">
               <div className="border rounded-lg p-3 bg-muted/30 text-xs text-muted-foreground mb-4">
-                <Zap className="h-4 w-4 inline mr-1 text-purple-500" />
+                <Zap className="h-4 w-4 inline mr-1 text-blue-500" />
                 A task will be auto-created in the Task module when this assignment is saved.
               </div>
               <div>

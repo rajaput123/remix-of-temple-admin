@@ -660,7 +660,7 @@ const BusinessHub = () => {
                             onClick={() => handleOpen(m)}
                             className="text-left p-4 flex items-start gap-3 border-b border-slate-100"
                           >
-                            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center shrink-0 shadow-sm">
+                            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center shrink-0 shadow-sm">
                               <Icon className="h-5 w-5 text-primary-foreground" />
                             </div>
                             <div className="flex-1 min-w-0">

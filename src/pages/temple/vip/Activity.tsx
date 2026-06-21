@@ -46,8 +46,8 @@ const moduleStyle: Record<
   },
   CRM: {
     icon: UserCircle2,
-    chip: "bg-violet-500/10 text-violet-700 border-violet-200",
-    ring: "ring-violet-200",
+    chip: "bg-blue-500/10 text-blue-700 border-blue-200",
+    ring: "ring-blue-200",
   },
 };
 

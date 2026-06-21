@@ -57,7 +57,7 @@ const FreelancerReports = () => {
           { label: "Completed", value: completed.length, icon: CheckCircle2, color: "text-green-600" },
           { label: "Active", value: active.length, icon: Clock, color: "text-amber-600" },
           { label: "Total Paid", value: `₹${totalSpend.toLocaleString()}`, icon: IndianRupee, color: "text-teal-600" },
-          { label: "Completion Rate", value: `${completionRate.toFixed(0)}%`, icon: Award, color: "text-purple-600" },
+          { label: "Completion Rate", value: `${completionRate.toFixed(0)}%`, icon: Award, color: "text-blue-600" },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-4"><div className="flex items-center gap-2 mb-1"><kpi.icon className={`h-4 w-4 ${kpi.color}`} /><span className="text-xs text-muted-foreground">{kpi.label}</span></div><p className="text-xl font-bold">{kpi.value}</p></CardContent></Card>
         ))}

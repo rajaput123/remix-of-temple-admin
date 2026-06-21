@@ -8,7 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { devoteesData } from "@/data/devotees";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(280,50%,55%)", "hsl(16,85%,23%)"];
+const COLORS = ["hsl(142,60%,40%)", "hsl(217,91%,60%)", "hsl(45,90%,45%)", "hsl(350,65%,50%)", "hsl(221,83%,53%)", "hsl(16,85%,23%)"];
 
 // Fallback mock comm logs so all charts always render even if devotees have no commLogs seeded.
 const MOCK_LOGS = (() => {
@@ -120,7 +120,7 @@ const CommunicationReports = () => {
         {[
           { label: "Total Messages", value: totalComms, icon: Megaphone, color: "text-blue-600" },
           { label: "Delivery Rate", value: `${deliveryRate}%`, icon: TrendingUp, color: "text-green-600" },
-          { label: "Devotees Reached", value: uniqueDevotees, icon: Users, color: "text-purple-600" },
+          { label: "Devotees Reached", value: uniqueDevotees, icon: Users, color: "text-blue-600" },
           { label: "Experience Posts", value: totalExperiences, icon: MessageSquare, color: "text-amber-600" },
           { label: "Avg Rating", value: `⭐ ${avgRating}`, icon: Globe, color: "text-teal-600" },
         ].map(kpi => (

@@ -219,7 +219,7 @@ const ImplementationStatus = () => {
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <Camera className="h-4 w-4 text-purple-600" /> Phase 3 Requirements Status
+            <Camera className="h-4 w-4 text-blue-600" /> Phase 3 Requirements Status
           </CardTitle>
           <p className="text-sm text-muted-foreground mt-2">CCTV/Sensor AI Integration</p>
         </CardHeader>
@@ -235,9 +235,9 @@ const ImplementationStatus = () => {
               </div>
             ))}
           </div>
-          <div className="mt-4 p-3 rounded bg-purple-50 border border-purple-200">
-            <p className="text-xs font-medium text-purple-900 mb-1">Phase 3 Readiness:</p>
-            <p className="text-xs text-purple-700">
+          <div className="mt-4 p-3 rounded bg-blue-50 border border-blue-200">
+            <p className="text-xs font-medium text-blue-900 mb-1">Phase 3 Readiness:</p>
+            <p className="text-xs text-blue-700">
               <strong>0%</strong> - Requires Phase 2 completion first. Needs expensive hardware (CCTV AI, sensors) 
               and advanced infrastructure.
             </p>

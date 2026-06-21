@@ -106,7 +106,7 @@ const BranchReports = () => {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <Users className="h-5 w-5 text-purple-600 mb-2" />
+            <Users className="h-5 w-5 text-blue-600 mb-2" />
             <p className="text-2xl font-bold">{totalVolunteers}</p>
             <p className="text-[11px] text-muted-foreground">Total Volunteers</p>
           </CardContent>

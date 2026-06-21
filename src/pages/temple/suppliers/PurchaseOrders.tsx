@@ -23,7 +23,7 @@ const purchaseOrders = [
 const statusColor = (s: string) => {
   if (s === "Draft") return "text-slate-700 border-slate-300 bg-slate-50";
   if (s === "Approved") return "text-blue-700 border-blue-300 bg-blue-50";
-  if (s === "Sent") return "text-indigo-700 border-indigo-300 bg-indigo-50";
+  if (s === "Sent") return "text-blue-700 border-blue-300 bg-blue-50";
   if (s === "Partially Delivered") return "text-amber-700 border-amber-300 bg-amber-50";
   if (s === "Delivered") return "text-green-700 border-green-300 bg-green-50";
   if (s === "Closed") return "text-muted-foreground border-border bg-muted";

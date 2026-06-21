@@ -69,7 +69,7 @@ const CustomNode = ({ data }: { data: GraphNodeData }) => {
     switch (data.type) {
       case 'Temple': return 'border-orange-500 bg-orange-50/90 dark:bg-orange-950/90';
       case 'Child Temple': return 'border-amber-500 bg-amber-50/90 dark:bg-amber-950/90';
-      case 'Sacred': return 'border-purple-500 bg-purple-50/90 dark:bg-purple-950/90';
+      case 'Sacred': return 'border-blue-500 bg-blue-50/90 dark:bg-blue-950/90';
       case 'Zone': return 'border-blue-500 bg-blue-50/90 dark:bg-blue-950/90';
       case 'Hall': case 'Room': return 'border-emerald-500 bg-emerald-50/90 dark:bg-emerald-950/90';
       case 'Counter': return 'border-slate-500 bg-slate-50/90 dark:bg-slate-950/90';

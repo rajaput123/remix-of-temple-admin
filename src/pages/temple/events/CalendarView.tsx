@@ -23,8 +23,8 @@ const statusConfig: Record<string, { bg: string; dot: string; text: string }> = 
 
 const typeColors: Record<string, string> = {
   Festival: "border-l-orange-500",
-  "Special Pooja": "border-l-purple-500",
-  "Special Ritual": "border-l-purple-500",
+  "Special Pooja": "border-l-blue-500",
+  "Special Ritual": "border-l-blue-500",
   Cultural: "border-l-pink-500",
   Fundraiser: "border-l-emerald-500",
   Annadanam: "border-l-amber-500",

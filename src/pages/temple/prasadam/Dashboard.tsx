@@ -9,7 +9,7 @@ const kpiData = [
   { title: "Active Prasadam Types", value: "24", icon: Package, trend: "+2 this month", color: "text-primary" },
   { title: "Today's Production", value: "18,500", subtitle: "units across 6 batches", icon: Factory, color: "text-blue-600" },
   { title: "Finished Stock", value: "42,300", subtitle: "units available", icon: Warehouse, color: "text-green-600" },
-  { title: "Counter Allocations", value: "12", subtitle: "counters active", icon: Store, color: "text-purple-600" },
+  { title: "Counter Allocations", value: "12", subtitle: "counters active", icon: Store, color: "text-blue-600" },
   { title: "Expiring Soon", value: "3", subtitle: "batches in 4 hours", icon: AlertTriangle, color: "text-amber-600" },
   { title: "Online Reservations", value: "2,450", subtitle: "pending pickup", icon: Clock, color: "text-cyan-600" },
   { title: "Sponsorship Today", value: "5,000", subtitle: "units sponsored", icon: Heart, color: "text-rose-600" },

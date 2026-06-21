@@ -8,7 +8,7 @@ import { Download, Truck, IndianRupee, Star, AlertCircle, CheckCircle2 } from "l
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { toast } from "sonner";
 
-const COLORS = ["hsl(16,85%,23%)", "hsl(217,91%,60%)", "hsl(142,60%,40%)", "hsl(45,90%,45%)", "hsl(280,50%,55%)", "hsl(350,65%,50%)", "hsl(190,60%,45%)"];
+const COLORS = ["hsl(16,85%,23%)", "hsl(217,91%,60%)", "hsl(142,60%,40%)", "hsl(45,90%,45%)", "hsl(221,83%,53%)", "hsl(350,65%,50%)", "hsl(190,60%,45%)"];
 
 const monthlyProcurement = [
   { month: "Sep", amount: 320000 }, { month: "Oct", amount: 380000 },
