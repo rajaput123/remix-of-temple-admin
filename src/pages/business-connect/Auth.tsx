@@ -156,7 +156,7 @@ export default function BCAuth() {
               }}
               className={cn(
                 "text-sm font-medium",
-                resendCooldown > 0 ? "text-slate-400" : "text-[#2b62ef] hover:underline",
+                resendCooldown > 0 ? "text-slate-400" : "text-primary hover:underline",
               )}
             >
               {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend OTP"}
