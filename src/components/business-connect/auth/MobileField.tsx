@@ -15,7 +15,7 @@ export function MobileField({ value, onChange, id = "mobile", error, autoFocus }
       <AuthFieldLabel htmlFor={id} required>
         Mobile Number
       </AuthFieldLabel>
-      <div className="flex rounded-xl border border-slate-200 overflow-hidden focus-within:ring-2 focus-within:ring-[#2563eb]/20 focus-within:border-[#2563eb]">
+      <div className="flex rounded-xl border border-slate-200 overflow-hidden focus-within:ring-2 focus-within:ring-[#2b62ef]/20 focus-within:border-[#2b62ef]">
         <span className="inline-flex items-center px-3.5 bg-slate-50 text-sm font-medium text-slate-600 border-r border-slate-200">
           +91
         </span>

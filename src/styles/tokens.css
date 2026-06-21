@@ -6,7 +6,7 @@
  * Prefer semantic utility classes; never hardcode hex in components.
  */
 
-@layer base {
+
   /* ─── Light theme — Operational Command (default) ─── */
   :root {
     color-scheme: light;
@@ -26,14 +26,14 @@
     --color-fg-disabled: oklch(0.72 0.015 260);
     --color-fg-inverse: oklch(0.99 0 0);
 
-    /* Brand & semantic — primary #2563EB */
-    --color-primary: oklch(0.546 0.215 264);
-    --color-primary-hover: oklch(0.457 0.215 264);
+    /* Brand & semantic — primary #2B62EF */
+    --color-primary: oklch(0.498 0.333 258);
+    --color-primary-hover: oklch(0.455 0.300 258);
     --color-primary-fg: oklch(1 0 0);
-    --color-primary-subtle: oklch(0.97 0.025 264);
+    --color-primary-subtle: oklch(0.97 0.03 258);
 
-    --color-ai: oklch(0.546 0.215 264);
-    --color-ai-subtle: oklch(0.97 0.025 264);
+    --color-ai: oklch(0.498 0.333 258);
+    --color-ai-subtle: oklch(0.97 0.03 258);
 
     --color-success: oklch(0.62 0.17 155);
     --color-success-subtle: oklch(0.95 0.04 155);
@@ -51,10 +51,10 @@
     --color-divider: oklch(0.9 0.008 260);
 
     /* Focus ring */
-    --color-ring: oklch(0.546 0.215 264 / 0.45);
+    --color-ring: oklch(0.498 0.333 258 / 0.45);
 
     /* Chart / data viz (categorical, colorblind-safe) */
-    --color-chart-1: oklch(0.546 0.215 264);
+    --color-chart-1: oklch(0.498 0.333 258);
     --color-chart-2: oklch(0.62 0.17 155);
     --color-chart-3: oklch(0.72 0.16 75);
     --color-chart-4: oklch(0.58 0.18 295);
@@ -68,34 +68,34 @@
     --card-foreground: 222 35% 12%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 35% 12%;
-    --primary: 221 83% 53%;
+    --primary: 223 86% 55%;
     --primary-foreground: 0 0% 100%;
     --secondary: 220 14% 94%;
     --secondary-foreground: 222 35% 12%;
     --muted: 220 14% 94%;
     --muted-foreground: 220 10% 46%;
-    --accent: 221 83% 53%;
+    --accent: 223 86% 55%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --border: 220 13% 88%;
     --input: 220 13% 88%;
-    --ring: 221 83% 53%;
+    --ring: 223 86% 55%;
     --radius: 0.5rem;
 
     --sidebar-background: 210 20% 98%;
     --sidebar-foreground: 222 35% 12%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary: 223 86% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 214 100% 97%;
-    --sidebar-accent-foreground: 221 83% 53%;
+    --sidebar-accent-foreground: 223 86% 55%;
     --sidebar-border: 220 13% 88%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-ring: 223 86% 55%;
 
     --surface: 220 14% 96%;
     --surface-2: 220 14% 94%;
 
-    --ai-accent: 221 83% 53%;
+    --ai-accent: 223 86% 55%;
     --ai-accent-foreground: 0 0% 100%;
     --success: 160 60% 40%;
     --success-foreground: 0 0% 100%;
@@ -153,13 +153,13 @@
     --color-fg-disabled: oklch(0.48 0.02 260);
     --color-fg-inverse: oklch(0.19 0.03 260);
 
-    --color-primary: oklch(0.623 0.188 264);
-    --color-primary-hover: oklch(0.68 0.188 264);
+    --color-primary: oklch(0.62 0.20 258);
+    --color-primary-hover: oklch(0.68 0.20 258);
     --color-primary-fg: oklch(1 0 0);
-    --color-primary-subtle: oklch(0.28 0.06 264);
+    --color-primary-subtle: oklch(0.28 0.06 258);
 
-    --color-ai: oklch(0.62 0.18 295);
-    --color-ai-subtle: oklch(0.28 0.04 295);
+    --color-ai: oklch(0.62 0.20 258);
+    --color-ai-subtle: oklch(0.28 0.06 258);
 
     --color-success: oklch(0.68 0.17 155);
     --color-success-subtle: oklch(0.28 0.04 155);
@@ -175,9 +175,9 @@
     --color-border-strong: oklch(1 0 0 / 0.18);
     --color-divider: oklch(1 0 0 / 0.06);
 
-    --color-ring: oklch(0.623 0.188 264 / 0.5);
+    --color-ring: oklch(0.62 0.20 258 / 0.5);
 
-    --color-chart-1: oklch(0.623 0.188 264);
+    --color-chart-1: oklch(0.62 0.20 258);
     --color-chart-2: oklch(0.68 0.17 155);
     --color-chart-3: oklch(0.78 0.14 75);
     --color-chart-4: oklch(0.65 0.16 295);
@@ -190,28 +190,28 @@
     --card-foreground: 210 40% 98%;
     --popover: 217 30% 22%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
+    --primary: 223 86% 65%;
     --primary-foreground: 0 0% 100%;
     --secondary: 217 33% 17%;
     --secondary-foreground: 214 32% 91%;
     --muted: 217 30% 22%;
     --muted-foreground: 215 16% 57%;
-    --accent: 217 91% 60%;
+    --accent: 223 86% 65%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 217 33% 22%;
     --input: 217 33% 22%;
-    --ring: 217 91% 60%;
+    --ring: 223 86% 65%;
 
     --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 214 32% 91%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary: 223 86% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 221 60% 18%;
-    --sidebar-accent-foreground: 217 91% 70%;
+    --sidebar-accent-foreground: 223 86% 65%;
     --sidebar-border: 0 0% 100%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-ring: 223 86% 65%;
 
     --surface: 217 30% 22%;
     --surface-2: 217 30% 20%;
@@ -227,4 +227,3 @@
       --duration-slow: 0ms;
     }
   }
-}

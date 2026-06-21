@@ -383,7 +383,7 @@ const BusinessHub = () => {
       >
         {/* Brand */}
         <div className="h-14 px-3 flex items-center gap-2 border-b border-slate-200">
-          <div className="h-8 w-8 rounded-md bg-[#2563eb] flex items-center justify-center shrink-0">
+          <div className="h-8 w-8 rounded-md bg-[#2b62ef] flex items-center justify-center shrink-0">
             <Sparkles className="h-4 w-4 text-white" />
           </div>
           {sidebarOpen && (
@@ -401,7 +401,7 @@ const BusinessHub = () => {
             onClick={() => setActiveId("overview")}
             className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors ${
               activeId === "overview"
-                ? "bg-[#2563eb]/10 text-[#2563eb]"
+                ? "bg-[#2b62ef]/10 text-[#2b62ef]"
                 : "text-slate-700 hover:bg-slate-100"
             }`}
           >
@@ -429,7 +429,7 @@ const BusinessHub = () => {
                         onClick={() => setActiveId(m.id)}
                         className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-[13px] transition-colors ${
                           active
-                            ? "bg-[#2563eb]/10 text-[#2563eb] font-medium"
+                            ? "bg-[#2b62ef]/10 text-[#2b62ef] font-medium"
                             : "text-slate-700 hover:bg-slate-100"
                         }`}
                       >
@@ -496,7 +496,7 @@ const BusinessHub = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search modules, customers, bookings…"
-              className="h-9 pl-9 pr-3 bg-slate-50 border-slate-200 text-[13px] focus-visible:ring-[#2563eb]/20"
+              className="h-9 pl-9 pr-3 bg-slate-50 border-slate-200 text-[13px] focus-visible:ring-[#2b62ef]/20"
             />
           </div>
 
@@ -519,7 +519,7 @@ const BusinessHub = () => {
                   <Shield className="h-3.5 w-3.5 mr-2 text-slate-400" />
                   {r.label}
                   {role === r.id && (
-                    <span className="ml-auto text-[10px] text-[#2563eb] font-semibold">ACTIVE</span>
+                    <span className="ml-auto text-[10px] text-[#2b62ef] font-semibold">ACTIVE</span>
                   )}
                 </DropdownMenuItem>
               ))}
@@ -535,7 +535,7 @@ const BusinessHub = () => {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 hover:opacity-80">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="text-[11px] font-semibold bg-[#2563eb] text-white">
+                  <AvatarFallback className="text-[11px] font-semibold bg-[#2b62ef] text-white">
                     RK
                   </AvatarFallback>
                 </Avatar>
@@ -584,7 +584,7 @@ const BusinessHub = () => {
                   <Button variant="outline" size="sm" className="h-9 text-[12px] gap-1.5">
                     <Eye className="h-3.5 w-3.5" /> Preview profile
                   </Button>
-                  <Button size="sm" className="h-9 text-[12px] gap-1.5 bg-[#2563eb] hover:bg-[#1d4ed8]">
+                  <Button size="sm" className="h-9 text-[12px] gap-1.5 bg-[#2b62ef] hover:bg-[#2656d2]">
                     <Plus className="h-3.5 w-3.5" /> Add Service
                   </Button>
                 </div>
@@ -606,8 +606,8 @@ const BusinessHub = () => {
                       className="rounded-xl border border-slate-200 bg-white p-4 hover:shadow-sm transition-shadow"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <div className="h-8 w-8 rounded-lg bg-[#2563eb]/10 flex items-center justify-center">
-                          <Icon className="h-4 w-4 text-[#2563eb]" />
+                        <div className="h-8 w-8 rounded-lg bg-[#2b62ef]/10 flex items-center justify-center">
+                          <Icon className="h-4 w-4 text-[#2b62ef]" />
                         </div>
                         {k.trend && (
                           <span
@@ -653,14 +653,14 @@ const BusinessHub = () => {
                       return (
                         <div
                           key={m.id}
-                          className="group rounded-xl border border-slate-200 bg-white hover:border-[#2563eb]/40 hover:shadow-md transition-all overflow-hidden flex flex-col"
+                          className="group rounded-xl border border-slate-200 bg-white hover:border-[#2b62ef]/40 hover:shadow-md transition-all overflow-hidden flex flex-col"
                         >
                           {/* Header */}
                           <button
                             onClick={() => handleOpen(m)}
                             className="text-left p-4 flex items-start gap-3 border-b border-slate-100"
                           >
-                            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-[#2563eb] to-[#4f46e5] flex items-center justify-center shrink-0 shadow-sm">
+                            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-[#2b62ef] to-[#4f46e5] flex items-center justify-center shrink-0 shadow-sm">
                               <Icon className="h-5 w-5 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -683,7 +683,7 @@ const BusinessHub = () => {
                                 {m.description}
                               </p>
                             </div>
-                            <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-[#2563eb] transition-colors" />
+                            <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-[#2b62ef] transition-colors" />
                           </button>
 
                           {/* Widgets */}
@@ -740,7 +740,7 @@ const BusinessHub = () => {
                             </span>
                             <button
                               onClick={() => handleOpen(m)}
-                              className="text-[12px] font-medium text-[#2563eb] hover:underline flex items-center gap-1"
+                              className="text-[12px] font-medium text-[#2b62ef] hover:underline flex items-center gap-1"
                             >
                               Open <ChevronRight className="h-3.5 w-3.5" />
                             </button>
