@@ -606,8 +606,8 @@ const BusinessHub = () => {
                       className="rounded-xl border border-slate-200 bg-white p-4 hover:shadow-sm transition-shadow"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <div className="h-8 w-8 rounded-lg bg-[#2b62ef]/10 flex items-center justify-center">
-                          <Icon className="h-4 w-4 text-[#2b62ef]" />
+                        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <Icon className="h-4 w-4 text-primary" />
                         </div>
                         {k.trend && (
                           <span
