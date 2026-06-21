@@ -191,7 +191,7 @@ export default function BCAuth() {
                   className={cn(
                     "flex items-center gap-2 rounded-xl border p-2.5 text-left text-xs font-medium transition",
                     businessType === id
-                      ? "border-[#2b62ef] bg-[#2b62ef]/5 text-[#2b62ef]"
+                      ? "border-primary bg-primary/5 text-primary"
                       : "border-slate-200 hover:border-slate-300",
                   )}
                 >
