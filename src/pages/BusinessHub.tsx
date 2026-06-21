@@ -683,7 +683,7 @@ const BusinessHub = () => {
                                 {m.description}
                               </p>
                             </div>
-                            <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-[#2b62ef] transition-colors" />
+                            <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-primary transition-colors" />
                           </button>
 
                           {/* Widgets */}
