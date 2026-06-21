@@ -29,7 +29,7 @@
     /* Brand & semantic — primary #2B62EF */
     --color-primary: oklch(0.498 0.333 258);
     --color-primary-hover: oklch(0.455 0.300 258);
-    --color-primary-fg: oklch(1 0 0);
+    --color-primary-fg: oklch(0.99 0 0);
     --color-primary-subtle: oklch(0.97 0.03 258);
 
     --color-ai: oklch(0.498 0.333 258);
