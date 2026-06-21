@@ -54,7 +54,7 @@ const Login = () => {
           onClick={() => navigate("/")}
           className="flex items-center gap-2.5 group"
         >
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#2563eb] shadow-sm">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#2b62ef] shadow-sm">
             <span className="block h-3.5 w-3.5 rounded-sm bg-white/90" />
           </span>
           <span className="text-[15px] font-semibold tracking-tight">
@@ -99,7 +99,7 @@ const Login = () => {
                   placeholder="98765 43210"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="h-11 rounded-lg border-slate-200 bg-white focus-visible:ring-[#2563eb]/20 focus-visible:border-[#2563eb] text-[15px]"
+                  className="h-11 rounded-lg border-slate-200 bg-white focus-visible:ring-[#2b62ef]/20 focus-visible:border-[#2b62ef] text-[15px]"
                 />
               </div>
 
@@ -111,7 +111,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => navigate("/forgot-mpin")}
-                    className="text-[12px] font-medium text-[#2563eb] hover:underline"
+                    className="text-[12px] font-medium text-[#2b62ef] hover:underline"
                   >
                     Forgot?
                   </button>
@@ -124,13 +124,13 @@ const Login = () => {
                   placeholder="Enter 4-digit MPIN"
                   value={mpin}
                   onChange={(e) => setMpin(e.target.value.replace(/\D/g, ""))}
-                  className="h-11 rounded-lg border-slate-200 bg-white focus-visible:ring-[#2563eb]/20 focus-visible:border-[#2563eb] text-[15px]"
+                  className="h-11 rounded-lg border-slate-200 bg-white focus-visible:ring-[#2b62ef]/20 focus-visible:border-[#2b62ef] text-[15px]"
                 />
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-11 rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-medium shadow-sm gap-2"
+                className="w-full h-11 rounded-lg bg-[#2b62ef] hover:bg-[#1d4ed8] text-white text-sm font-medium shadow-sm gap-2"
               >
                 Sign in <ArrowRight className="h-4 w-4" />
               </Button>
@@ -138,7 +138,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={handleBypass}
-                className="w-full text-center text-[12px] font-medium text-slate-500 hover:text-[#2563eb] hover:underline"
+                className="w-full text-center text-[12px] font-medium text-slate-500 hover:text-[#2b62ef] hover:underline"
               >
                 Bypass → Go to Temple Hub
               </button>
@@ -146,7 +146,7 @@ const Login = () => {
 
             <p className="text-center text-sm text-slate-500 mt-6">
               Don't have an account?{" "}
-              <Link to="/business-connect/auth" className="text-[#2563eb] font-medium hover:underline">
+              <Link to="/business-connect/auth" className="text-[#2b62ef] font-medium hover:underline">
                 Create one
               </Link>
             </p>

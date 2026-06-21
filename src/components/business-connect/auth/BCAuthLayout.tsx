@@ -54,7 +54,7 @@ export function BCAuthLayout({
             </Button>
           ) : (
             <Link to="/login" className="flex items-center gap-2.5">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#2563eb] shadow-sm">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#2b62ef] shadow-sm">
                 <span className="block h-3.5 w-3.5 rounded-sm bg-white/90" />
               </span>
               <span className="text-[15px] font-semibold tracking-tight hidden sm:inline">
@@ -74,7 +74,7 @@ export function BCAuthLayout({
         <div className="relative z-10 px-4 sm:px-8 pb-2">
           <div className="mx-auto max-w-md h-1.5 overflow-hidden rounded-full bg-slate-200">
             <div
-              className="h-full rounded-full bg-[#2563eb] transition-all duration-500"
+              className="h-full rounded-full bg-[#2b62ef] transition-all duration-500"
               style={{ width: `${(step / totalSteps) * 100}%` }}
             />
           </div>
@@ -139,7 +139,7 @@ export function AuthPrimaryButton({
       type={type}
       disabled={disabled || loading}
       onClick={onClick}
-      className="w-full h-12 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-medium shadow-sm"
+      className="w-full h-12 rounded-xl bg-[#2b62ef] hover:bg-[#1d4ed8] text-white text-sm font-medium shadow-sm"
     >
       {loading ? "Please wait…" : children}
     </Button>
