@@ -496,7 +496,7 @@ const BusinessHub = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search modules, customers, bookings…"
-              className="h-9 pl-9 pr-3 bg-slate-50 border-slate-200 text-[13px] focus-visible:ring-[#2b62ef]/20"
+              className="h-9 pl-9 pr-3 bg-slate-50 border-slate-200 text-[13px] focus-visible:ring-primary/20"
             />
           </div>
 
