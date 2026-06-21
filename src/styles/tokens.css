@@ -153,12 +153,12 @@
     --color-fg-disabled: oklch(0.48 0.02 260);
     --color-fg-inverse: oklch(0.19 0.03 260);
 
-    --color-primary: oklch(0.62 0.20 258);
-    --color-primary-hover: oklch(0.68 0.20 258);
-    --color-primary-fg: oklch(1 0 0);
+    --color-primary: oklch(0.68 0.21 260);
+    --color-primary-hover: oklch(0.72 0.21 260);
+    --color-primary-fg: oklch(0.09 0.02 260);
     --color-primary-subtle: oklch(0.28 0.06 258);
 
-    --color-ai: oklch(0.62 0.20 258);
+    --color-ai: oklch(0.68 0.21 260);
     --color-ai-subtle: oklch(0.28 0.06 258);
 
     --color-success: oklch(0.68 0.17 155);
