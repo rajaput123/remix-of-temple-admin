@@ -130,7 +130,7 @@ const Login = () => {
 
               <Button
                 type="submit"
-                className="w-full h-11 rounded-lg bg-[#2b62ef] hover:bg-[#1d4ed8] text-white text-sm font-medium shadow-sm gap-2"
+                className="w-full h-11 rounded-lg bg-[#2b62ef] hover:bg-[#2656d2] text-white text-sm font-medium shadow-sm gap-2"
               >
                 Sign in <ArrowRight className="h-4 w-4" />
               </Button>
