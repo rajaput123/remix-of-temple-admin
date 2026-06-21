@@ -584,7 +584,7 @@ const BusinessHub = () => {
                   <Button variant="outline" size="sm" className="h-9 text-[12px] gap-1.5">
                     <Eye className="h-3.5 w-3.5" /> Preview profile
                   </Button>
-                  <Button size="sm" className="h-9 text-[12px] gap-1.5 bg-[#2b62ef] hover:bg-[#2656d2]">
+                  <Button size="sm" className="h-9 text-[12px] gap-1.5">
                     <Plus className="h-3.5 w-3.5" /> Add Service
                   </Button>
                 </div>
