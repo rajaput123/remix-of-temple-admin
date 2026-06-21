@@ -54,8 +54,8 @@ export function BCAuthLayout({
             </Button>
           ) : (
             <Link to="/login" className="flex items-center gap-2.5">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#2b62ef] shadow-sm">
-                <span className="block h-3.5 w-3.5 rounded-sm bg-white/90" />
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-primary shadow-sm">
+                <span className="block h-3.5 w-3.5 rounded-sm bg-primary-foreground/90" />
               </span>
               <span className="text-[15px] font-semibold tracking-tight hidden sm:inline">
                 Digi Devalaya <span className="font-normal text-slate-500">Business</span>
