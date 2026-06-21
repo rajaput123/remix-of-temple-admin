@@ -383,8 +383,8 @@ const BusinessHub = () => {
       >
         {/* Brand */}
         <div className="h-14 px-3 flex items-center gap-2 border-b border-slate-200">
-          <div className="h-8 w-8 rounded-md bg-[#2b62ef] flex items-center justify-center shrink-0">
-            <Sparkles className="h-4 w-4 text-white" />
+          <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center shrink-0">
+            <Sparkles className="h-4 w-4 text-primary-foreground" />
           </div>
           {sidebarOpen && (
             <div className="min-w-0">
