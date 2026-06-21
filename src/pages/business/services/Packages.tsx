@@ -115,9 +115,9 @@ export default function PackagesPage() {
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col">
       <WorkspacePage
-        eyebrow="Business Connect · Package Queue"
-        title="Package Queue"
-        description="Extra tiers for main services — add Complete, Premium, or bundled options."
+        eyebrow="Business Connect · Packages"
+        title="Packages"
+        description="Extra tiers for main services — Complete, Premium, or bundled options"
         actions={
           hasAny ? (
             <>

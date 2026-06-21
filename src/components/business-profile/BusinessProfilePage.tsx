@@ -1,4 +1,6 @@
 import { type ReactNode } from "react";
+import { profileTypography as t } from "@/components/business-profile/profileStyles";
+import { cn } from "@/lib/utils";
 
 interface BusinessProfilePageProps {
   title: string;
@@ -11,10 +13,8 @@ export function BusinessProfilePage({ title, description, children }: BusinessPr
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div>
-        <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">{title}</h1>
-        {description && (
-          <p className="mt-1 text-sm text-muted-foreground max-w-2xl">{description}</p>
-        )}
+        <h1 className={t.title}>{title}</h1>
+        {description && <p className={cn("mt-1 max-w-2xl", t.desc)}>{description}</p>}
       </div>
       {children}
     </div>

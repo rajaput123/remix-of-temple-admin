@@ -128,6 +128,39 @@
     @apply rounded-full px-1.5 py-0.5 text-[10px] font-mono font-medium;
   }
 
+  /* Workspace typography — shared with services table pages & business profile */
+  .text-workspace-eyebrow {
+    @apply text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  .text-workspace-title {
+    @apply text-lg font-semibold tracking-tight text-foreground;
+  }
+
+  .text-workspace-desc {
+    @apply text-xs text-muted-foreground;
+  }
+
+  .text-workspace-section {
+    @apply text-sm font-semibold text-foreground;
+  }
+
+  .text-workspace-label {
+    @apply text-[10px] font-bold uppercase tracking-wider text-muted-foreground;
+  }
+
+  .text-workspace-body {
+    @apply text-sm leading-relaxed text-foreground;
+  }
+
+  .text-workspace-muted {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .text-workspace-mono {
+    @apply font-mono text-xs tabular-nums text-foreground;
+  }
+
   /* Shell: sidebar ends above viewport-fixed status strip */
   :root[data-status-bar="true"] {
     --shell-statusbar-height: 2.25rem;

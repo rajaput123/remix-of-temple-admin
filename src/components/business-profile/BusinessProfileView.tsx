@@ -40,6 +40,7 @@ import {
   isVerificationPending,
 } from "@/components/business-profile/singleProfileUtils";
 import { cn } from "@/lib/utils";
+import { profileCardClass, profileTypography as t } from "@/components/business-profile/profileStyles";
 
 interface BusinessProfileViewProps {
   profile: BusinessProfile;
@@ -63,7 +64,7 @@ function CoverHero({ src }: { src: string | null }) {
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-stone-800 via-stone-700 to-amber-900/80" />
       )}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/20 to-stone-100" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/20 to-background" />
     </div>
   );
 }
@@ -80,10 +81,10 @@ function StatTile({
   accent?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-stone-200/80 bg-white p-4 shadow-sm">
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">{label}</p>
+    <div className={cn("p-4", profileCardClass)}>
+      <p className={t.label}>{label}</p>
       <div className={cn("mt-2", accent)}>{value}</div>
-      {sub && <p className="mt-1 text-xs text-stone-500">{sub}</p>}
+      {sub && <p className={cn("mt-1", t.desc)}>{sub}</p>}
     </div>
   );
 }
@@ -91,10 +92,10 @@ function StatTile({
 function SectionLabel({ n, title }: { n: string; title: string }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-stone-900 text-xs font-bold text-white">
+      <span className="grid h-7 w-7 place-items-center rounded-md bg-primary/10 text-[10px] font-bold text-primary">
         {n}
       </span>
-      <h2 className="text-lg font-semibold tracking-tight text-stone-900">{title}</h2>
+      <h2 className={t.section}>{title}</h2>
     </div>
   );
 }
@@ -117,20 +118,20 @@ function DocChip({
       className={cn(
         "flex min-w-[140px] flex-1 flex-col rounded-xl border p-3 text-left transition hover:shadow-md",
         uploaded
-          ? "border-emerald-200 bg-emerald-50/60 hover:border-emerald-300"
-          : "border-dashed border-stone-300 bg-stone-50 hover:border-stone-400",
+          ? "border-success/30 bg-success/5 hover:border-success/40"
+          : "border-dashed border-border bg-muted/20 hover:border-muted-foreground/30",
       )}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500">{label}</span>
+        <span className={t.label}>{label}</span>
         {uploaded ? (
-          <CheckCircle className="h-3.5 w-3.5 text-emerald-600" />
+          <CheckCircle className="h-3.5 w-3.5 text-success" />
         ) : (
-          <FileText className="h-3.5 w-3.5 text-stone-400" />
+          <FileText className="h-3.5 w-3.5 text-muted-foreground" />
         )}
       </div>
-      <p className="mt-1.5 text-sm font-medium text-stone-900">{value || "Add document"}</p>
-      <p className="mt-0.5 text-[11px] text-stone-500">{uploaded ? "Verified file" : "Tap to upload"}</p>
+      <p className="mt-1.5 text-sm font-medium text-foreground">{value || "Add document"}</p>
+      <p className={cn("mt-0.5", t.desc)}>{uploaded ? "Verified file" : "Tap to upload"}</p>
     </button>
   );
 }
@@ -159,7 +160,7 @@ function GalleryTile({ src, className, large }: { src: string; className?: strin
   return (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-2xl bg-stone-200 shadow-sm ring-1 ring-black/5",
+        "group relative overflow-hidden rounded-lg border border-border bg-muted/30",
         className,
       )}
     >
@@ -201,8 +202,8 @@ function CompletionRing({ value }: { value: number }) {
         />
       </svg>
       <div className="absolute text-center">
-        <p className="text-xl font-bold tabular-nums text-stone-900">{value}%</p>
-        <p className="text-[9px] font-medium uppercase tracking-wide text-stone-500">Complete</p>
+        <p className={cn(t.title, "tabular-nums")}>{value}%</p>
+        <p className={t.label}>Complete</p>
       </div>
     </div>
   );
@@ -270,39 +271,34 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
 
       {/* Rising content sheet */}
       <div className="relative z-20 -mt-10 mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="rounded-t-[1.75rem] bg-white px-5 pb-8 pt-6 shadow-[0_-8px_40px_rgba(0,0,0,0.08)] sm:rounded-[1.75rem] sm:px-8 sm:pt-8 sm:pb-10">
+        <div className={cn("rounded-t-2xl border border-border bg-card px-5 pb-8 pt-6 sm:rounded-2xl sm:px-8 sm:pt-8 sm:pb-10", profileCardClass)}>
           {/* Identity row */}
-          <div className="flex flex-col gap-5 border-b border-stone-100 pb-6 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-5 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
               <ProfileAvatar
                 src={profile.logo}
                 alt={profile.businessName}
                 size="lg"
-                className="-mt-20 border-[5px] border-white shadow-xl sm:-mt-24"
+                className="-mt-20 border-[5px] border-card shadow-md sm:-mt-24"
               />
               <div className="min-w-0 sm:pb-1">
-                <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <Badge variant="secondary" className="rounded-md bg-stone-100 text-stone-700">
-                    {typeLabel}
-                  </Badge>
+                <p className={t.eyebrow}>Business Connect · Profile</p>
+                <div className="mb-2 mt-1 flex flex-wrap items-center gap-2">
+                  <Badge variant="secondary">{typeLabel}</Badge>
                   {profile.category && (
-                    <Badge variant="outline" className="rounded-md border-stone-200">
-                      {profile.category}
-                    </Badge>
+                    <Badge variant="outline">{profile.category}</Badge>
                   )}
                   {profile.experience && (
-                    <span className="text-xs text-stone-500">{profile.experience}+ yrs</span>
+                    <span className={t.desc}>{profile.experience}+ yrs</span>
                   )}
                 </div>
-                <h1 className="text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl md:text-4xl">
-                  {profile.businessName}
-                </h1>
-                <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-stone-500">
+                <h1 className={t.title}>{profile.businessName}</h1>
+                <p className={cn("mt-1 flex flex-wrap items-center gap-x-3 gap-y-1", t.muted)}>
                   <span className="inline-flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5" />
                     {formatProfileLocation(profile)}
                   </span>
-                  <span className="hidden sm:inline text-stone-300">·</span>
+                  <span className="hidden sm:inline text-border">·</span>
                   <span className="inline-flex items-center gap-1">
                     <User className="h-3.5 w-3.5" />
                     {profile.ownerName}
@@ -335,26 +331,26 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
             />
             <StatTile
               label="Last updated"
-              value={<p className="text-base font-semibold text-stone-900">{formatUpdatedAt(profile.updatedAt)}</p>}
+              value={<p className={cn(t.body, "font-medium")}>{formatUpdatedAt(profile.updatedAt)}</p>}
               sub="Profile activity"
             />
           </div>
 
           {/* Publish alert */}
           {profile.status !== "published" && missing.length > 0 && (
-            <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-6 flex flex-col gap-3 rounded-lg border border-warning/30 bg-warning/5 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-start gap-3">
-                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber-100">
-                  <AlertCircle className="h-4 w-4 text-amber-700" />
+                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-warning/10">
+                  <AlertCircle className="h-4 w-4 text-warning" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-amber-950">Finish setup to go live</p>
-                  <p className="mt-0.5 text-xs text-amber-800/80">
+                  <p className={cn(t.section, "text-warning")}>Finish setup to go live</p>
+                  <p className={cn("mt-0.5", t.desc)}>
                     {missing.length} required field{missing.length > 1 ? "s" : ""} remaining
                   </p>
                 </div>
               </div>
-              <Button size="sm" variant="outline" className="shrink-0 border-amber-300 bg-white" onClick={onEdit}>
+              <Button size="sm" variant="outline" className="shrink-0" onClick={onEdit}>
                 Complete profile
               </Button>
             </div>
@@ -366,7 +362,7 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
             <div className="space-y-10">
               <section className="space-y-4">
                 <SectionLabel n="01" title="About the business" />
-                <p className="text-base leading-relaxed text-stone-600 whitespace-pre-wrap">
+                <p className={cn(t.body, "text-muted-foreground whitespace-pre-wrap")}>
                   {profile.about || "No description provided yet."}
                 </p>
               </section>
@@ -392,13 +388,13 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                 </div>
 
                 {verified && (
-                  <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                  <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-4 py-3 text-sm text-success">
                     <CheckCircle2 className="h-4 w-4 shrink-0" />
                     Verified — badge shown on your public listing
                   </div>
                 )}
                 {pending && (
-                  <div className="flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <div className="flex items-center gap-2 rounded-lg border border-warning/30 bg-warning/5 px-4 py-3 text-sm text-warning">
                     <ShieldCheck className="h-4 w-4 shrink-0" />
                     Documents under review (2–3 business days)
                   </div>
@@ -433,10 +429,10 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
 
             {/* Right track — contact panel */}
             <div className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-              <div className="overflow-hidden rounded-2xl bg-stone-900 text-white shadow-xl">
-                <div className="border-b border-white/10 px-5 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-400">Reach out</p>
-                  <p className="mt-1 text-lg font-semibold">Contact details</p>
+              <div className={cn("overflow-hidden", profileCardClass)}>
+                <div className="border-b border-border bg-muted/20 px-5 py-3">
+                  <p className={t.label}>Reach out</p>
+                  <p className={cn("mt-1", t.section)}>Contact details</p>
                 </div>
                 <div className="space-y-1 p-2">
                   {[
@@ -445,15 +441,15 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                     { icon: MapPin, label: "Address", value: profile.address, sub: [profile.city, profile.state, profile.pincode].filter(Boolean).join(", ") },
                     { icon: User, label: "Owner", value: profile.ownerName },
                   ].map(({ icon: Icon, label, value, sub }) => (
-                    <div key={label} className="rounded-xl px-3 py-3 transition hover:bg-white/5">
+                    <div key={label} className="rounded-lg px-3 py-3 transition hover:bg-muted/30">
                       <div className="flex gap-3">
-                        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white/10">
-                          <Icon className="h-4 w-4 text-amber-200" />
+                        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
+                          <Icon className="h-4 w-4" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">{label}</p>
-                          <p className="mt-0.5 text-sm font-medium break-all">{value}</p>
-                          {sub && <p className="mt-0.5 text-xs text-stone-400">{sub}</p>}
+                          <p className={t.label}>{label}</p>
+                          <p className="mt-0.5 text-sm font-medium break-all text-foreground">{value}</p>
+                          {sub && <p className={cn("mt-0.5", t.desc)}>{sub}</p>}
                         </div>
                       </div>
                     </div>
@@ -461,34 +457,34 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-stone-200 bg-stone-50 p-5">
-                <div className="flex items-center gap-2 text-stone-900">
+              <div className={cn("p-5", profileCardClass)}>
+                <div className="flex items-center gap-2 text-foreground">
                   <Clock className="h-4 w-4 text-primary" />
-                  <p className="font-semibold">Working hours</p>
+                  <p className={t.section}>Working hours</p>
                 </div>
-                <p className="mt-3 text-2xl font-bold tabular-nums tracking-tight text-stone-900">
+                <p className={cn("mt-3", t.mono, "text-sm font-medium")}>
                   {profile.openingTime}
-                  <span className="mx-2 text-lg font-normal text-stone-400">to</span>
+                  <span className="mx-2 font-normal text-muted-foreground">–</span>
                   {profile.closingTime}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {workingDays.map((d) => (
                     <span
                       key={d}
-                      className="rounded-md bg-white px-2 py-1 text-xs font-medium text-stone-700 ring-1 ring-stone-200"
+                      className="rounded-md border border-border bg-muted/30 px-2 py-1 text-xs font-medium text-foreground"
                     >
                       {d}
                     </span>
                   ))}
                 </div>
                 {languages.length > 0 && (
-                  <div className="mt-5 border-t border-stone-200 pt-4">
-                    <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-stone-500">
+                  <div className="mt-5 border-t border-border pt-4">
+                    <p className={cn("flex items-center gap-1.5", t.label)}>
                       <Globe className="h-3.5 w-3.5" /> Languages
                     </p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {languages.map((l) => (
-                        <Badge key={l} variant="secondary" className="rounded-md bg-white">
+                        <Badge key={l} variant="secondary" className="rounded-full text-xs">
                           {l}
                         </Badge>
                       ))}
@@ -497,10 +493,10 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                 )}
               </div>
 
-              <div className="rounded-2xl border border-dashed border-stone-300 bg-white p-5 text-center">
+              <div className="rounded-lg border border-dashed border-border bg-card p-5 text-center">
                 <Sparkles className="mx-auto h-5 w-5 text-primary" />
-                <p className="mt-2 text-sm font-medium text-stone-900">Marketplace preview</p>
-                <p className="mt-1 text-xs text-stone-500">
+                <p className={cn("mt-2", t.section)}>Marketplace preview</p>
+                <p className={cn("mt-1", t.desc)}>
                   {profile.status === "published"
                     ? "Your profile is visible to devotees searching for services."
                     : "Publish to appear in Digidevalaya search results."}

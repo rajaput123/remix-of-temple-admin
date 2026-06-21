@@ -4,10 +4,10 @@ interface BusinessProfileShellProps {
   children: ReactNode;
 }
 
-/** Minimal canvas — profile view owns layout, cover, and navigation. */
+/** Minimal canvas — profile view owns layout; uses workspace shell tokens. */
 export default function BusinessProfileShell({ children }: BusinessProfileShellProps) {
   return (
-    <div className="min-h-screen bg-stone-100">
+    <div className="min-h-screen bg-background text-foreground">
       {children}
     </div>
   );

@@ -59,6 +59,34 @@ export function formatPackagePrice(pkg: Pick<ServicePackage, "price">) {
   return pkg.price ? `₹${pkg.price}` : "—";
 }
 
+export function packagePriceParts(
+  pkg: Pick<ServicePackage, "price">,
+  service?: Pick<BusinessService, "pricingType" | "price">,
+) {
+  if (service?.pricingType === "Quote Based") {
+    return { main: "Quote Based" as const, sub: undefined };
+  }
+
+  const base = Number(service?.price || 0);
+  const addOn = Number(pkg.price || 0);
+
+  if (!base && !addOn) return { main: "—" as const, sub: undefined };
+  if (base > 0 && addOn > 0) {
+    return { main: `₹${base + addOn}`, sub: `₹${base} + ₹${addOn}` };
+  }
+  if (addOn > 0) return { main: `₹${addOn}`, sub: base > 0 ? `incl. base ₹${base}` : undefined };
+  if (base > 0) return { main: `₹${base}`, sub: "Service base only" };
+  return { main: "—" as const, sub: undefined };
+}
+
+export function packageCombinedPriceValue(
+  pkg: Pick<ServicePackage, "price">,
+  service?: Pick<BusinessService, "pricingType" | "price">,
+) {
+  if (service?.pricingType === "Quote Based") return 0;
+  return Number(service?.price || 0) + Number(pkg.price || 0);
+}
+
 export function formatAge(updatedAt: string) {
   const d = new Date(updatedAt);
   if (Number.isNaN(d.getTime())) return updatedAt;

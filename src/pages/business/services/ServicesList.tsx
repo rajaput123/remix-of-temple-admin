@@ -117,9 +117,9 @@ export default function ServicesListPage() {
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col">
       <WorkspacePage
-        eyebrow="Business Connect · Service Queue"
-        title="Service Queue"
-        description="Operational service listings awaiting decision"
+        eyebrow="Business Connect · Service listing"
+        title="Service listing"
+        description="Manage and publish your service listings"
         actions={
           hasAny ? (
             <>

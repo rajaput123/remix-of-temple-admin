@@ -7,7 +7,8 @@ import { BUSINESS_TYPES } from "@/data/businessTypes";
 import { businessTypeLabel, formatUpdatedAt } from "@/components/business-profile/profileUtils";
 import { ProfileStatusBadge, VerificationStatusBadge } from "@/components/business-profile/ProfileBadges";
 import { ProfileAvatar, ProfileCover, ProfileGallery } from "@/components/business-profile/ProfileMedia";
-import { profileCardClass } from "@/components/business-profile/profileStyles";
+import { profileCardClass, profileTypography as t } from "@/components/business-profile/profileStyles";
+import { cn } from "@/lib/utils";
 
 interface ProfileDetailPanelProps {
   profile: BusinessProfile;
@@ -26,8 +27,9 @@ export function ProfileDetailPanel({ profile, onEdit, onPreview, onPublish }: Pr
             <div className="flex items-end gap-4">
               <ProfileAvatar src={profile.logo} alt={profile.businessName} size="md" />
               <div className="min-w-0 pb-1">
-                <h2 className="text-2xl font-bold tracking-tight">{profile.businessName}</h2>
-                <p className="text-sm text-muted-foreground">
+                <p className={t.eyebrow}>Business Connect · Profile</p>
+                <h2 className={t.title}>{profile.businessName}</h2>
+                <p className={t.muted}>
                   {businessTypeLabel(profile.businessType, BUSINESS_TYPES)} · {profile.category}
                   {profile.experience ? ` · ${profile.experience} yrs` : ""}
                 </p>
@@ -60,10 +62,10 @@ export function ProfileDetailPanel({ profile, onEdit, onPreview, onPublish }: Pr
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card className={profileCardClass}>
           <CardHeader className="pb-2 px-5 pt-5">
-            <CardTitle className="text-base">About</CardTitle>
+            <CardTitle className={t.section}>About</CardTitle>
           </CardHeader>
           <CardContent className="px-5 pb-5">
-            <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+            <p className={cn(t.body, "text-muted-foreground whitespace-pre-wrap")}>
               {profile.about || "No description provided."}
             </p>
           </CardContent>

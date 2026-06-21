@@ -52,7 +52,7 @@ function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-sm font-medium">
+      <Label className="text-xs font-medium text-muted-foreground">
         {label} {required && <span className="text-destructive">*</span>}
       </Label>
       {children}
@@ -252,7 +252,7 @@ export function CreateProfileDrawer({
               <AccordionTrigger className="text-sm font-semibold">Business Hours</AccordionTrigger>
               <AccordionContent className="space-y-4">
                 <div>
-                  <Label className="text-sm font-medium">Working Days</Label>
+                  <Label className="text-xs font-medium text-muted-foreground">Working Days</Label>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {WORKING_DAYS.map((day) => {
                       const on = form.workingDays.includes(day);

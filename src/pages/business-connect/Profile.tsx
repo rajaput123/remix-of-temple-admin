@@ -8,6 +8,9 @@ import { bcStore, useBCStore } from "@/stores/businessConnectStore";
 import { BUSINESS_TYPES } from "@/data/businessTypes";
 import { Edit3, Globe2, MapPin, Phone, Mail } from "lucide-react";
 import { toast } from "sonner";
+import { WorkspacePage } from "@/components/workspace";
+import { profileTypography as t } from "@/components/business-profile/profileStyles";
+import { cn } from "@/lib/utils";
 
 export default function BCProfile() {
   const s = useBCStore();
@@ -23,7 +26,26 @@ export default function BCProfile() {
   }
 
   return (
-    <div className="max-w-5xl space-y-6">
+    <WorkspacePage
+      eyebrow="Business Connect · Profile"
+      title={s.info?.name ?? "Your business"}
+      description="Manage your public marketplace profile"
+      bleed={false}
+      className="max-w-5xl"
+      actions={
+        <>
+          <Button asChild variant="outline" size="sm" className="h-9 gap-1.5 text-xs">
+            <Link to="/business-connect/onboarding/business">
+              <Edit3 className="size-3.5" /> Edit
+            </Link>
+          </Button>
+          <Button size="sm" className="h-9 gap-1.5 text-xs" onClick={publish}>
+            <Globe2 className="size-3.5" /> Publish
+          </Button>
+        </>
+      }
+    >
+    <div className="space-y-6 px-4 pb-6 sm:px-6">
       <Card className="overflow-hidden">
         <div
           className="h-32 w-full bg-gradient-to-r from-primary/40 to-primary/10"
@@ -44,8 +66,8 @@ export default function BCProfile() {
                 ) : null}
               </div>
               <div>
-                <h1 className="text-xl font-bold md:text-2xl">{s.info?.name ?? "Your business"}</h1>
-                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                <p className={t.muted}>Business type & status</p>
+                <div className="mt-1 flex flex-wrap items-center gap-2">
                   {type && <Badge variant="secondary">{type.label}</Badge>}
                   {s.businessType?.subcategory && (
                     <Badge variant="outline">{s.businessType.subcategory}</Badge>
@@ -57,35 +79,25 @@ export default function BCProfile() {
                 </div>
               </div>
             </div>
-            <div className="flex gap-2">
-              <Button asChild variant="outline" size="sm">
-                <Link to="/business-connect/onboarding/business">
-                  <Edit3 className="mr-1 h-3.5 w-3.5" /> Edit
-                </Link>
-              </Button>
-              <Button size="sm" onClick={publish}>
-                <Globe2 className="mr-1 h-3.5 w-3.5" /> Publish
-              </Button>
-            </div>
           </div>
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="about" className="mt-6">
-        <TabsList className="flex w-full flex-wrap justify-start">
-          <TabsTrigger value="about">About</TabsTrigger>
-          <TabsTrigger value="contact">Contact</TabsTrigger>
-          <TabsTrigger value="location">Location</TabsTrigger>
-          <TabsTrigger value="languages">Languages</TabsTrigger>
-          <TabsTrigger value="gallery">Gallery</TabsTrigger>
-          <TabsTrigger value="documents">Documents</TabsTrigger>
-          <TabsTrigger value="subscription">Subscription</TabsTrigger>
+      <Tabs defaultValue="about">
+        <TabsList className="flex h-9 w-full flex-wrap justify-start gap-6 rounded-none border-b bg-transparent p-0">
+          <TabsTrigger value="about" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">About</TabsTrigger>
+          <TabsTrigger value="contact" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Contact</TabsTrigger>
+          <TabsTrigger value="location" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Location</TabsTrigger>
+          <TabsTrigger value="languages" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Languages</TabsTrigger>
+          <TabsTrigger value="gallery" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Gallery</TabsTrigger>
+          <TabsTrigger value="documents" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Documents</TabsTrigger>
+          <TabsTrigger value="subscription" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Subscription</TabsTrigger>
         </TabsList>
 
         <TabsContent value="about">
           <Card>
             <CardContent className="space-y-2 p-5">
-              <h2 className="font-semibold">About</h2>
+              <h2 className={t.section}>About</h2>
               <p className="text-sm text-muted-foreground">
                 {s.info?.description ?? "No description added yet."}
               </p>
@@ -103,7 +115,7 @@ export default function BCProfile() {
         <TabsContent value="contact">
           <Card>
             <CardContent className="space-y-2 p-5">
-              <h2 className="font-semibold">Contact</h2>
+              <h2 className={t.section}>Contact</h2>
               <Row icon={Phone} label="Phone" value={s.info?.phone} />
               <Row icon={Phone} label="WhatsApp" value={s.info?.whatsapp} />
               <Row icon={Mail} label="Email" value={s.info?.email} />
@@ -115,7 +127,7 @@ export default function BCProfile() {
         <TabsContent value="location">
           <Card>
             <CardContent className="space-y-2 p-5">
-              <h2 className="font-semibold">Location & service reach</h2>
+              <h2 className={t.section}>Location & service reach</h2>
               <Row
                 icon={MapPin}
                 label="Address"
@@ -132,7 +144,7 @@ export default function BCProfile() {
         <TabsContent value="languages">
           <Card>
             <CardContent className="space-y-3 p-5">
-              <h2 className="font-semibold">Languages</h2>
+              <h2 className={t.section}>Languages</h2>
               <div className="flex flex-wrap gap-1.5">
                 {(s.comms?.languages ?? []).map((l) => (
                   <Badge key={l} variant="secondary">
@@ -143,7 +155,7 @@ export default function BCProfile() {
                   <span className="text-sm text-muted-foreground">No languages added.</span>
                 )}
               </div>
-              <h3 className="pt-2 font-semibold">Communication channels</h3>
+              <h3 className={cn(t.section, "pt-2")}>Communication channels</h3>
               <div className="flex flex-wrap gap-1.5">
                 {(s.comms?.channels ?? []).map((c) => (
                   <Badge key={c} variant="outline">
@@ -159,7 +171,7 @@ export default function BCProfile() {
         <TabsContent value="gallery">
           <Card>
             <CardContent className="space-y-3 p-5">
-              <h2 className="font-semibold">Gallery</h2>
+              <h2 className={t.section}>Gallery</h2>
               {(s.media?.gallery?.length ?? 0) === 0 ? (
                 <p className="text-sm text-muted-foreground">No photos uploaded yet.</p>
               ) : (
@@ -178,7 +190,7 @@ export default function BCProfile() {
           <Card>
             <CardContent className="space-y-3 p-5">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold">Verification documents</h2>
+                <h2 className={t.section}>Verification documents</h2>
                 <VerificationBadge status={s.verification?.status ?? "pending"} />
               </div>
               {(s.verification?.docs?.length ?? 0) === 0 ? (
@@ -201,7 +213,7 @@ export default function BCProfile() {
         <TabsContent value="subscription">
           <Card>
             <CardContent className="space-y-3 p-5">
-              <h2 className="font-semibold">Subscription</h2>
+              <h2 className={t.section}>Subscription</h2>
               <div className="text-sm">
                 <span className="text-muted-foreground">Current plan: </span>
                 <span className="font-semibold capitalize">
@@ -214,6 +226,7 @@ export default function BCProfile() {
         </TabsContent>
       </Tabs>
     </div>
+    </WorkspacePage>
   );
 }
 

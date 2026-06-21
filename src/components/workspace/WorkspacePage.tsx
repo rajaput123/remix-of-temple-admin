@@ -69,7 +69,7 @@ export function WorkspacePage({
         </div>
 
         {tabs && tabs.length > 0 && (
-          <nav className="-mb-px flex items-center gap-6 px-6" aria-label="Page sections">
+          <nav className="flex items-center gap-6 px-6 pb-0" aria-label="Page sections">
             {tabs.map((tab) => {
               const isActive = tab.id === activeTab;
               return (
@@ -78,10 +78,10 @@ export function WorkspacePage({
                   type="button"
                   onClick={() => onTabChange?.(tab.id)}
                   className={cn(
-                    "inline-flex h-9 items-center gap-2 border-b-2 px-0 text-[12px] font-medium transition-colors duration-[120ms]",
+                    "relative -mb-px inline-flex h-9 items-center gap-1.5 border-b-2 px-0 text-xs font-medium transition-colors duration-[120ms]",
                     isActive
                       ? "border-primary text-primary"
-                      : "-mb-px border-transparent text-muted-foreground hover:text-foreground",
+                      : "border-transparent text-muted-foreground hover:text-foreground",
                   )}
                   aria-current={isActive ? "page" : undefined}
                 >
@@ -89,7 +89,7 @@ export function WorkspacePage({
                   {tab.count !== undefined && (
                     <span
                       className={cn(
-                        "inline-flex h-5 min-w-5 items-center justify-center rounded px-1 font-mono text-[10px] font-medium",
+                        "inline-flex h-5 min-w-5 items-center justify-center rounded-md px-1.5 font-mono text-[10px] font-medium tabular-nums leading-none",
                         isActive ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground",
                       )}
                     >

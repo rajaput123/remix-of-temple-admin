@@ -27,6 +27,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { resolveHubModule } from "@/lib/hubModules";
 
 interface NavItemType {
   label: string;
@@ -55,6 +56,23 @@ interface TempleLayoutProps {
   profileName?: string;
   profileRole?: string;
   profileInitials?: string;
+}
+
+function isNavItemActive(
+  item: NavItemType,
+  pathname: string,
+  search: string,
+  firstNavPath?: string,
+): boolean {
+  const fullPath = pathname + search;
+  if (item.isActive) return item.isActive(pathname);
+  return (
+    fullPath === item.path ||
+    pathname === item.path ||
+    (firstNavPath != null &&
+      item.path === firstNavPath &&
+      pathname === firstNavPath.replace(/\/[^/]+$/, ""))
+  );
 }
 
 const TempleLayout = ({
@@ -89,6 +107,10 @@ const TempleLayout = ({
     });
   };
 
+  const hubModule = resolveHubModule(location.pathname);
+  const headerLabel = hubModule?.title ?? title;
+  const HeaderIcon = hubModule?.icon ?? Icon;
+
   return (
     <div
       className="min-h-screen bg-background"
@@ -105,8 +127,8 @@ const TempleLayout = ({
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className="shell-sidebar fixed left-0 top-0 z-30 flex flex-col border-r border-border bg-sidebar"
       >
-        {/* Logo / Module Title */}
-        <div className="h-14 flex items-center justify-center px-4 border-b border-border">
+        {/* Hub module title */}
+        <div className="h-14 flex items-center justify-center border-b border-border px-4">
           <AnimatePresence mode="wait">
             {!collapsed ? (
               <motion.button
@@ -114,10 +136,10 @@ const TempleLayout = ({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => navigate("/temple-hub")}
-                className="sidebar-brand"
+                className="sidebar-brand min-w-0 w-full"
               >
-                <Icon className="size-4 shrink-0" />
-                <span className="truncate">{title}</span>
+                <HeaderIcon className="size-4 shrink-0" />
+                <span className="truncate">{headerLabel}</span>
               </motion.button>
             ) : (
               <motion.button
@@ -126,8 +148,9 @@ const TempleLayout = ({
                 exit={{ opacity: 0 }}
                 onClick={() => navigate("/temple-hub")}
                 className="text-primary"
+                title={headerLabel}
               >
-                <Icon className="size-4" />
+                <HeaderIcon className="size-4" />
               </motion.button>
             )}
           </AnimatePresence>
@@ -162,12 +185,7 @@ const TempleLayout = ({
             const hasChildren = item.children && item.children.length > 0;
             const isGroupExpanded = expandedGroups.has(item.label);
             const fullPath = location.pathname + location.search;
-            const active = item.isActive
-              ? item.isActive(location.pathname)
-              : fullPath === item.path ||
-                location.pathname === item.path ||
-                (item.path === navItems[0]?.path &&
-                  location.pathname === navItems[0]?.path.replace(/\/[^/]+$/, ""));
+            const active = isNavItemActive(item, location.pathname, location.search, navItems[0]?.path);
             const childActive = hasChildren && item.children!.some(c => fullPath === c.path || location.pathname === c.path);
 
             if (hasChildren) {

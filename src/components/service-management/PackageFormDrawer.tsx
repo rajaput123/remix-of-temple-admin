@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sheet";
 import type { BusinessService, ServicePackage, ServiceStatus } from "@/types/serviceManagement";
 import { Field, SectionTitle } from "./ui";
+import { formatPrice, packagePriceParts } from "./shared";
 import type { PackageFormErrors } from "./validation";
 import { FileText } from "lucide-react";
 
@@ -52,6 +53,7 @@ export function PackageFormDrawer({
   const isEdit = !!pkg.id;
   const primaryLocked = !!lockPrimaryServiceId;
   const primaryService = services.find((s) => s.id === pkg.primaryServiceId);
+  const pricePreview = primaryService ? packagePriceParts(pkg, primaryService) : null;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -96,7 +98,9 @@ export function PackageFormDrawer({
           {primaryService && (
             <div className="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
               Base service: <span className="font-medium text-foreground">{primaryService.name}</span>
-              {primaryService.price && <span> · from ₹{primaryService.price}</span>}
+              {primaryService.pricingType !== "Quote Based" && primaryService.price && (
+                <span> · base {formatPrice(primaryService)}</span>
+              )}
             </div>
           )}
 
@@ -124,15 +128,27 @@ export function PackageFormDrawer({
               />
             </Field>
 
-            <Field label="Tier Price *" hint="Total price for this package in INR." error={errors.price}>
+            <Field
+              label="Tier add-on price *"
+              hint="Extra amount on top of the main service base price."
+              error={errors.price}
+            >
               <Input
                 inputMode="decimal"
                 value={pkg.price}
                 onChange={(e) => onChange({ ...pkg, price: e.target.value.replace(/[^\d.]/g, "") })}
-                placeholder="Enter price"
+                placeholder="Enter tier add-on amount"
                 aria-required
               />
             </Field>
+
+            {pricePreview && pricePreview.sub && (
+              <div className="rounded-md border border-border bg-muted/30 px-3 py-2 text-xs">
+                <span className="text-muted-foreground">Total listing price: </span>
+                <span className="font-mono font-medium tabular-nums text-foreground">{pricePreview.main}</span>
+                <span className="ml-1 font-mono text-muted-foreground">({pricePreview.sub})</span>
+              </div>
+            )}
 
             <Field label="Discount" hint="Optional — percentage or label.">
               <Input

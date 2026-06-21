@@ -37,7 +37,7 @@ import { paginate, WORKSPACE_PAGE_SIZE } from "@/components/workspace/tablePagin
 import type { BusinessService, ServicePackage } from "@/types/serviceManagement";
 import { cn } from "@/lib/utils";
 import { StatusDotBadge } from "./StatusBadges";
-import { formatAge, formatPackageId, formatPackagePrice } from "./shared";
+import { formatAge, formatPackageId, packageCombinedPriceValue, packagePriceParts } from "./shared";
 
 function stopRowActivation(e: SyntheticEvent) {
   e.stopPropagation();
@@ -97,6 +97,11 @@ export function PackageTable({
     [services],
   );
 
+  const serviceById = useMemo(
+    () => new Map(services.map((s) => [s.id, s])),
+    [services],
+  );
+
   const filtered = useMemo(() => {
     let rows = packages.filter((p) => {
       const main =
@@ -122,7 +127,9 @@ export function PackageTable({
           );
           break;
         case "price":
-          cmp = Number(a.price || 0) - Number(b.price || 0);
+          cmp =
+            packageCombinedPriceValue(a, serviceById.get(a.primaryServiceId)) -
+            packageCombinedPriceValue(b, serviceById.get(b.primaryServiceId));
           break;
         case "status":
           cmp = a.status.localeCompare(b.status);
@@ -135,7 +142,7 @@ export function PackageTable({
     });
 
     return rows;
-  }, [packages, mainServiceFilter, statusFilter, savedView, sortKey, sortDir, serviceNameById]);
+  }, [packages, mainServiceFilter, statusFilter, savedView, sortKey, sortDir, serviceNameById, serviceById]);
 
   const { items: paged, totalPages, currentPage, rangeStart, rangeEnd, total } = paginate(
     filtered,
@@ -317,15 +324,15 @@ export function PackageTable({
         </FilterSelectionActions>
       </FilterStrip>
 
-      <div className="flex flex-col overflow-hidden" role="region" aria-label="Packages table">
-        <Table variant="workspace" container={false} className="table-workspace min-w-[960px]">
+      <div className="flex flex-col overflow-x-auto" role="region" aria-label="Packages table">
+        <Table variant="workspace" container={false} className="table-workspace min-w-[1024px]">
           <colgroup>
             <col style={{ width: "2.5rem" }} />
-            <col style={{ width: "4.5rem" }} />
-            <col style={{ width: "18%" }} />
-            <col />
-            <col style={{ width: "6.5rem" }} />
-            <col style={{ width: "11%" }} />
+            <col style={{ width: "5.5rem" }} />
+            <col style={{ width: "16%" }} />
+            <col style={{ width: "22%" }} />
+            <col style={{ width: "8.5rem" }} />
+            <col style={{ width: "10%" }} />
             <col style={{ width: "6.5rem" }} />
             <col style={{ width: "4.5rem" }} />
           </colgroup>
@@ -373,6 +380,8 @@ export function PackageTable({
               paged.map((pkg) => {
                 const isSelected = selected.has(pkg.id);
                 const mainName = serviceNameById.get(pkg.primaryServiceId) ?? "—";
+                const primaryService = serviceById.get(pkg.primaryServiceId);
+                const price = packagePriceParts(pkg, primaryService);
                 return (
                   <TableRow
                     key={pkg.id}
@@ -403,10 +412,10 @@ export function PackageTable({
                         aria-label={`Select ${pkg.name}`}
                       />
                     </TableCell>
-                    <TableCell className="whitespace-nowrap text-left">
+                    <TableCell className="max-w-[5.5rem] overflow-hidden text-left">
                       <button
                         type="button"
-                        className="font-mono text-[11px] text-primary hover:underline"
+                        className="block max-w-full truncate font-mono text-[11px] text-primary hover:underline"
                         title={pkg.id}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -416,19 +425,30 @@ export function PackageTable({
                         {formatPackageId(pkg.id)}
                       </button>
                     </TableCell>
-                    <TableCell className="hidden min-w-0 text-left lg:table-cell">
-                      <span className="block truncate font-medium text-foreground" title={mainName}>
+                    <TableCell className="hidden max-w-0 overflow-hidden text-left lg:table-cell">
+                      <span className="block truncate text-sm text-muted-foreground" title={mainName}>
                         {mainName}
                       </span>
                     </TableCell>
-                    <TableCell className="min-w-0 text-left">
-                      <div className="min-w-0 space-y-0.5" title={`${pkg.name} · ${subjectSecondary(pkg)}`}>
+                    <TableCell className="max-w-0 overflow-hidden text-left">
+                      <div
+                        className="min-w-0 space-y-0.5"
+                        title={`${pkg.name}${mainName !== "—" ? ` · ${mainName}` : ""} · ${subjectSecondary(pkg)}`}
+                      >
                         <p className="cell-primary">{pkg.name}</p>
-                        <p className="cell-secondary">{subjectSecondary(pkg)}</p>
+                        <p className="cell-secondary lg:hidden">{mainName}</p>
+                        <p className="cell-secondary hidden lg:block">{subjectSecondary(pkg)}</p>
                       </div>
                     </TableCell>
-                    <TableCell className="whitespace-nowrap text-right font-mono text-xs tabular-nums">
-                      {formatPackagePrice(pkg)}
+                    <TableCell className="overflow-hidden text-right">
+                      <div className="min-w-0">
+                        <p className="font-mono text-xs tabular-nums text-foreground">{price.main}</p>
+                        {price.sub && (
+                          <p className="truncate font-mono text-[10px] tabular-nums text-muted-foreground" title={price.sub}>
+                            {price.sub}
+                          </p>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="hidden min-w-0 text-left sm:table-cell">
                       <span className="block truncate text-muted-foreground" title={pkg.validity || undefined}>

@@ -34,7 +34,7 @@ const navItems = [
 const BCLayout = () => {
   return (
     <TempleLayout
-      title="Business Connect"
+      title="Service Listings"
       icon={Sparkles}
       navItems={navItems}
       profileName="Alex Sterling"
