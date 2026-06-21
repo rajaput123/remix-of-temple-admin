@@ -6,7 +6,7 @@ export const DEMO_PROFILE_MEDIA = {
   fallback: "/placeholder.svg",
 } as const;
 
-export function profileImageUrl(url: string | null | undefined, fallback = DEMO_PROFILE_MEDIA.fallback): string {
+export function profileImageUrl(url: string | null | undefined, fallback: string = DEMO_PROFILE_MEDIA.fallback): string {
   return url?.trim() ? url : fallback;
 }
 

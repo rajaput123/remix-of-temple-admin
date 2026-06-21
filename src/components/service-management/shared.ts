@@ -21,7 +21,7 @@ export function formatPrice(service: Pick<BusinessService, "pricingType" | "pric
 }
 
 export function formatPriceSub(service: Pick<BusinessService, "pricingType" | "discount">) {
-  const parts = [service.pricingType];
+  const parts: string[] = [service.pricingType];
   if (service.discount?.trim()) parts.push(`Discount: ${service.discount.trim()}`);
   return parts.join(" · ");
 }
