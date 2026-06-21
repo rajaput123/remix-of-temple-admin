@@ -653,7 +653,7 @@ const BusinessHub = () => {
                       return (
                         <div
                           key={m.id}
-                          className="group rounded-xl border border-slate-200 bg-white hover:border-[#2b62ef]/40 hover:shadow-md transition-all overflow-hidden flex flex-col"
+                          className="group rounded-xl border border-slate-200 bg-white hover:border-primary/40 hover:shadow-md transition-all overflow-hidden flex flex-col"
                         >
                           {/* Header */}
                           <button
