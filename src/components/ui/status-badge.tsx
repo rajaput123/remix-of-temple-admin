@@ -14,7 +14,7 @@ const statusBadgeVariants = cva(
         // Status-specific variants
         success: "border-transparent bg-green-500 text-white hover:bg-green-600",
         neutral: "border-transparent bg-gray-500 text-white hover:bg-gray-600",
-        primary: "border-transparent bg-blue-500 text-white hover:bg-blue-600",
+        primary: "border-transparent bg-primary text-primary-foreground hover:bg-primary/90",
         warning: "border-transparent bg-amber-500 text-white hover:bg-amber-600",
       },
     },

@@ -134,7 +134,7 @@ export default function BCAuth() {
           <AuthPrimaryButton>Continue</AuthPrimaryButton>
           <p className="text-center text-sm text-slate-500">
             Have an account?{" "}
-            <Link to="/login" className="text-[#2b62ef] font-medium hover:underline">
+            <Link to="/login" className="text-primary font-medium hover:underline">
               Sign in
             </Link>
           </p>
@@ -156,7 +156,7 @@ export default function BCAuth() {
               }}
               className={cn(
                 "text-sm font-medium",
-                resendCooldown > 0 ? "text-slate-400" : "text-[#2b62ef] hover:underline",
+                resendCooldown > 0 ? "text-slate-400" : "text-primary hover:underline",
               )}
             >
               {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend OTP"}
@@ -191,7 +191,7 @@ export default function BCAuth() {
                   className={cn(
                     "flex items-center gap-2 rounded-xl border p-2.5 text-left text-xs font-medium transition",
                     businessType === id
-                      ? "border-[#2b62ef] bg-[#2b62ef]/5 text-[#2b62ef]"
+                      ? "border-primary bg-primary/5 text-primary"
                       : "border-slate-200 hover:border-slate-300",
                   )}
                 >

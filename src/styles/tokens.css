@@ -29,7 +29,7 @@
     /* Brand & semantic — primary #2B62EF */
     --color-primary: oklch(0.498 0.333 258);
     --color-primary-hover: oklch(0.455 0.300 258);
-    --color-primary-fg: oklch(1 0 0);
+    --color-primary-fg: oklch(0.99 0 0);
     --color-primary-subtle: oklch(0.97 0.03 258);
 
     --color-ai: oklch(0.498 0.333 258);
@@ -69,13 +69,13 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 35% 12%;
     --primary: 223 86% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 0 0% 99%;
     --secondary: 220 14% 94%;
     --secondary-foreground: 222 35% 12%;
     --muted: 220 14% 94%;
     --muted-foreground: 220 10% 46%;
     --accent: 223 86% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent-foreground: 0 0% 99%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --border: 220 13% 88%;
@@ -86,7 +86,7 @@
     --sidebar-background: 210 20% 98%;
     --sidebar-foreground: 222 35% 12%;
     --sidebar-primary: 223 86% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 99%;
     --sidebar-accent: 214 100% 97%;
     --sidebar-accent-foreground: 223 86% 55%;
     --sidebar-border: 220 13% 88%;
@@ -96,7 +96,7 @@
     --surface-2: 220 14% 94%;
 
     --ai-accent: 223 86% 55%;
-    --ai-accent-foreground: 0 0% 100%;
+    --ai-accent-foreground: 0 0% 99%;
     --success: 160 60% 40%;
     --success-foreground: 0 0% 100%;
     --warning: 38 90% 50%;
@@ -153,12 +153,12 @@
     --color-fg-disabled: oklch(0.48 0.02 260);
     --color-fg-inverse: oklch(0.19 0.03 260);
 
-    --color-primary: oklch(0.62 0.20 258);
-    --color-primary-hover: oklch(0.68 0.20 258);
-    --color-primary-fg: oklch(1 0 0);
+    --color-primary: oklch(0.68 0.21 260);
+    --color-primary-hover: oklch(0.72 0.21 260);
+    --color-primary-fg: oklch(0.09 0.02 260);
     --color-primary-subtle: oklch(0.28 0.06 258);
 
-    --color-ai: oklch(0.62 0.20 258);
+    --color-ai: oklch(0.68 0.21 260);
     --color-ai-subtle: oklch(0.28 0.06 258);
 
     --color-success: oklch(0.68 0.17 155);
@@ -175,9 +175,9 @@
     --color-border-strong: oklch(1 0 0 / 0.18);
     --color-divider: oklch(1 0 0 / 0.06);
 
-    --color-ring: oklch(0.62 0.20 258 / 0.5);
+    --color-ring: oklch(0.68 0.21 260 / 0.5);
 
-    --color-chart-1: oklch(0.62 0.20 258);
+    --color-chart-1: oklch(0.68 0.21 260);
     --color-chart-2: oklch(0.68 0.17 155);
     --color-chart-3: oklch(0.78 0.14 75);
     --color-chart-4: oklch(0.65 0.16 295);
@@ -190,31 +190,34 @@
     --card-foreground: 210 40% 98%;
     --popover: 217 30% 22%;
     --popover-foreground: 210 40% 98%;
-    --primary: 223 86% 65%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 220 100% 70%;
+    --primary-foreground: 222 42% 6%;
     --secondary: 217 33% 17%;
     --secondary-foreground: 214 32% 91%;
     --muted: 217 30% 22%;
     --muted-foreground: 215 16% 57%;
-    --accent: 223 86% 65%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 220 100% 70%;
+    --accent-foreground: 222 42% 6%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 217 33% 22%;
     --input: 217 33% 22%;
-    --ring: 223 86% 65%;
+    --ring: 220 100% 70%;
 
     --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 214 32% 91%;
-    --sidebar-primary: 223 86% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 220 100% 70%;
+    --sidebar-primary-foreground: 222 42% 6%;
     --sidebar-accent: 221 60% 18%;
-    --sidebar-accent-foreground: 223 86% 65%;
+    --sidebar-accent-foreground: 220 100% 70%;
     --sidebar-border: 0 0% 100%;
-    --sidebar-ring: 223 86% 65%;
+    --sidebar-ring: 220 100% 70%;
 
     --surface: 217 30% 22%;
     --surface-2: 217 30% 20%;
+
+    --ai-accent: 220 100% 70%;
+    --ai-accent-foreground: 222 42% 6%;
 
     --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.25);
     --shadow-panel-md: 0 4px 8px oklch(0 0 0 / 0.35);
