@@ -74,7 +74,7 @@ export function BCAuthLayout({
         <div className="relative z-10 px-4 sm:px-8 pb-2">
           <div className="mx-auto max-w-md h-1.5 overflow-hidden rounded-full bg-slate-200">
             <div
-              className="h-full rounded-full bg-[#2b62ef] transition-all duration-500"
+              className="h-full rounded-full bg-primary transition-all duration-500"
               style={{ width: `${(step / totalSteps) * 100}%` }}
             />
           </div>
