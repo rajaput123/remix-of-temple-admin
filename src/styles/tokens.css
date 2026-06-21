@@ -1,0 +1,230 @@
+/**
+ * Keehoo ERP Hub — Semantic design tokens (oklch)
+ * Import from src/index.css: @import "./styles/tokens.css";
+ *
+ * Usage in Tailwind/shadcn: hsl(var(--background)) or oklch(var(--l-bg) var(--c-neutral) var(--h-neutral))
+ * Prefer semantic utility classes; never hardcode hex in components.
+ */
+
+@layer base {
+  /* ─── Light theme — Operational Command (default) ─── */
+  :root {
+    color-scheme: light;
+
+    /* Background hierarchy */
+    --color-bg-app: oklch(0.975 0.008 260);
+    --color-bg-surface: oklch(0.995 0.004 260);
+    --color-bg-card: oklch(1 0 0);
+    --color-bg-elevated: oklch(1 0 0);
+    --color-bg-muted: oklch(0.955 0.01 260);
+    --color-bg-inset: oklch(0.94 0.012 260);
+
+    /* Foreground hierarchy */
+    --color-fg-primary: oklch(0.22 0.03 260);
+    --color-fg-secondary: oklch(0.42 0.025 260);
+    --color-fg-muted: oklch(0.55 0.02 260);
+    --color-fg-disabled: oklch(0.72 0.015 260);
+    --color-fg-inverse: oklch(0.99 0 0);
+
+    /* Brand & semantic — primary #2563EB */
+    --color-primary: oklch(0.546 0.215 264);
+    --color-primary-hover: oklch(0.457 0.215 264);
+    --color-primary-fg: oklch(1 0 0);
+    --color-primary-subtle: oklch(0.97 0.025 264);
+
+    --color-ai: oklch(0.546 0.215 264);
+    --color-ai-subtle: oklch(0.97 0.025 264);
+
+    --color-success: oklch(0.62 0.17 155);
+    --color-success-subtle: oklch(0.95 0.04 155);
+    --color-warning: oklch(0.72 0.16 75);
+    --color-warning-subtle: oklch(0.96 0.04 75);
+    --color-info: oklch(0.68 0.14 230);
+    --color-info-subtle: oklch(0.95 0.03 230);
+    --color-destructive: oklch(0.58 0.22 25);
+    --color-destructive-subtle: oklch(0.95 0.04 25);
+
+    /* Borders */
+    --color-border-soft: oklch(0.88 0.01 260 / 0.9);
+    --color-border-default: oklch(0.82 0.015 260);
+    --color-border-strong: oklch(0.72 0.02 260);
+    --color-divider: oklch(0.9 0.008 260);
+
+    /* Focus ring */
+    --color-ring: oklch(0.546 0.215 264 / 0.45);
+
+    /* Chart / data viz (categorical, colorblind-safe) */
+    --color-chart-1: oklch(0.546 0.215 264);
+    --color-chart-2: oklch(0.62 0.17 155);
+    --color-chart-3: oklch(0.72 0.16 75);
+    --color-chart-4: oklch(0.58 0.18 295);
+    --color-chart-5: oklch(0.68 0.14 230);
+    --color-chart-6: oklch(0.58 0.22 25);
+
+    /* shadcn bridge (HSL triplets for existing components) */
+    --background: 0 0% 100%;
+    --foreground: 222 35% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 35% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 35% 12%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 222 35% 12%;
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 10% 46%;
+    --accent: 221 83% 53%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 221 83% 53%;
+    --radius: 0.5rem;
+
+    --sidebar-background: 210 20% 98%;
+    --sidebar-foreground: 222 35% 12%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 214 100% 97%;
+    --sidebar-accent-foreground: 221 83% 53%;
+    --sidebar-border: 220 13% 88%;
+    --sidebar-ring: 221 83% 53%;
+
+    --surface: 220 14% 96%;
+    --surface-2: 220 14% 94%;
+
+    --ai-accent: 221 83% 53%;
+    --ai-accent-foreground: 0 0% 100%;
+    --success: 160 60% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 90% 50%;
+    --warning-foreground: 0 0% 9%;
+    --info: 198 85% 55%;
+    --info-foreground: 0 0% 100%;
+
+    /* Typography */
+    --font-sans: "IBM Plex Sans", "Geist", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+
+    /* Spacing scale: 4 8 12 16 24 32 48 64 */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    /* Layout */
+    --topbar-height: 4rem;
+    --sidebar-width: 16.5rem;
+    --statusbar-height: 2.25rem;
+
+    /* Motion */
+    --duration-fast: 120ms;
+    --duration-normal: 200ms;
+    --duration-slow: 320ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+
+    /* Elevation */
+    --shadow-panel: 0 1px 2px oklch(0.2 0.02 260 / 0.06), 0 1px 3px oklch(0.2 0.02 260 / 0.08);
+    --shadow-panel-md: 0 4px 6px oklch(0.2 0.02 260 / 0.08);
+  }
+
+  /* ─── Dark theme — Deep Indigo Enterprise ─── */
+  [data-theme="keehoo"],
+  .dark {
+    color-scheme: dark;
+
+    --color-bg-app: oklch(0.19 0.03 260);
+    --color-bg-surface: oklch(0.25 0.025 260);
+    --color-bg-card: oklch(0.25 0.025 260);
+    --color-bg-elevated: oklch(0.30 0.025 260);
+    --color-bg-muted: oklch(0.28 0.022 260);
+    --color-bg-inset: oklch(0.22 0.028 260);
+
+    --color-fg-primary: oklch(0.98 0.005 260);
+    --color-fg-secondary: oklch(0.82 0.015 260);
+    --color-fg-muted: oklch(0.65 0.02 260);
+    --color-fg-disabled: oklch(0.48 0.02 260);
+    --color-fg-inverse: oklch(0.19 0.03 260);
+
+    --color-primary: oklch(0.623 0.188 264);
+    --color-primary-hover: oklch(0.68 0.188 264);
+    --color-primary-fg: oklch(1 0 0);
+    --color-primary-subtle: oklch(0.28 0.06 264);
+
+    --color-ai: oklch(0.62 0.18 295);
+    --color-ai-subtle: oklch(0.28 0.04 295);
+
+    --color-success: oklch(0.68 0.17 155);
+    --color-success-subtle: oklch(0.28 0.04 155);
+    --color-warning: oklch(0.78 0.14 75);
+    --color-warning-subtle: oklch(0.30 0.05 75);
+    --color-info: oklch(0.72 0.12 230);
+    --color-info-subtle: oklch(0.28 0.04 230);
+    --color-destructive: oklch(0.62 0.22 25);
+    --color-destructive-subtle: oklch(0.30 0.06 25);
+
+    --color-border-soft: oklch(1 0 0 / 0.08);
+    --color-border-default: oklch(1 0 0 / 0.12);
+    --color-border-strong: oklch(1 0 0 / 0.18);
+    --color-divider: oklch(1 0 0 / 0.06);
+
+    --color-ring: oklch(0.623 0.188 264 / 0.5);
+
+    --color-chart-1: oklch(0.623 0.188 264);
+    --color-chart-2: oklch(0.68 0.17 155);
+    --color-chart-3: oklch(0.78 0.14 75);
+    --color-chart-4: oklch(0.65 0.16 295);
+    --color-chart-5: oklch(0.72 0.12 230);
+    --color-chart-6: oklch(0.65 0.18 25);
+
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
+    --popover: 217 30% 22%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 214 32% 91%;
+    --muted: 217 30% 22%;
+    --muted-foreground: 215 16% 57%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 33% 22%;
+    --input: 217 33% 22%;
+    --ring: 217 91% 60%;
+
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 214 32% 91%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 221 60% 18%;
+    --sidebar-accent-foreground: 217 91% 70%;
+    --sidebar-border: 0 0% 100%;
+    --sidebar-ring: 217 91% 60%;
+
+    --surface: 217 30% 22%;
+    --surface-2: 217 30% 20%;
+
+    --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.25);
+    --shadow-panel-md: 0 4px 8px oklch(0 0 0 / 0.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --duration-fast: 0ms;
+      --duration-normal: 0ms;
+      --duration-slow: 0ms;
+    }
+  }
+}

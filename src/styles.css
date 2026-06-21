@@ -1,0 +1,7 @@
+/**
+ * Tailwind CSS v4 entry point (migration target)
+ * @see docs/ERP-DESIGN-SYSTEM-SPEC.md
+ *
+ * For current Vite build, tokens are imported via src/index.css
+ */
+@import "./styles/tokens.css";

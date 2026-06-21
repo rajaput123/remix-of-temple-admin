@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import "./styles/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* App-only overrides — core palette lives in styles/tokens.css */
+    --radius: 0.75rem;
+
+    --brown-deep: 224 76% 33%;
+    --brown-darkest: 226 71% 22%;
+    --brown-light: 220 33% 98%;
+    --brown-gradient: linear-gradient(135deg, hsl(221 83% 53%), hsl(224 76% 40%));
+
+    --shell-sidebar-width: 240px;
+    --shell-statusbar-height: 0px;
+
+    /* Elite pricing palette — kept for pricing page accents */
+    --elite-green: 154 51% 15%;
+    --elite-green-mid: 158 41% 24%;
+    --elite-green-soft: 154 30% 96%;
+    --elite-orange: 22 96% 54%;
+    --elite-orange-soft: 22 96% 96%;
+    --elite-gold: 42 96% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 9999px;
+  }
+
+  /* Workspace table row spacing + header highlight */
+  .table-workspace thead {
+    @apply border-b border-border shadow-none;
+  }
+
+  .table-workspace thead th {
+    @apply py-2.5 text-foreground;
+  }
+
+  .table-workspace thead th button {
+    @apply text-foreground;
+  }
+
+  .table-workspace tbody td {
+    @apply py-1.5 align-middle;
+  }
+
+  .table-workspace th.text-right,
+  .table-workspace td.text-right {
+    text-align: right;
+  }
+
+  .table-workspace th.text-center,
+  .table-workspace td.text-center {
+    text-align: center;
+  }
+
+  .table-workspace td .cell-primary {
+    @apply truncate font-medium leading-tight text-foreground;
+  }
+
+  .table-workspace td .cell-secondary {
+    @apply truncate text-[11px] leading-tight text-muted-foreground;
+  }
+
+  /* Sidebar typography — Keehoo ERP shell */
+  .sidebar-brand {
+    @apply flex items-center gap-2 text-sm font-semibold tracking-tight text-primary;
+  }
+
+  .sidebar-section-label {
+    @apply mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  .sidebar-nav-item {
+    @apply flex w-full items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-colors duration-200;
+  }
+
+  .sidebar-nav-nested {
+    @apply flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-xs font-normal transition-colors duration-200;
+  }
+
+  .sidebar-quick-link {
+    @apply flex w-full items-center gap-2.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors duration-200;
+  }
+
+  .sidebar-profile-name {
+    @apply truncate text-xs font-medium text-foreground;
+  }
+
+  .sidebar-search {
+    @apply h-8 border-0 bg-muted/50 pl-9 text-xs;
+  }
+
+  .sidebar-badge {
+    @apply rounded-full px-1.5 py-0.5 text-[10px] font-mono font-medium;
+  }
+
+  /* Shell: sidebar ends above viewport-fixed status strip */
+  :root[data-status-bar="true"] {
+    --shell-statusbar-height: 2.25rem;
+  }
+
+  .shell-sidebar {
+    height: calc(100vh - var(--shell-statusbar-height));
+  }
+
+  .shell-status-bar {
+    height: var(--shell-statusbar-height, 2.25rem);
+  }
+
+  :root[data-status-bar="true"] .shell-main-content {
+    height: calc(100vh - var(--shell-statusbar-height));
+    min-height: calc(100vh - var(--shell-statusbar-height));
+    padding-bottom: 0;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-subtle {
+    background: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(30 30% 98%) 100%);
+  }
+  
+  .bg-gradient-radial {
+    background: radial-gradient(ellipse at top, hsl(30 30% 99%) 0%, hsl(0 0% 100%) 70%);
+  }
+
+  /* Glassmorphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  
+  .glass-sidebar {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  /* Primary gradient (legacy name kept for backwards compat) */
+  .brown-gradient {
+    background: linear-gradient(135deg, hsl(224 76% 40%), hsl(221 83% 53%));
+  }
+
+  .brown-gradient-soft {
+    background: linear-gradient(135deg, hsl(220 33% 98%), hsl(220 14% 96%));
+  }
+
+  /* Shadows */
+  .card-shadow {
+    box-shadow: 0 1px 3px 0 rgba(105, 46, 13, 0.04), 0 1px 2px -1px rgba(105, 46, 13, 0.04);
+  }
+  
+  .card-shadow-hover {
+    box-shadow: 0 20px 40px -15px rgba(105, 46, 13, 0.1), 0 8px 20px -10px rgba(105, 46, 13, 0.06);
+  }
+  
+  .card-shadow-lg {
+    box-shadow: 0 25px 50px -12px rgba(105, 46, 13, 0.12);
+  }
+  
+  .glass-shadow {
+    box-shadow: 0 8px 32px rgba(105, 46, 13, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  /* Animations */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .hover-lift:hover {
+    @apply -translate-y-1;
+  }
+  
+  .animate-fade-up {
+    animation: fadeUp 0.5s ease-out forwards;
+  }
+  
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+  
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .animate-slide-in {
+    animation: slideIn 0.4s ease-out forwards;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* NEFT/RTGS & Cash/UPI voucher — print layout (A4 landscape, template only) */
+  @media print {
+    @page {
+      size: A4 landscape;
+      margin: 8mm;
+    }
+
+    aside,
+    .print\\:hidden,
+    [data-sidebar],
+    button,
+    [role="dialog"] > *:not(.voucher-print-root),
+    nav,
+    header {
+      display: none !important;
+    }
+
+    body.voucher-print-active > *:not(.voucher-print-clone-host) {
+      display: none !important;
+    }
+
+    body.voucher-print-active .voucher-print-clone-host {
+      display: block !important;
+      position: static !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    main {
+      margin-left: 0 !important;
+    }
+
+    .neft-rtgs-form input,
+    .cash-upi-voucher-form input {
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      height: auto !important;
+      background: transparent !important;
+    }
+
+    .voucher-print-sheet,
+    .neft-rtgs-form,
+    .cash-upi-voucher-form {
+      width: 100% !important;
+      max-width: none !important;
+    }
+
+    .voucher-print-copies-row {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: stretch !important;
+      gap: 0 !important;
+      width: 100% !important;
+    }
+
+    .voucher-print-copies-row > div {
+      flex: 1 1 50% !important;
+      max-width: 50% !important;
+      min-width: 0 !important;
+      page-break-inside: avoid !important;
+      box-sizing: border-box !important;
+    }
+  }
+}
+
+/* Voucher print — outside @layer for reliable PDF / Save as PDF */
+@media print {
+  @page voucher-a4-landscape {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  html,
+  body {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.voucher-print-active {
+    page: voucher-a4-landscape;
+  }
+
+  body.voucher-print-active .voucher-print-clone-host {
+    page: voucher-a4-landscape;
+  }
+
+  body.voucher-print-active .voucher-print-clone-host .voucher-print-copies-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+  }
+
+  body.voucher-print-active .voucher-print-clone-host .voucher-print-copies-row > div {
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+    page-break-inside: avoid !important;
+  }
+
+  body.voucher-print-active .voucher-print-clone-host .neft-rtgs-form,
+  body.voucher-print-active .voucher-print-clone-host .cash-upi-voucher-form,
+  body.voucher-print-active .voucher-print-clone-host .payroll-bulk-remittance-form {
+    font-size: 10px !important;
+  }
+}
+
+/* ── Reconciliation Suite Print Styles ───────────────────────────────────── */
+@media print {
+  /* Hide the suite sidebar and toolbar when printing */
+  .recon-suite aside,
+  .recon-suite .print\:hidden,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .recon-suite main {
+    margin-left: 0 !important;
+  }
+
+  /* Print wrapper */
+  .recon-suite {
+    background: #fff !important;
+  }
+
+  /* Table borders for print register */
+  .recon-suite table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    font-size: 9px !important;
+  }
+
+  .recon-suite table th,
+  .recon-suite table td {
+    border: 1px solid #ccc !important;
+    padding: 4px 6px !important;
+  }
+
+  .recon-suite table thead tr {
+    background: #f0ede7 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
