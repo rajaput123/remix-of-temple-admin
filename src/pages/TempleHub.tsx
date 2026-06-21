@@ -111,7 +111,7 @@ const allModules = [
     gradient: "from-[hsl(24,95%,55%)] to-[hsl(20,90%,45%)]", bgTint: "bg-[hsl(24,90%,96%)]" },
 
   // Daily Operations
-  { id: "bookings", title: "Booking Management", icon: Calendar, enabled: true, path: "/temple/bookings",
+  { id: "bookings", title: "Booking Management", icon: Calendar, enabled: true, path: "/business-connect/bookings",
     description: "Appointments, consultations, reservations & service bookings", category: "operations",
     gradient: "from-[hsl(142,60%,40%)] to-[hsl(142,55%,30%)]", bgTint: "bg-[hsl(142,50%,95%)]" },
   { id: "crm", title: "CRM", icon: UserCheck, enabled: true, path: "/temple/devotees",

@@ -27,6 +27,7 @@ import StepComplete from "./pages/business-connect/steps/StepComplete";
 import BCDashboard from "./pages/business-connect/Dashboard";
 import BCProfile from "./pages/business-connect/Profile";
 import BCLayout from "./pages/business-connect/BCLayout";
+import BookingLayout from "./pages/business-connect/BookingLayout";
 import BusinessProfileLayout from "./pages/business/BusinessProfileLayout";
 import ServiceManagementLayout from "./pages/business/services/ServiceManagementLayout";
 import ServicesDashboardPage from "./pages/business/services/ServicesDashboard";
@@ -35,6 +36,8 @@ import ServiceDetailPage from "./pages/business/services/ServiceDetail";
 import PackagesPage from "./pages/business/services/Packages";
 import AvailabilityPage from "./pages/business/services/Availability";
 import ServicePricingPage from "./pages/business/services/Pricing";
+import OnlineServiceBookings from "./pages/business/bookings/OnlineBookings";
+import ServiceCounterBooking from "./pages/business/bookings/CounterBooking";
 import BCExplore from "./pages/business-connect/Explore";
 import Profile from "./pages/Profile";
 // Temple Admin Module Layouts
@@ -322,6 +325,11 @@ const App = () => {
                 <Route path="pricing" element={<ServicePricingPage />} />
                 <Route path=":serviceId" element={<ServiceDetailPage />} />
               </Route>
+            </Route>
+            <Route path="/business-connect/bookings" element={<BookingLayout />}>
+              <Route index element={<Navigate to="online" replace />} />
+              <Route path="online" element={<OnlineServiceBookings />} />
+              <Route path="counter" element={<ServiceCounterBooking />} />
             </Route>
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
               <Route index element={<Navigate to="business" replace />} />

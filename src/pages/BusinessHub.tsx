@@ -152,7 +152,7 @@ const MODULES: ModuleDef[] = [
     title: "Booking Management",
     icon: CalendarCheck,
     description: "Appointments, consultations, reservations & service bookings.",
-    path: "/temple/bookings",
+    path: "/business-connect/bookings",
     group: "operations",
     status: "core",
     roles: ["owner", "admin", "ops", "staff"],

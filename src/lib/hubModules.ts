@@ -34,7 +34,7 @@ export const HUB_MODULES: HubModule[] = [
     icon: Megaphone,
     path: "/business-connect/marketing",
   },
-  { id: "bookings", title: "Booking Management", icon: Calendar, path: "/temple/bookings" },
+  { id: "bookings", title: "Booking Management", icon: Calendar, path: "/business-connect/bookings" },
   { id: "crm", title: "CRM", icon: UserCheck, path: "/temple/devotees" },
   { id: "communication", title: "Communication", icon: Megaphone, path: "/temple/communication" },
   { id: "live-services", title: "Live Services", icon: Video, path: "/business-connect/live" },
