@@ -401,7 +401,7 @@ const BusinessHub = () => {
             onClick={() => setActiveId("overview")}
             className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors ${
               activeId === "overview"
-                ? "bg-[#2b62ef]/10 text-[#2b62ef]"
+                ? "bg-primary/10 text-primary"
                 : "text-slate-700 hover:bg-slate-100"
             }`}
           >
