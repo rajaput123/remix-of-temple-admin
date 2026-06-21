@@ -535,7 +535,7 @@ const BusinessHub = () => {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 hover:opacity-80">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="text-[11px] font-semibold bg-[#2b62ef] text-white">
+                  <AvatarFallback className="text-[11px] font-semibold bg-primary text-primary-foreground">
                     RK
                   </AvatarFallback>
                 </Avatar>
