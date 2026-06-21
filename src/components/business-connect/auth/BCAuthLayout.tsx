@@ -139,7 +139,7 @@ export function AuthPrimaryButton({
       type={type}
       disabled={disabled || loading}
       onClick={onClick}
-      className="w-full h-12 rounded-xl bg-[#2b62ef] hover:bg-[#2656d2] text-white text-sm font-medium shadow-sm"
+      className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-medium shadow-sm"
     >
       {loading ? "Please wait…" : children}
     </Button>
