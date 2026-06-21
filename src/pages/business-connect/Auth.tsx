@@ -134,7 +134,7 @@ export default function BCAuth() {
           <AuthPrimaryButton>Continue</AuthPrimaryButton>
           <p className="text-center text-sm text-slate-500">
             Have an account?{" "}
-            <Link to="/login" className="text-[#2b62ef] font-medium hover:underline">
+            <Link to="/login" className="text-primary font-medium hover:underline">
               Sign in
             </Link>
           </p>
