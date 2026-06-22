@@ -1,26 +1,24 @@
-import { CalendarCheck, Globe, Store } from "lucide-react";
+import { Calendar, Clock, BookOpen, Store, UserCheck, Cookie } from "lucide-react";
 import TempleLayout from "@/components/TempleLayout";
 
 const navItems = [
   {
-    label: "Online Booking",
-    path: "/business-connect/bookings/online",
-    icon: Globe,
-    description: "Bookings from website and app",
+    label: "Today",
+    path: "/business-connect/bookings",
+    icon: Clock,
+    badge: "Live",
     isActive: (pathname: string) =>
-      pathname === "/business-connect/bookings/online" ||
-      pathname === "/business-connect/bookings",
+      pathname === "/business-connect/bookings" ||
+      pathname === "/business-connect/bookings/",
   },
-  {
-    label: "Counter Booking",
-    path: "/business-connect/bookings/counter",
-    icon: Store,
-    description: "Walk-in bookings at your counter",
-  },
+  { label: "All Bookings", path: "/business-connect/bookings/all", icon: BookOpen, badge: "156" },
+  { label: "Counter Booking", path: "/business-connect/bookings/counter", icon: Store },
+  { label: "Prasad Counter", path: "/business-connect/bookings/prasad", icon: Cookie },
+  { label: "Attendance", path: "/business-connect/bookings/attendance", icon: UserCheck },
 ];
 
 export default function BookingLayout() {
   return (
-    <TempleLayout title="Booking Management" icon={CalendarCheck} navItems={navItems} />
+    <TempleLayout title="Booking Management" icon={Calendar} navItems={navItems} />
   );
 }

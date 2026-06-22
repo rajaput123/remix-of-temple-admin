@@ -327,9 +327,13 @@ const App = () => {
               </Route>
             </Route>
             <Route path="/business-connect/bookings" element={<BookingLayout />}>
-              <Route index element={<Navigate to="online" replace />} />
-              <Route path="online" element={<OnlineServiceBookings />} />
-              <Route path="counter" element={<ServiceCounterBooking />} />
+              <Route index element={<BookingsToday />} />
+              <Route path="all" element={<AllBookings />} />
+              <Route path="counter" element={<CounterBooking />} />
+              <Route path="prasad" element={<PrasadCounter />} />
+              <Route path="attendance" element={<Attendance />} />
+              <Route path="reports" element={<BookingReports />} />
+              <Route path="online" element={<Navigate to="/business-connect/bookings" replace />} />
             </Route>
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
               <Route index element={<Navigate to="business" replace />} />
