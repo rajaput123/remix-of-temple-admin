@@ -312,7 +312,7 @@ const App = () => {
 
             {/* Business Connect */}
             <Route path="/business-connect" element={<Navigate to="/login" replace />} />
-            <Route path="/business-connect/auth" element={<BCAuth />} />
+            <Route path="/business-connect/auth" element={<Navigate to="/temple-register" replace />} />
             <Route path="/business-connect/explore" element={<BCExplore />} />
             <Route element={<BCLayout />}>
               <Route path="/business-connect/dashboard" element={<BCDashboard />} />
