@@ -16,8 +16,8 @@ import {
   SEED_SERVICES,
 } from "@/data/serviceManagementSeed";
 
-const STORAGE_KEY = "digidevalaya-service-management-v5";
-const SEED_VERSION = 5;
+const STORAGE_KEY = "digidevalaya-service-management-v10";
+const SEED_VERSION = 10;
 
 interface ServiceManagementState {
   services: BusinessService[];
@@ -248,6 +248,34 @@ export const serviceManagementStore = {
     emit();
   },
 
+  getAddOns: () => {
+    return state.services.flatMap(s => (s.addOns ?? []).map(a => ({ ...a, serviceId: s.id })));
+  },
+  upsertAddOn: (serviceId: string, addOn: any) => {
+    const service = state.services.find((s) => s.id === serviceId);
+    if (!service) return;
+    const addOns = service.addOns ?? [];
+    const exists = addOns.some((a) => a.id === addOn.id);
+    const nextAddOns = exists
+      ? addOns.map((a) => (a.id === addOn.id ? addOn : a))
+      : [...addOns, { ...addOn, id: addOn.id || `addon-${Date.now()}` }];
+    state = {
+      ...state,
+      services: state.services.map((s) => (s.id === serviceId ? { ...s, addOns: nextAddOns } : s)),
+    };
+    emit();
+  },
+  deleteAddOn: (serviceId: string, addOnId: string) => {
+    const service = state.services.find((s) => s.id === serviceId);
+    if (!service) return;
+    const nextAddOns = (service.addOns ?? []).filter((a) => a.id !== addOnId);
+    state = {
+      ...state,
+      services: state.services.map((s) => (s.id === serviceId ? { ...s, addOns: nextAddOns } : s)),
+    };
+    emit();
+  },
+
   getPricingRules: () => state.pricingRules,
   upsertPricingRule: (rule: PricingRule) => {
     const payload = { ...rule, updatedAt: today() };
@@ -313,4 +341,12 @@ export function usePackages() {
 export function useServiceStats() {
   const services = useServices();
   return useMemo(() => serviceManagementStore.getStats(), [services]);
+}
+
+export function useAddOns() {
+  return useSyncExternalStore(
+    serviceManagementStore.subscribe,
+    serviceManagementStore.getAddOns,
+    () => [],
+  );
 }

@@ -104,8 +104,8 @@ export default function StepLocation() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="contents">
       <StepShell
-        title="Where do you operate?"
-        subtitle="Enter your pincode — we'll fill in the rest."
+        title="Business location"
+        subtitle="Where your business operates — office, shop, or service base."
         backTo="/business-connect/onboarding/business"
         onNext={handleSubmit(onSubmit)}
       >
@@ -113,8 +113,8 @@ export default function StepLocation() {
           {/* Pincode hero */}
           <div className="rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
             <Label className="text-xs font-medium">
-              Pincode <span className="text-destructive">*</span>
-            </Label>
+                Business pincode <span className="text-destructive">*</span>
+              </Label>
             <div className="mt-1.5 flex gap-2">
               <Input
                 className="h-10 text-sm tracking-wider"
@@ -159,12 +159,12 @@ export default function StepLocation() {
           <div className="space-y-3">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">
-                Address line 1 <span className="text-destructive">*</span>
+                Business address <span className="text-destructive">*</span>
               </Label>
               <Input
                 className="h-10 text-sm"
                 {...register("line1")}
-                placeholder="Building, street"
+                placeholder="Shop, office, or workplace — building, street"
               />
               {errors.line1 && (
                 <p className="text-[11px] text-destructive">{errors.line1.message as string}</p>
@@ -173,7 +173,7 @@ export default function StepLocation() {
 
             <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium">Address line 2 / landmark</Label>
+                <Label className="text-xs font-medium">Landmark (optional)</Label>
                 <Input className="h-10 text-sm" {...register("line2")} placeholder="Optional" />
               </div>
               <div className="space-y-1.5">

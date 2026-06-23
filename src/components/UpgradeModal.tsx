@@ -155,7 +155,7 @@ const UpgradeModal = ({
             className="flex-1 gap-2"
             onClick={() => {
               onOpenChange(false);
-              navigate("/temple/settings/subscription");
+              navigate("/temple/settings/upgrade");
             }}
           >
             View All Plans

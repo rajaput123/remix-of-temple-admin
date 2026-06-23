@@ -16,6 +16,7 @@ import {
   User,
   HelpCircle,
   AlertCircle,
+  CheckCircle2,
   Sparkles,
   Video,
   MapPin,
@@ -41,6 +42,7 @@ import {
   ArrowRight,
   Compass,
 } from "lucide-react";
+import { toast } from "sonner";
 import DemoVideoModal from "@/components/DemoVideoModal";
 import UpgradeModal from "@/components/UpgradeModal";
 import GuidedTour, { type TourStep } from "@/components/GuidedTour";
@@ -72,6 +74,31 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { shouldShowFinanceSetupPrompt, shouldShowSubscriptionPrompt, dismissSubscriptionPrompt, dismissFinanceSetupPrompt } from "@/lib/onboardingFlow";
+import { hasRegistrationData } from "@/lib/registrationProfileBridge";
+import {
+  consumeBusinessProfileHubToast,
+  isBusinessProfileComplete,
+} from "@/lib/businessProfileOnboarding";
+import { isSubscriptionComplete } from "@/lib/templeConfig";
+import {
+  BUSINESS_MODULES_UNLOCKED_BEFORE_PLAN,
+  clearBusinessOnboardingDialogSnoozes,
+  consumeBusinessFinanceHubToast,
+  consumeBusinessSubscriptionHubToast,
+  dismissBusinessProfileDialog,
+  getBusinessOnboardingStep,
+  handleBusinessFinanceSnooze,
+  handleBusinessSubscriptionSnooze,
+  isBusinessHubModuleEnabled,
+  isBusinessUser as checkIsBusinessUser,
+  needsBusinessPlanForModules,
+  shouldShowBusinessFinanceDialog,
+  shouldShowBusinessProfileDialog,
+  shouldShowBusinessSubscriptionDialog,
+} from "@/lib/businessOnboardingFlow";
+import { profileDisplayName } from "@/components/business-profile/profileUtils";
+import { useBusinessProfile } from "@/stores/businessProfileStore";
+import { getMissingRequiredFields } from "@/components/business-profile/singleProfileUtils";
 
 // Account status types
 type AccountStatus = "active" | "trial" | "expired" | "suspended" | "compliance_pending";
@@ -166,6 +193,18 @@ const itemVariants = {
 const TempleHub = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const profile = useBusinessProfile();
+  const isBusinessAccount = hasRegistrationData();
+  const onboardingStep = getBusinessOnboardingStep(profile);
+  const businessProfilePending = onboardingStep === "profile";
+  const businessPlanPending = needsBusinessPlanForModules(profile);
+  const showBusinessPlanBar = businessPlanPending;
+  const missingProfileFields = profile ? getMissingRequiredFields(profile).length : 0;
+  const hubTitle = isBusinessAccount
+    ? profile
+      ? profileDisplayName(profile)
+      : "Your Business"
+    : tenantData.templeName;
   const [lang] = useLang();
   const [showBanner, setShowBanner] = useState(true);
   const [helpVideoOpen, setHelpVideoOpen] = useState(false);
@@ -179,30 +218,103 @@ const TempleHub = () => {
   const [onboardingTick, setOnboardingTick] = useState(0);
   const [subscriptionOpen, setSubscriptionOpen] = useState(false);
   const [financeOpen, setFinanceOpen] = useState(false);
+  const [profileSetupOpen, setProfileSetupOpen] = useState(false);
 
   const syncOnboardingDialogs = useCallback(() => {
     if (location.pathname !== "/temple-hub") {
       setSubscriptionOpen(false);
       setFinanceOpen(false);
+      setProfileSetupOpen(false);
       return;
     }
+
+    if (checkIsBusinessUser()) {
+      const step = getBusinessOnboardingStep(profile);
+      setProfileSetupOpen(step === "profile" && shouldShowBusinessProfileDialog(profile));
+      setSubscriptionOpen(step === "subscription" && shouldShowBusinessSubscriptionDialog(profile));
+      setFinanceOpen(step === "finance" && shouldShowBusinessFinanceDialog(profile));
+      return;
+    }
+
     const showSub = shouldShowSubscriptionPrompt();
     const showFinance = shouldShowFinanceSetupPrompt();
+    setProfileSetupOpen(false);
     setSubscriptionOpen(showSub);
     setFinanceOpen(!showSub && showFinance);
-  }, [location.pathname]);
+  }, [location.pathname, profile]);
 
   useEffect(() => {
     syncOnboardingDialogs();
   }, [syncOnboardingDialogs, onboardingTick]);
 
+  useEffect(() => {
+    if (location.pathname !== "/temple-hub") return;
+    clearBusinessOnboardingDialogSnoozes();
+    setOnboardingTick((t) => t + 1);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    setOnboardingTick((t) => t + 1);
+  }, [profile]);
+
+  useEffect(() => {
+    if (location.pathname !== "/temple-hub") return;
+    if (consumeBusinessProfileHubToast()) {
+      toast.info("Complete your business profile — required", {
+        description: "This is mandatory. Plans and other modules unlock only after your profile is done.",
+        duration: 8000,
+      });
+    }
+    if (isBusinessProfileComplete(profile) && consumeBusinessSubscriptionHubToast()) {
+      toast.success("Business profile complete!", {
+        description: "You haven't chosen a plan yet — pick one to unlock the full toolkit.",
+        duration: 7000,
+      });
+    }
+    if (
+      isBusinessProfileComplete(profile) &&
+      !shouldShowSubscriptionPrompt() &&
+      consumeBusinessFinanceHubToast()
+    ) {
+      toast.info("One more step: finance setup", {
+        description: "Add your bank details in Settings → Finance to receive payouts.",
+        duration: 7000,
+      });
+    }
+  }, [location.pathname, onboardingTick]);
+
   const handleSubscriptionDismiss = () => {
-    dismissSubscriptionPrompt();
+    if (checkIsBusinessUser()) {
+      handleBusinessSubscriptionSnooze();
+      setSubscriptionOpen(false);
+    } else {
+      dismissSubscriptionPrompt();
+    }
     setOnboardingTick((t) => t + 1);
   };
 
   const handleFinanceSetupDismiss = () => {
-    dismissFinanceSetupPrompt();
+    if (checkIsBusinessUser()) {
+      handleBusinessFinanceSnooze();
+      setFinanceOpen(false);
+    } else {
+      dismissFinanceSetupPrompt();
+    }
+    setOnboardingTick((t) => t + 1);
+  };
+
+  const openProfileSetup = () => {
+    setProfileSetupOpen(false);
+    navigate("/business/profile?setup=1");
+  };
+
+  const handleProfileDialogCancel = () => {
+    dismissBusinessProfileDialog();
+    setProfileSetupOpen(false);
+    toast.info("Profile setup paused", {
+      description: "Use the banner or Business Profile tile on the hub when you're ready.",
+      duration: 5000,
+    });
     setOnboardingTick((t) => t + 1);
   };
 
@@ -346,13 +458,32 @@ const TempleHub = () => {
 
   const getModuleState = (module: typeof allModules[0]): "suspended" | "locked" | "enabled" => {
     if (isSuspended) return "suspended";
-    // Mock: all modules unlocked regardless of plan
+    if (isBusinessAccount && !isBusinessHubModuleEnabled(module.id, profile)) {
+      return "locked";
+    }
     return "enabled";
   };
 
   const handleModuleClick = (module: typeof allModules[0], _event: React.MouseEvent) => {
     const state = getModuleState(module);
     if (state === "suspended") return;
+
+    if (businessProfilePending && module.id !== "business-profile") {
+      toast.info("Complete your business profile first", {
+        description: "Open Business Profile from the hub to finish required setup.",
+      });
+      navigate("/business/profile?setup=1");
+      return;
+    }
+
+    if (businessPlanPending && !BUSINESS_MODULES_UNLOCKED_BEFORE_PLAN.has(module.id)) {
+      toast.info("Choose a plan to unlock this module", {
+        description: "Settings, Finance, and Plans are available — purchase a plan to unlock the rest.",
+      });
+      clearBusinessOnboardingDialogSnoozes();
+      setSubscriptionOpen(true);
+      return;
+    }
 
     if (state === "locked") {
       setSelectedLockedModule(module);
@@ -499,7 +630,7 @@ const TempleHub = () => {
       )}
 
       {/* Upgrade Banner */}
-      {showBanner && currentPlanId === "seva" && !isSuspended && (
+      {showBanner && currentPlanId === "seva" && !isSuspended && !isBusinessAccount && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -547,19 +678,81 @@ const TempleHub = () => {
           transition={{ duration: 0.4 }}
           className="mb-4"
         >
-          <h1 className="text-2xl font-bold mb-1 text-foreground">{tenantData.templeName}</h1>
+          <h1 className="text-2xl font-bold mb-1 text-foreground">{hubTitle}</h1>
           <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-            <span className="font-mono text-xs px-2 py-0.5 rounded bg-muted">{tenantData.tenantId}</span>
-            <span>•</span>
-            <span>{tenantData.region}</span>
-            <span>•</span>
-            <Badge variant="outline" className="text-xs text-green-700 border-green-300 bg-green-50">
-              {tenantData.healthScore}
-            </Badge>
+            {isBusinessAccount ? (
+              <>
+                <span>Business Connect</span>
+                <span>•</span>
+                {businessProfilePending ? (
+                  <Badge variant="outline" className="text-xs text-amber-700 border-amber-300 bg-amber-50">
+                    Profile setup required
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-xs text-green-700 border-green-300 bg-green-50 gap-1">
+                    <CheckCircle2 className="h-3 w-3" />
+                    Profile complete
+                  </Badge>
+                )}
+                {!businessProfilePending && businessPlanPending && (
+                  <>
+                    <span>•</span>
+                    <Badge variant="outline" className="text-xs text-primary border-primary/30 bg-primary/5">
+                      Plan required
+                    </Badge>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <span className="font-mono text-xs px-2 py-0.5 rounded bg-muted">{tenantData.tenantId}</span>
+                <span>•</span>
+                <span>{tenantData.region}</span>
+                <span>•</span>
+                <Badge variant="outline" className="text-xs text-green-700 border-green-300 bg-green-50">
+                  {tenantData.healthScore}
+                </Badge>
+              </>
+            )}
           </div>
         </motion.div>
 
+        {businessProfilePending && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 rounded-2xl border border-amber-300/60 bg-gradient-to-r from-amber-50 to-orange-50 p-4 sm:p-5"
+          >
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-100">
+                  <AlertCircle className="h-5 w-5 text-amber-700" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-amber-950">Complete your business profile</p>
+                  <p className="mt-0.5 text-sm text-amber-900/80">
+                    {profile
+                      ? `${missingProfileFields} required field${missingProfileFields > 1 ? "s" : ""} left — finish setup to unlock Service Listings, Bookings, and more.`
+                      : "Set up your business name, location, and contact details to unlock all modules."}
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                className="shrink-0 gap-1.5 bg-amber-700 hover:bg-amber-800 text-white"
+                onClick={() => navigate("/business/profile?setup=1")}
+              >
+                Set up profile
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+
+
         {/* Plan & Discount Bar */}
+        {(!isBusinessAccount || showBusinessPlanBar) && (
         <motion.div
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
@@ -569,6 +762,17 @@ const TempleHub = () => {
           {/* Decorative glow */}
           <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-amber-200/30 blur-3xl" />
+
+          {/* Profile-complete + plan-required notice (business accounts only, before plan purchased) */}
+          {businessPlanPending && (
+            <div className="relative flex items-center gap-2 px-4 sm:px-5 pt-3 pb-0">
+              <CheckCircle2 className="h-3.5 w-3.5 text-green-600 shrink-0" />
+              <p className="text-xs text-muted-foreground">
+                <span className="font-medium text-green-700">Business profile complete.</span>{" "}
+                Other modules are locked until you choose a plan.
+              </p>
+            </div>
+          )}
 
           <div className="relative px-4 sm:px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
             {/* Plan identity */}
@@ -594,9 +798,23 @@ const TempleHub = () => {
             {/* Divider */}
             <div className="hidden sm:block h-10 w-px bg-border/70" />
 
-            {/* Discount / Billing info */}
+            {/* Discount / Billing info — hidden when no plan purchased yet */}
             <div className="flex-1 flex items-center gap-3 min-w-0">
-              {tenantData.discountPercent > 0 ? (
+              {businessPlanPending ? (
+                <>
+                  <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <Lock className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground">
+                      No active plan
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      Choose a plan to unlock listings, bookings &amp; all modules.
+                    </p>
+                  </div>
+                </>
+              ) : tenantData.discountPercent > 0 ? (
                 <>
                   <div className="h-9 w-9 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
                     <Sparkles className="h-4 w-4 text-green-700" />
@@ -634,26 +852,40 @@ const TempleHub = () => {
 
             {/* Actions */}
             <div className="flex items-center gap-2 shrink-0">
-              <Button
-                size="sm"
-                variant="outline"
-                className="text-xs h-8 gap-1"
-                onClick={() => navigate("/temple/settings/subscription")}
-              >
-                Manage Plan
-              </Button>
-              {currentPlanId === "seva" && (
+              {businessPlanPending ? (
                 <Button
                   size="sm"
-                  className="text-xs h-8 gap-1 bg-gradient-to-r from-primary to-amber-500 hover:opacity-90 text-primary-foreground border-0"
-                  onClick={() => navigate("/temple/settings/subscription")}
+                  className="text-xs h-8 gap-1.5"
+                  onClick={() => navigate("/temple/settings/upgrade")}
                 >
-                  <Zap className="h-3 w-3" /> Upgrade
+                  <Crown className="h-3.5 w-3.5" />
+                  View plans
                 </Button>
+              ) : (
+                <>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-xs h-8 gap-1"
+                    onClick={() => navigate("/temple/settings/upgrade")}
+                  >
+                    Manage Plan
+                  </Button>
+                  {currentPlanId === "seva" && (
+                    <Button
+                      size="sm"
+                      className="text-xs h-8 gap-1 bg-gradient-to-r from-primary to-amber-500 hover:opacity-90 text-primary-foreground border-0"
+                      onClick={() => navigate("/temple/settings/upgrade")}
+                    >
+                      <Zap className="h-3 w-3" /> Upgrade
+                    </Button>
+                  )}
+                </>
               )}
             </div>
           </div>
         </motion.div>
+        )}
 
         {/* Module Categories */}
         {!isSuspended && (
@@ -776,7 +1008,12 @@ const TempleHub = () => {
                           </TooltipTrigger>
                           <TooltipContent side="bottom" className="max-w-[200px] text-center">
                             <p className="text-xs">{module.description}</p>
-                            {isLocked && minPlan && (
+                            {isLocked && businessPlanPending && module.id !== "business-profile" && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Choose a plan to unlock
+                              </p>
+                            )}
+                            {isLocked && !businessPlanPending && minPlan && (
                               <p className="text-xs text-muted-foreground mt-1">
                                 Available in {minPlan.name} plan & above
                               </p>
@@ -803,7 +1040,36 @@ const TempleHub = () => {
         onClose={() => localStorage.setItem("templeSetupComplete", "1")}
       />
 
-      {/* Subscription prompt — stays until View Plans or Continue (not closable otherwise) */}
+      {/* Step 1 — Business profile (mandatory) */}
+      <Dialog open={profileSetupOpen} onOpenChange={() => {}}>
+        <DialogContent
+          className="sm:max-w-md [&>button]:hidden"
+          onInteractOutside={(e) => e.preventDefault()}
+          onEscapeKeyDown={(e) => e.preventDefault()}
+        >
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-primary" />
+              Complete your business profile
+            </DialogTitle>
+            <DialogDescription className="text-left pt-1 leading-relaxed">
+              Welcome! Before you can list services or take bookings, add your business name,
+              location, and contact details. This step is <strong>required</strong>.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col sm:flex-row sm:justify-end gap-2">
+            <Button variant="outline" className="w-full sm:w-auto" onClick={handleProfileDialogCancel}>
+              Cancel
+            </Button>
+            <Button className="w-full sm:w-auto gap-2" onClick={openProfileSetup}>
+              Set up business profile
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Step 2 — Subscription / planning */}
       <Dialog open={subscriptionOpen} onOpenChange={() => {}}>
         <DialogContent
           className="sm:max-w-md [&>button]:hidden"
@@ -813,20 +1079,24 @@ const TempleHub = () => {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Crown className="h-5 w-5 text-elite-orange" />
-              Welcome — registration complete
+              {isBusinessAccount ? "Choose your plan" : "Welcome — registration complete"}
             </DialogTitle>
             <DialogDescription className="text-left pt-1 leading-relaxed">
-              You have registered successfully. To access all modules and full platform features,
-              please check our subscription plans.
+              {isBusinessAccount
+                ? "Your business profile is complete. You haven't purchased a plan yet — choose one to unlock listings, bookings, and marketplace tools."
+                : "You have registered successfully. To access all modules and full platform features, please check our subscription plans."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-2">
             <Button variant="outline" className="w-full sm:w-auto" onClick={handleSubscriptionDismiss}>
-              Continue to dashboard
+              {isBusinessAccount ? "Remind me later" : "Continue to dashboard"}
             </Button>
             <Button
               className="w-full sm:w-auto gap-2"
-              onClick={() => navigate("/temple/settings/subscription")}
+              onClick={() => {
+                setSubscriptionOpen(false);
+                navigate("/temple/settings/upgrade");
+              }}
             >
               View Plans
               <ArrowRight className="h-4 w-4" />
@@ -835,7 +1105,7 @@ const TempleHub = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Finance setup — stays until Go to Settings or Later (not closable otherwise) */}
+      {/* Step 3 — Finance setup */}
       <Dialog open={financeOpen} onOpenChange={() => {}}>
         <DialogContent
           className="sm:max-w-md [&>button]:hidden"
@@ -848,17 +1118,21 @@ const TempleHub = () => {
               Complete your finance setup
             </DialogTitle>
             <DialogDescription className="text-left pt-1 leading-relaxed">
-              Add your temple bank account in 2 minutes — just bank name and account number.
-              80G is already handled from your registration.
+              {isBusinessAccount
+                ? "Add your business bank account in Settings → Finance so you can receive payouts and manage invoices. Takes about 2 minutes."
+                : "Add your temple bank account in 2 minutes — just bank name and account number. 80G is already handled from your registration."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-2">
             <Button variant="outline" className="w-full sm:w-auto" onClick={handleFinanceSetupDismiss}>
-              Later
+              {isBusinessAccount ? "Remind me later" : "Later"}
             </Button>
             <Button
               className="w-full sm:w-auto gap-2"
-              onClick={() => navigate("/temple/settings/finance")}
+              onClick={() => {
+                setFinanceOpen(false);
+                navigate("/temple/settings/finance");
+              }}
             >
               Go to Finance Settings
               <ArrowRight className="h-4 w-4" />

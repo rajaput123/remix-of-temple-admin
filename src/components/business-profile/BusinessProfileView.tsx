@@ -27,9 +27,15 @@ import { profileImageUrl } from "@/data/businessProfileMedia";
 import { ProfileAvatar } from "@/components/business-profile/ProfileMedia";
 import {
   businessTypeLabel,
+  formatOptionalText,
   formatProfileLocation,
   formatUpdatedAt,
+  profileAboutTitle,
+  profileDisplayName,
+  profileEntityLabel,
   profileStatusLabel,
+  profileSubtitle,
+  shouldShowGst,
   verificationStatusLabel,
 } from "@/components/business-profile/profileUtils";
 import {
@@ -45,6 +51,7 @@ interface BusinessProfileViewProps {
   profile: BusinessProfile;
   onEdit: () => void;
   onPublish: () => void;
+  lockNavigation?: boolean;
 }
 
 function CoverHero({ src }: { src: string | null }) {
@@ -206,7 +213,7 @@ function CompletionRing({ value }: { value: number }) {
   );
 }
 
-export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProfileViewProps) {
+export function BusinessProfileView({ profile, onEdit, onPublish, lockNavigation }: BusinessProfileViewProps) {
   const navigate = useNavigate();
   const languages = profile.languages ?? [];
   const gallery = profile.gallery ?? [];
@@ -217,6 +224,54 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
   const pending = isVerificationPending(profile);
   const hasDocs = !!(profile.aadhaarDoc || profile.panDoc);
   const typeLabel = businessTypeLabel(profile.businessType, BUSINESS_TYPES);
+  const displayName = profileDisplayName(profile);
+  const entityLabel = profileEntityLabel(profile.entityType);
+  const subtitle = profileSubtitle(profile);
+  const isIndividual = profile.entityType === "individual";
+  const isCompany = profile.entityType === "company";
+
+  const socialLinks = [
+    { label: "Instagram", value: profile.instagram },
+    { label: "YouTube", value: profile.youtube },
+    { label: "Facebook", value: profile.facebook },
+  ].filter((link) => link.value?.trim());
+
+  const contactRows = [
+    { icon: Phone, label: "Mobile", value: formatOptionalText(profile.mobile, "—") },
+    { icon: Phone, label: "WhatsApp", value: formatOptionalText(profile.whatsapp, "—") },
+    {
+      icon: Mail,
+      label: "Email",
+      value: profile.email.trim() ? profile.email : "Not provided",
+    },
+    {
+      icon: MapPin,
+      label: "Business address",
+      value: formatOptionalText(profile.address, "—"),
+      sub: [formatProfileLocation(profile), profile.mapLink?.trim() ? "View on map" : ""]
+        .filter((part) => part && part !== "—")
+        .join(" · ") || undefined,
+    },
+    ...(isIndividual && profile.businessName.trim()
+      ? [{ icon: User, label: "Trade name", value: profile.businessName }]
+      : []),
+    ...(isCompany && profile.ownerName.trim()
+      ? [
+          {
+            icon: User,
+            label: "Authorized contact",
+            value: profile.ownerName,
+            sub: profile.contactDesignation.trim() || undefined,
+          },
+        ]
+      : []),
+    ...(profile.alternatePhone.trim()
+      ? [{ icon: Phone, label: "Alternate mobile", value: profile.alternatePhone }]
+      : []),
+    ...(profile.landline.trim()
+      ? [{ icon: Phone, label: "Landline", value: profile.landline }]
+      : []),
+  ];
 
   return (
     <div className="pb-16">
@@ -225,15 +280,18 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
         <CoverHero src={profile.coverImage} />
 
         <div className="absolute inset-x-0 top-0 z-10 mx-auto flex max-w-6xl items-start justify-between gap-3 px-4 pt-4 sm:px-6">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="gap-1.5 border-0 bg-white/90 shadow-lg backdrop-blur-md hover:bg-white"
-            onClick={() => navigate("/temple-hub")}
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
+          {!lockNavigation && (
+            <Button
+              variant="secondary"
+              size="sm"
+              className="gap-1.5 border-0 bg-white/90 shadow-lg backdrop-blur-md hover:bg-white"
+              onClick={() => navigate("/business-connect/dashboard")}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </Button>
+          )}
+          {lockNavigation && <div />}
           <div className="flex gap-2">
             <Button
               size="sm"
@@ -267,12 +325,13 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
               <ProfileAvatar
                 src={profile.logo}
-                alt={profile.businessName}
+                alt={displayName}
+                fallbackName={profile.ownerName || displayName}
                 size="lg"
                 className="-mt-20 border-[5px] border-card shadow-md sm:-mt-24"
               />
               <div className="min-w-0 sm:pb-1">
-                <p className={t.eyebrow}>Business Connect · Profile</p>
+                <p className={t.eyebrow}>Business Connect · {entityLabel}</p>
                 <div className="mb-2 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
                   <span>{typeLabel}</span>
                   {profile.category && (
@@ -288,17 +347,19 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                     </>
                   )}
                 </div>
-                <h1 className={t.title}>{profile.businessName}</h1>
+                <h1 className={t.title}>{displayName}</h1>
+                {subtitle && <p className={cn("mt-0.5", t.muted)}>{subtitle}</p>}
                 <p className={cn("mt-1 flex flex-wrap items-center gap-x-3 gap-y-1", t.muted)}>
                   <span className="inline-flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5" />
                     {formatProfileLocation(profile)}
                   </span>
-                  <span className="hidden sm:inline text-border">·</span>
-                  <span className="inline-flex items-center gap-1">
-                    <User className="h-3.5 w-3.5" />
-                    {profile.ownerName}
-                  </span>
+                  {isCompany && profile.contactDesignation.trim() && (
+                    <>
+                      <span className="hidden sm:inline text-border">·</span>
+                      <span>{profile.contactDesignation}</span>
+                    </>
+                  )}
                 </p>
               </div>
             </div>
@@ -353,21 +414,57 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
             {/* Left track — story + gallery */}
             <div className="space-y-10">
               <section className="space-y-4">
-                <SectionLabel n="01" title="About the business" />
+                <SectionLabel n="01" title={profileAboutTitle(profile.entityType)} />
                 <p className={cn(t.body, "text-muted-foreground whitespace-pre-wrap")}>
                   {profile.about || "No description provided yet."}
                 </p>
               </section>
 
+              {isCompany && (profile.legalCompanyName.trim() || profile.companyRegNumber.trim()) && (
+                <section className="space-y-4">
+                  <SectionLabel n="02" title="Registration details" />
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {profile.legalCompanyName.trim() && (
+                      <div className={cn("p-4", profileCardClass)}>
+                        <p className={t.label}>Legal name</p>
+                        <p className={cn("mt-1", t.body, "font-medium")}>{profile.legalCompanyName}</p>
+                      </div>
+                    )}
+                    {profile.companyRegNumber.trim() && (
+                      <div className={cn("p-4", profileCardClass)}>
+                        <p className={t.label}>Registration number</p>
+                        <p className={cn("mt-1", t.body, "font-medium font-mono text-sm")}>
+                          {profile.companyRegNumber}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </section>
+              )}
+
               {gallery.length > 0 && (
                 <section className="space-y-4">
-                  <SectionLabel n="02" title="Photos & gallery" />
+                  <SectionLabel
+                    n={isCompany && (profile.legalCompanyName.trim() || profile.companyRegNumber.trim()) ? "03" : "02"}
+                    title="Photos & gallery"
+                  />
                   <MasonryGallery images={gallery} />
                 </section>
               )}
 
               <section className="space-y-4">
-                <SectionLabel n={gallery.length > 0 ? "03" : "02"} title="Trust & documents" />
+                <SectionLabel
+                  n={
+                    gallery.length > 0
+                      ? isCompany && (profile.legalCompanyName.trim() || profile.companyRegNumber.trim())
+                        ? "04"
+                        : "03"
+                      : isCompany && (profile.legalCompanyName.trim() || profile.companyRegNumber.trim())
+                        ? "03"
+                        : "02"
+                  }
+                  title="Trust & documents"
+                />
                 <div className="flex flex-wrap gap-3">
                   <DocChip
                     label="Aadhaar"
@@ -376,7 +473,25 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                     onEdit={onEdit}
                   />
                   <DocChip label="PAN" value={profile.pan} uploaded={!!profile.panDoc} onEdit={onEdit} />
-                  <DocChip label="GST" value={profile.gst || "Optional"} uploaded={!!profile.gstDoc} onEdit={onEdit} />
+                  {shouldShowGst(profile) && (
+                    <DocChip
+                      label="GST"
+                      value={
+                        profile.gst.trim() ||
+                        (isIndividual ? "Not registered" : formatOptionalText(profile.gst, "Not provided"))
+                      }
+                      uploaded={!!profile.gstDoc}
+                      onEdit={onEdit}
+                    />
+                  )}
+                  {isCompany && (
+                    <DocChip
+                      label="Incorporation"
+                      value={profile.incorporationDoc ? "Uploaded" : "Add certificate"}
+                      uploaded={!!profile.incorporationDoc}
+                      onEdit={onEdit}
+                    />
+                  )}
                 </div>
 
                 {verified && (
@@ -427,12 +542,7 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                   <p className={cn("mt-1", t.section)}>Contact details</p>
                 </div>
                 <div className="space-y-1 p-2">
-                  {[
-                    { icon: Phone, label: "Phone", value: profile.mobile, sub: profile.whatsapp ? `WhatsApp ${profile.whatsapp}` : undefined },
-                    { icon: Mail, label: "Email", value: profile.email },
-                    { icon: MapPin, label: "Address", value: profile.address, sub: [profile.city, profile.state, profile.pincode].filter(Boolean).join(", ") },
-                    { icon: User, label: "Owner", value: profile.ownerName },
-                  ].map(({ icon: Icon, label, value, sub }) => (
+                  {contactRows.map(({ icon: Icon, label, value, sub }) => (
                     <div key={label} className="rounded-lg px-3 py-3 transition hover:bg-muted/30">
                       <div className="flex gap-3">
                         <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
@@ -448,6 +558,35 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                   ))}
                 </div>
               </div>
+
+              {socialLinks.length > 0 && (
+                <div className={cn("p-5", profileCardClass)}>
+                  <div className="flex items-center gap-2 text-foreground">
+                    <Globe className="h-4 w-4 text-primary" />
+                    <p className={t.section}>Social</p>
+                  </div>
+                  <div className="mt-3 space-y-2">
+                    {socialLinks.map(({ label, value }) => {
+                      const href = value.startsWith("http") ? value : null;
+                      return href ? (
+                        <a
+                          key={label}
+                          href={href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="block truncate text-sm text-primary hover:underline"
+                        >
+                          {label}: {value}
+                        </a>
+                      ) : (
+                        <span key={label} className="block truncate text-sm text-foreground">
+                          {label}: {value}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               <div className={cn("p-5", profileCardClass)}>
                 <div className="flex items-center gap-2 text-foreground">
@@ -475,7 +614,7 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                 <p className={cn("mt-2", t.section)}>Marketplace preview</p>
                 <p className={cn("mt-1", t.desc)}>
                   {profile.status === "published"
-                    ? "Your profile is visible to devotees searching for services."
+                    ? "Your profile is visible to customers searching for services."
                     : "Publish to appear in Digidevalaya search results."}
                 </p>
                 {profile.status !== "published" && (

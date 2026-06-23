@@ -5,9 +5,10 @@ import { BUSINESS_TYPES } from "@/data/businessTypes";
 import {
   businessTypeLabel,
   formatProfileLocation,
+  profileDisplayName,
 } from "@/components/business-profile/profileUtils";
 import { ProfileStatusBadge, VerificationStatusBadge } from "@/components/business-profile/ProfileBadges";
-import { ProfileLogoPlaceholder } from "@/components/business-profile/ProfileListingToolbar";
+import { ProfileAvatar } from "@/components/business-profile/ProfileMedia";
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 
 interface ProfileCardGridProps {
@@ -39,17 +40,17 @@ export function ProfileCardGrid({
         <Card key={profile.id} className="overflow-hidden transition-shadow hover:shadow-md">
           <CardContent className="p-5">
             <div className="flex items-start gap-3">
-              {profile.logo ? (
-                <img
-                  src={profile.logo}
-                  alt=""
-                  className="h-12 w-12 shrink-0 rounded-lg border object-cover"
-                />
-              ) : (
-                <ProfileLogoPlaceholder />
-              )}
+              <ProfileAvatar
+                src={profile.logo}
+                alt={profileDisplayName(profile)}
+                fallbackName={profile.ownerName || profileDisplayName(profile)}
+                size="sm"
+                className="h-12 w-12 rounded-lg border-2 shadow-none"
+              />
               <div className="min-w-0 flex-1">
-                <h3 className="truncate font-semibold text-foreground">{profile.businessName || "Untitled"}</h3>
+                <h3 className="truncate font-semibold text-foreground">
+                  {profileDisplayName(profile)}
+                </h3>
                 <p className="text-xs text-muted-foreground">
                   {businessTypeLabel(profile.businessType, BUSINESS_TYPES)}
                   {profile.category ? ` · ${profile.category}` : ""}

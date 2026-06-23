@@ -24,7 +24,6 @@ import StepVerification from "./pages/business-connect/steps/StepVerification";
 import StepSubscription from "./pages/business-connect/steps/StepSubscription";
 import StepComplete from "./pages/business-connect/steps/StepComplete";
 
-import BCDashboard from "./pages/business-connect/Dashboard";
 import BCProfile from "./pages/business-connect/Profile";
 import BCLayout from "./pages/business-connect/BCLayout";
 import BookingLayout from "./pages/business-connect/BookingLayout";
@@ -36,11 +35,13 @@ import ServiceDetailPage from "./pages/business/services/ServiceDetail";
 import PackagesPage from "./pages/business/services/Packages";
 import AvailabilityPage from "./pages/business/services/Availability";
 import ServicePricingPage from "./pages/business/services/Pricing";
+import AddOnsPage from "./pages/business/services/AddOns";
 import OnlineServiceBookings from "./pages/business/bookings/OnlineBookings";
 import CounterBookingsPage from "./pages/business/bookings/counter/CounterBookingsPage";
 import NewCounterBookingPage from "./pages/business/bookings/counter/NewCounterBookingPage";
 import BookingCalendarPage from "./pages/business/bookings/counter/BookingCalendarPage";
 import BCExplore from "./pages/business-connect/Explore";
+import { BusinessProfileOnboardingRedirect } from "@/components/business-profile/BusinessProfileOnboardingRedirect";
 import Profile from "./pages/Profile";
 // Temple Admin Module Layouts
 import TempleInfoLayout from "./pages/temple/TempleInfoLayout";
@@ -63,7 +64,6 @@ import BookingReports from "./pages/temple/bookings/BookingReports";
 import SettingsLayout from "./pages/temple/SettingsLayout";
 import ProfileSettings from "./pages/temple/settings/ProfileSettings";
 import FinanceSettings from "./pages/temple/settings/FinanceSettings";
-import SubscriptionBilling from "./pages/temple/settings/SubscriptionBilling";
 import SubscriptionUpgrade from "./pages/temple/settings/SubscriptionUpgrade";
 import InvoiceManagement from "./pages/temple/settings/InvoiceManagement";
 import UserAccessManagement from "./pages/temple/settings/UserAccessManagement";
@@ -299,6 +299,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <BusinessProfileOnboardingRedirect />
           <Routes>
             {/* Auth Routes */}
             <Route path="/" element={<Login />} />
@@ -317,27 +318,19 @@ const App = () => {
             <Route path="/business-connect/auth" element={<Navigate to="/temple-register" replace />} />
             <Route path="/business-connect/explore" element={<BCExplore />} />
             <Route element={<BCLayout />}>
-              <Route path="/business-connect/dashboard" element={<BCDashboard />} />
+              <Route path="/business-connect/dashboard" element={<Navigate to="/business-connect/services/list" replace />} />
               <Route path="/business-connect/profile" element={<BCProfile />} />
               <Route path="/business-connect/services" element={<ServiceManagementLayout />}>
                 <Route index element={<ServicesDashboardPage />} />
                 <Route path="list" element={<ServicesListPage />} />
-                <Route path="packages" element={<PackagesPage />} />
+                <Route path="packages" element={<Navigate to="/business-connect/services/list" replace />} />
+                <Route path="addons" element={<AddOnsPage />} />
                 <Route path="availability" element={<AvailabilityPage />} />
                 <Route path="pricing" element={<ServicePricingPage />} />
                 <Route path=":serviceId" element={<ServiceDetailPage />} />
               </Route>
             </Route>
             <Route path="/business-connect/bookings" element={<BookingLayout />}>
-<<<<<<< Updated upstream
-              <Route index element={<BookingsToday />} />
-              <Route path="all" element={<AllBookings />} />
-              <Route path="counter" element={<CounterBooking />} />
-              <Route path="prasad" element={<PrasadCounter />} />
-              <Route path="attendance" element={<Attendance />} />
-              <Route path="reports" element={<BookingReports />} />
-              <Route path="online" element={<Navigate to="/business-connect/bookings" replace />} />
-=======
               <Route index element={<Navigate to="counter" replace />} />
               <Route path="online" element={<OnlineServiceBookings />} />
               <Route path="counter" element={<CounterBookingsPage />} />
@@ -365,7 +358,6 @@ const App = () => {
                   />
                 }
               />
->>>>>>> Stashed changes
             </Route>
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
               <Route index element={<Navigate to="business" replace />} />
@@ -471,7 +463,7 @@ const App = () => {
             <Route path="/temple/settings" element={<SettingsLayout />}>
               <Route index element={<ProfileSettings />} />
               <Route path="finance" element={<FinanceSettings />} />
-              <Route path="subscription" element={<Pricing embedded />} />
+              <Route path="subscription" element={<Navigate to="/temple/settings/upgrade" replace />} />
               <Route path="upgrade" element={<SubscriptionUpgrade />} />
               <Route path="invoice" element={<InvoiceManagement />} />
               <Route path="templates" element={<ReceiptTemplates />} />

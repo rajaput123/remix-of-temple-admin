@@ -49,7 +49,7 @@ export function getTempleConfig(): TempleConfig {
       if (data.registration80G || data.pan80G) {
         return {
           ...DEFAULT_TEMPLE_CONFIG,
-          name: data.templeName || DEFAULT_TEMPLE_CONFIG.name,
+          name: data.businessName || data.templeName || DEFAULT_TEMPLE_CONFIG.name,
           address: data.fullAddress
             ? `${data.fullAddress}${data.city ? `, ${data.city}` : ""}${data.state ? ` – ${data.state}` : ""}`
             : DEFAULT_TEMPLE_CONFIG.address,

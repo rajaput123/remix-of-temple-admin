@@ -15,7 +15,7 @@ export default function StepComplete() {
       <div>
         <h1 className="text-xl font-semibold md:text-2xl">You're all set!</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Your business profile is ready. You can polish it anytime from your dashboard.
+          Your business profile is ready. You can manage your services anytime from the Service Listings.
         </p>
       </div>
 
@@ -38,8 +38,8 @@ export default function StepComplete() {
 
       <div className="flex flex-wrap justify-center gap-2">
         <Button asChild>
-          <Link to="/business-connect/dashboard">
-            Go to dashboard <ArrowRight className="ml-1 h-4 w-4" />
+          <Link to="/business-connect/services/list">
+            Go to services <ArrowRight className="ml-1 h-4 w-4" />
           </Link>
         </Button>
         <Button asChild variant="outline">

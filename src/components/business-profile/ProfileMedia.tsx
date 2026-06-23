@@ -8,6 +8,15 @@ interface ProfileAvatarProps {
   alt: string;
   size?: "sm" | "md" | "lg";
   className?: string;
+  /** Shown when there is no image — typically owner or display name. */
+  fallbackName?: string;
+}
+
+function initialsFromName(name?: string): string {
+  if (!name?.trim()) return "";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0] ?? ""}${parts[parts.length - 1][0] ?? ""}`.toUpperCase();
 }
 
 const sizes = {
@@ -16,9 +25,10 @@ const sizes = {
   lg: "h-28 w-28 rounded-2xl border-4",
 };
 
-export function ProfileAvatar({ src, alt, size = "md", className }: ProfileAvatarProps) {
+export function ProfileAvatar({ src, alt, size = "md", className, fallbackName }: ProfileAvatarProps) {
   const [failed, setFailed] = useState(false);
   const url = profileImageUrl(failed ? null : src, profileImageUrl(null));
+  const initials = initialsFromName(fallbackName || alt);
 
   return (
     <div
@@ -35,6 +45,15 @@ export function ProfileAvatar({ src, alt, size = "md", className }: ProfileAvata
           className="h-full w-full object-cover"
           onError={() => setFailed(true)}
         />
+      ) : initials ? (
+        <span
+          className={cn(
+            "font-semibold text-primary",
+            size === "sm" ? "text-lg" : size === "lg" ? "text-2xl" : "text-xl",
+          )}
+        >
+          {initials}
+        </span>
       ) : (
         <Building2 className={cn("text-primary", size === "sm" ? "h-9 w-9" : "h-10 w-10")} />
       )}

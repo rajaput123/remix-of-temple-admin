@@ -60,7 +60,7 @@ const CreditWidget = ({
           variant="outline"
           size="sm"
           className="flex-1 gap-1 text-xs"
-          onClick={() => navigate("/temple/settings/subscription")}
+          onClick={() => navigate("/temple/settings/upgrade")}
         >
           <Eye className="h-3 w-3" /> View Usage
         </Button>

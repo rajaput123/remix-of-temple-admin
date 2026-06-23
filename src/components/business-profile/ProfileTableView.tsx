@@ -13,6 +13,7 @@ import {
   businessTypeLabel,
   formatProfileLocation,
   formatUpdatedAt,
+  profileDisplayName,
 } from "@/components/business-profile/profileUtils";
 import { ProfileStatusBadge, VerificationStatusBadge } from "@/components/business-profile/ProfileBadges";
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
@@ -45,7 +46,7 @@ export function ProfileTableView({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Business Name</TableHead>
+            <TableHead>Name</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Owner</TableHead>
             <TableHead>Mobile</TableHead>
@@ -59,7 +60,7 @@ export function ProfileTableView({
         <TableBody>
           {profiles.map((profile) => (
             <TableRow key={profile.id} className="hover:bg-muted/40">
-              <TableCell className="font-medium">{profile.businessName || "—"}</TableCell>
+              <TableCell className="font-medium">{profileDisplayName(profile)}</TableCell>
               <TableCell>{profile.category || businessTypeLabel(profile.businessType, BUSINESS_TYPES)}</TableCell>
               <TableCell>{profile.ownerName || "—"}</TableCell>
               <TableCell>{profile.mobile || "—"}</TableCell>

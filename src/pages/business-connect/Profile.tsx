@@ -87,7 +87,7 @@ export default function BCProfile() {
         <TabsList className="flex h-9 w-full flex-wrap justify-start gap-6 rounded-none border-b bg-transparent p-0">
           <TabsTrigger value="about" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">About</TabsTrigger>
           <TabsTrigger value="contact" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Contact</TabsTrigger>
-          <TabsTrigger value="location" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Location</TabsTrigger>
+          <TabsTrigger value="location" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Business location</TabsTrigger>
           <TabsTrigger value="languages" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Languages</TabsTrigger>
           <TabsTrigger value="gallery" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Gallery</TabsTrigger>
           <TabsTrigger value="documents" className="rounded-none border-b-2 border-transparent px-0 text-[12px] font-medium data-[state=active]:border-primary data-[state=active]:text-primary">Documents</TabsTrigger>
@@ -127,10 +127,10 @@ export default function BCProfile() {
         <TabsContent value="location">
           <Card>
             <CardContent className="space-y-2 p-5">
-              <h2 className={t.section}>Location & service reach</h2>
+              <h2 className={t.section}>Business location & service reach</h2>
               <Row
                 icon={MapPin}
-                label="Address"
+                label="Business address"
                 value={[s.location?.line1, s.location?.city, s.location?.state, s.location?.pincode]
                   .filter(Boolean)
                   .join(", ")}

@@ -2,10 +2,18 @@ import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import {
   businessProfileStore,
+  formDataFromEmpty,
   profileToFormData,
   useBusinessProfile,
 } from "@/stores/businessProfileStore";
 import type { BusinessProfile, BusinessProfileFormData } from "@/types/businessProfile";
+import {
+  clearBusinessProfileSetupRequired,
+  isBusinessProfileComplete,
+} from "@/lib/businessProfileOnboarding";
+import { prepareBusinessPostProfileOnboarding } from "@/lib/businessOnboardingFlow";
+import { getBusinessProfileSampleFormData } from "@/lib/businessProfileSample";
+import { getMissingRequiredFields } from "@/components/business-profile/singleProfileUtils";
 
 export function useProfileFormActions() {
   const profile = useBusinessProfile();
@@ -17,13 +25,29 @@ export function useProfileFormActions() {
       toast.info("You already have a business profile. Edit your existing profile instead.");
       return;
     }
-    setInitialData(undefined);
+    setInitialData(formDataFromEmpty());
     setDrawerOpen(true);
   }, [profile]);
 
   const openEdit = useCallback((p: BusinessProfile) => {
     setInitialData(profileToFormData(p));
     setDrawerOpen(true);
+  }, []);
+
+  const applyProfileSave = useCallback((saved: BusinessProfile | null) => {
+    if (saved && isBusinessProfileComplete(saved)) {
+      clearBusinessProfileSetupRequired();
+      prepareBusinessPostProfileOnboarding(saved);
+      toast.success("Business profile complete", {
+        description: "Next: choose your plan on the hub to unlock full features.",
+        duration: 7000,
+      });
+    } else if (saved) {
+      const missing = getMissingRequiredFields(saved);
+      if (missing.length > 0) {
+        toast.info(`${missing.length} required field${missing.length > 1 ? "s" : ""} still needed`);
+      }
+    }
   }, []);
 
   const handleSaveDraft = useCallback(
@@ -35,9 +59,11 @@ export function useProfileFormActions() {
         businessProfileStore.create(data, false);
         toast.success("Profile created");
       }
+      const saved = businessProfileStore.getProfile();
+      applyProfileSave(saved);
       setDrawerOpen(false);
     },
-    [profile],
+    [profile, applyProfileSave],
   );
 
   const handlePublish = useCallback(
@@ -48,6 +74,11 @@ export function useProfileFormActions() {
       } else {
         const created = businessProfileStore.create(data, true);
         businessProfileStore.publish(created.id);
+      }
+      const saved = businessProfileStore.getProfile();
+      if (saved && isBusinessProfileComplete(saved)) {
+        clearBusinessProfileSetupRequired();
+        prepareBusinessPostProfileOnboarding(saved);
       }
       toast.success("Profile published");
       setDrawerOpen(false);
@@ -60,6 +91,24 @@ export function useProfileFormActions() {
     toast.success("Profile published");
   }, []);
 
+  const loadSampleIntoForm = useCallback(() => {
+    setInitialData(getBusinessProfileSampleFormData());
+    setDrawerOpen(true);
+    toast.info("Sample data loaded — review and save when ready");
+  }, []);
+
+  const loadSampleAndSave = useCallback(() => {
+    const sample = getBusinessProfileSampleFormData();
+    if (profile) {
+      businessProfileStore.saveDraft(profile.id, sample);
+    } else {
+      businessProfileStore.create(sample, false);
+    }
+    const saved = businessProfileStore.getProfile();
+    applyProfileSave(saved);
+    setDrawerOpen(false);
+  }, [profile, applyProfileSave]);
+
   return {
     profile,
     drawerOpen,
@@ -70,6 +119,8 @@ export function useProfileFormActions() {
     handleSaveDraft,
     handlePublish,
     handlePublishProfile,
+    loadSampleIntoForm,
+    loadSampleAndSave,
   };
 }
 

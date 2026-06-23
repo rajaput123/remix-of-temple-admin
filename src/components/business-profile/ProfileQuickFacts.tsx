@@ -1,4 +1,4 @@
-import { Clock, Globe, Languages, Sparkles } from "lucide-react";
+import { Globe, Languages, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { BusinessProfile } from "@/types/businessProfile";
@@ -13,27 +13,7 @@ interface ProfileQuickFactsProps {
 
 export function ProfileQuickFacts({ profile }: ProfileQuickFactsProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <Card className={profileCardClass}>
-        <CardHeader className="pb-2 pt-5 px-5">
-          <CardTitle className="flex items-center gap-2 text-sm font-semibold">
-            <Clock className="h-4 w-4 text-primary" /> Business Hours
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="px-5 pb-5 space-y-3">
-          <div className="flex flex-wrap gap-1.5">
-            {profile.workingDays.map((d) => (
-              <Badge key={d} variant="secondary" className="rounded-full text-xs">
-                {d}
-              </Badge>
-            ))}
-          </div>
-          <p className="text-sm font-medium tabular-nums">
-            {profile.openingTime} – {profile.closingTime}
-          </p>
-        </CardContent>
-      </Card>
-
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <Card className={profileCardClass}>
         <CardHeader className="pb-2 pt-5 px-5">
           <CardTitle className="flex items-center gap-2 text-sm font-semibold">
@@ -41,13 +21,17 @@ export function ProfileQuickFacts({ profile }: ProfileQuickFactsProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="px-5 pb-5">
-          <div className="flex flex-wrap gap-1.5">
-            {profile.languages.map((l) => (
-              <Badge key={l} variant="outline" className="rounded-full">
-                {l}
-              </Badge>
-            ))}
-          </div>
+          {profile.languages.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5">
+              {profile.languages.map((l) => (
+                <Badge key={l} variant="outline" className="rounded-full">
+                  {l}
+                </Badge>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No languages added.</p>
+          )}
         </CardContent>
       </Card>
 

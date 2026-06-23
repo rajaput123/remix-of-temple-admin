@@ -7,3 +7,4 @@ export { FilterStrip, FilterSelectionActions } from "./FilterStrip";
 export { TableRegion } from "./TableRegion";
 export { TablePaginationFooter } from "./TablePaginationFooter";
 export { KpiCard } from "./KpiCard";
+export { WorkspaceTable, type WorkspaceColumnDef } from "./WorkspaceTable";

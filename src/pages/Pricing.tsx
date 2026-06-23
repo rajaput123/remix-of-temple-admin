@@ -32,7 +32,15 @@ import {
   type Plan,
 } from "@/lib/plans";
 import { markSubscriptionComplete } from "@/lib/templeConfig";
+import { isBusinessUser, prepareBusinessPostSubscriptionOnboarding } from "@/lib/businessOnboardingFlow";
 import { toast } from "sonner";
+
+function activateBusinessPlan(planName: string, navigate: ReturnType<typeof useNavigate>) {
+  markSubscriptionComplete();
+  if (isBusinessUser()) prepareBusinessPostSubscriptionOnboarding();
+  toast.success(`${planName} plan activated!`);
+  navigate("/temple-hub");
+}
 
 const planIcons: Record<string, typeof Zap> = {
   seva: Zap,
@@ -222,15 +230,11 @@ const Pricing = ({ embedded = false, onboarding = false }: PricingProps) => {
                 previousPlanName={idx > 0 ? plans[idx - 1].name : undefined}
                 onSelect={() => {
                   if (onboarding) {
-                    markSubscriptionComplete();
-                    toast.success(`${plan.name} plan activated!`);
-                    navigate("/temple-hub");
+                    activateBusinessPlan(plan.name, navigate);
                     return;
                   }
                   if (embedded && plan.price === 0) {
-                    markSubscriptionComplete();
-                    toast.success("Free plan activated!");
-                    navigate("/temple-hub");
+                    activateBusinessPlan(plan.name, navigate);
                     return;
                   }
                   navigate("/temple/settings/upgrade");

@@ -28,6 +28,7 @@ export interface ServiceAddOn {
   description?: string;
   pricingType: AddOnPricingType;
   price?: string;
+  linkedServiceIds?: string[];
 }
 
 /** Listing status shown in create form (Draft is set via Save Draft action) */

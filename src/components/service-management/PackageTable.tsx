@@ -20,20 +20,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   AiInsightBanner,
   FilterSelectionActions,
   FilterStrip,
-  TablePaginationFooter,
+  WorkspaceTable,
+  type WorkspaceColumnDef,
 } from "@/components/workspace";
-import { paginate, WORKSPACE_PAGE_SIZE } from "@/components/workspace/tablePagination";
+import { WORKSPACE_PAGE_SIZE } from "@/components/workspace/tablePagination";
 import type { BusinessService, ServicePackage } from "@/types/serviceManagement";
 import { cn } from "@/lib/utils";
 import { StatusDotBadge } from "./StatusBadges";
@@ -119,7 +112,7 @@ export function PackageTable({
       let cmp = 0;
       switch (sortKey) {
         case "name":
-          cmp = a.name.localeCompare(b.name);
+          cmp = (a.name || "").localeCompare(b.name || "");
           break;
         case "primary":
           cmp = (serviceNameById.get(a.primaryServiceId) ?? "").localeCompare(
@@ -132,10 +125,12 @@ export function PackageTable({
             packageCombinedPriceValue(b, serviceById.get(b.primaryServiceId));
           break;
         case "status":
-          cmp = a.status.localeCompare(b.status);
+          cmp = (a.status || "").localeCompare(b.status || "");
           break;
         case "updatedAt":
-          cmp = new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+          const tA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+          const tB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+          cmp = tA - tB;
           break;
       }
       return sortDir === "asc" ? cmp : -cmp;
@@ -150,11 +145,6 @@ export function PackageTable({
     WORKSPACE_PAGE_SIZE,
   );
 
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
-
-  const allPageSelected = paged.length > 0 && paged.every((p) => selected.has(p.id));
   const selectedDraftIds = [...selected].filter(
     (id) => packages.find((p) => p.id === id)?.status === "Draft",
   );
@@ -163,19 +153,96 @@ export function PackageTable({
 
   const clearSelection = () => setSelected(new Set());
 
-  const toggleAll = () => {
-    const next = new Set(selected);
-    if (allPageSelected) paged.forEach((p) => next.delete(p.id));
-    else paged.forEach((p) => next.add(p.id));
-    setSelected(next);
-  };
-
-  const toggleOne = (id: string) => {
-    const next = new Set(selected);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    setSelected(next);
-  };
+  const columns: WorkspaceColumnDef<ServicePackage>[] = [
+    {
+      id: "id",
+      header: (
+        <span className="text-[10px] font-bold uppercase tracking-wider text-foreground">ID</span>
+      ),
+      colStyle: { width: "5.5rem" },
+      className: "max-w-[5.5rem] overflow-hidden text-left",
+      cell: (pkg) => (
+        <button
+          type="button"
+          className="block max-w-full truncate font-mono text-[11px] text-primary hover:underline"
+          title={pkg.id}
+          onClick={(e) => {
+            e.stopPropagation();
+            openRow(pkg);
+          }}
+        >
+          {formatPackageId(pkg.id)}
+        </button>
+      )
+    },
+    {
+      id: "name",
+      header: <SortHead label="Package" col="name" />,
+      colStyle: { width: "26%" },
+      className: "max-w-0 overflow-hidden text-left",
+      cell: (pkg) => (
+        <div
+          className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5"
+          title={`${pkg.name}${pkg.description ? ` · ${pkg.description}` : ""}`}
+        >
+          <p className="cell-primary shrink-0">{pkg.name || "—"}</p>
+        </div>
+      )
+    },
+    {
+      id: "primary",
+      header: <SortHead label="Primary Service" col="primary" />,
+      colStyle: { width: "26%" },
+      className: "max-w-0 overflow-hidden text-left",
+      cell: (pkg) => {
+        const name = serviceNameById.get(pkg.primaryServiceId) ?? "—";
+        return (
+          <span className="block truncate text-sm text-muted-foreground" title={name}>
+            {name}
+          </span>
+        );
+      }
+    },
+    {
+      id: "price",
+      header: <SortHead label="Price" col="price" align="right" />,
+      colStyle: { width: "12rem" },
+      headerClassName: "text-right",
+      className: "overflow-hidden text-right",
+      cell: (pkg) => {
+        const { formattedCombined, parts } = packagePriceParts(pkg, serviceById.get(pkg.primaryServiceId));
+        return (
+          <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-0.5">
+            <p className="font-mono text-xs tabular-nums text-foreground">{formattedCombined}</p>
+            {parts && (
+              <span
+                className="truncate font-mono text-[10px] tabular-nums text-muted-foreground"
+                title={parts}
+              >
+                · {parts}
+              </span>
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      id: "status",
+      header: <SortHead label="Status" col="status" />,
+      colStyle: { width: "6.5rem" },
+      className: "whitespace-nowrap text-left",
+      cell: (pkg) => (
+        <StatusDotBadge status={pkg.status} label={queueStatusLabel(pkg.status)} />
+      )
+    },
+    {
+      id: "updatedAt",
+      header: <SortHead label="Updated" col="updatedAt" />,
+      colStyle: { width: "4.5rem" },
+      className: "whitespace-nowrap text-left font-mono text-[11px] tabular-nums text-muted-foreground",
+      cell: (pkg) => formatAge(pkg.updatedAt)
+    }
+  ];
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -324,160 +391,22 @@ export function PackageTable({
         </FilterSelectionActions>
       </FilterStrip>
 
-      <div className="flex flex-col overflow-x-auto" role="region" aria-label="Packages table">
-        <Table variant="workspace" container={false} className="table-workspace min-w-[1024px]">
-          <colgroup>
-            <col style={{ width: "2.5rem" }} />
-            <col style={{ width: "5.5rem" }} />
-            <col style={{ width: "16%" }} />
-            <col style={{ width: "22%" }} />
-            <col style={{ width: "8.5rem" }} />
-            <col style={{ width: "10%" }} />
-            <col style={{ width: "6.5rem" }} />
-            <col style={{ width: "4.5rem" }} />
-          </colgroup>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="text-center">
-                <Checkbox checked={allPageSelected} onCheckedChange={toggleAll} aria-label="Select all rows" />
-              </TableHead>
-              <TableHead className="text-left">ID</TableHead>
-              <TableHead className="hidden text-left lg:table-cell">
-                <SortHead label="Main service" col="primary" />
-              </TableHead>
-              <TableHead className="text-left">
-                <SortHead label="Tier" col="name" />
-              </TableHead>
-              <TableHead className="text-right">
-                <div className="flex justify-end">
-                  <SortHead label="Price" col="price" align="right" />
-                </div>
-              </TableHead>
-              <TableHead className="hidden text-left sm:table-cell">Validity</TableHead>
-              <TableHead className="text-left">
-                <SortHead label="Status" col="status" />
-              </TableHead>
-              <TableHead className="text-right">
-                <div className="flex justify-end">
-                  <SortHead label="Updated" col="updatedAt" align="right" />
-                </div>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paged.length === 0 ? (
-              <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={8} className="p-0">
-                  <div className="py-16 text-center">
-                    <Inbox className="mx-auto size-8 text-muted-foreground/40" aria-hidden />
-                    <p className="mt-3 text-sm font-medium text-foreground">No packages match your filters</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Try adjusting main service, priority, or saved view.</p>
-                    {emptyAction && <div className="mt-4">{emptyAction}</div>}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ) : (
-              paged.map((pkg) => {
-                const isSelected = selected.has(pkg.id);
-                const mainName = serviceNameById.get(pkg.primaryServiceId) ?? "—";
-                const primaryService = serviceById.get(pkg.primaryServiceId);
-                const price = packagePriceParts(pkg, primaryService);
-                return (
-                  <TableRow
-                    key={pkg.id}
-                    data-state={isSelected ? "selected" : undefined}
-                    tabIndex={0}
-                    className="group cursor-pointer"
-                    onClick={(e) => {
-                      if (isCheckboxInteraction(e.target)) return;
-                      openRow(pkg);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !isCheckboxInteraction(e.target)) {
-                        e.preventDefault();
-                        openRow(pkg);
-                      }
-                    }}
-                  >
-                    <TableCell
-                      data-checkbox-cell
-                      className="text-center"
-                      onClick={stopRowActivation}
-                      onMouseDown={stopRowActivation}
-                      onPointerDown={stopRowActivation}
-                    >
-                      <Checkbox
-                        checked={isSelected}
-                        onCheckedChange={() => toggleOne(pkg.id)}
-                        aria-label={`Select ${pkg.name}`}
-                      />
-                    </TableCell>
-                    <TableCell className="max-w-[5.5rem] overflow-hidden text-left">
-                      <button
-                        type="button"
-                        className="block max-w-full truncate font-mono text-[11px] text-primary hover:underline"
-                        title={pkg.id}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openRow(pkg);
-                        }}
-                      >
-                        {formatPackageId(pkg.id)}
-                      </button>
-                    </TableCell>
-                    <TableCell className="hidden max-w-0 overflow-hidden text-left lg:table-cell">
-                      <span className="block truncate text-sm text-muted-foreground" title={mainName}>
-                        {mainName}
-                      </span>
-                    </TableCell>
-                    <TableCell className="max-w-0 overflow-hidden text-left">
-                      <div
-                        className="min-w-0 space-y-0.5"
-                        title={`${pkg.name}${mainName !== "—" ? ` · ${mainName}` : ""} · ${subjectSecondary(pkg)}`}
-                      >
-                        <p className="cell-primary">{pkg.name}</p>
-                        <p className="cell-secondary lg:hidden">{mainName}</p>
-                        <p className="cell-secondary hidden lg:block">{subjectSecondary(pkg)}</p>
-                      </div>
-                    </TableCell>
-                    <TableCell className="overflow-hidden text-right">
-                      <div className="min-w-0">
-                        <p className="font-mono text-xs tabular-nums text-foreground">{price.main}</p>
-                        {price.sub && (
-                          <p className="truncate font-mono text-[10px] tabular-nums text-muted-foreground" title={price.sub}>
-                            {price.sub}
-                          </p>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden min-w-0 text-left sm:table-cell">
-                      <span className="block truncate text-muted-foreground" title={pkg.validity || undefined}>
-                        {pkg.validity || "—"}
-                      </span>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap text-left">
-                      <StatusDotBadge status={pkg.status} label={queueStatusLabel(pkg.status)} />
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap text-right font-mono text-[11px] tabular-nums text-muted-foreground">
-                      {formatAge(pkg.updatedAt)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            )}
-          </TableBody>
-        </Table>
-
-        <TablePaginationFooter
-          rangeStart={rangeStart}
-          rangeEnd={rangeEnd}
-          total={total}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          pageSize={WORKSPACE_PAGE_SIZE}
-          onPageChange={setPage}
-        />
-      </div>
+      <WorkspaceTable
+        data={filtered}
+        columns={columns}
+        rowIdKey="id"
+        selectedIds={selected}
+        onSelectionChange={setSelected}
+        page={page}
+        onPageChange={setPage}
+        pageSize={WORKSPACE_PAGE_SIZE}
+        onRowClick={openRow}
+        emptyTitle="No packages match your filters"
+        emptyDescription="Try adjusting main service, priority, or saved view."
+        emptyAction={emptyAction}
+        minWidth="min-w-[1024px]"
+        ariaLabel="Packages table"
+      />
     </div>
   );
 }

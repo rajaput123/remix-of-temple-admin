@@ -1,16 +1,53 @@
 import type { BusinessProfile, BusinessProfileFormData } from "@/types/businessProfile";
 
-const REQUIRED_FIELDS: (keyof BusinessProfileFormData)[] = [
-  "businessName",
-  "businessType",
-  "category",
-  "ownerName",
-  "mobile",
-  "email",
-  "address",
-  "city",
-  "about",
-];
+const FIELD_LABELS: Record<string, string> = {
+  entityType: "Profile type (Individual or Company)",
+  businessName: "Trading / brand name",
+  legalCompanyName: "Registered company name",
+  companyRegNumber: "Company registration number",
+  businessType: "Business type",
+  category: "Category",
+  ownerName: "Your name",
+  contactPerson: "Authorized contact",
+  mobile: "Mobile number",
+  whatsapp: "WhatsApp number",
+  email: "Email",
+  pincode: "Business pincode",
+  address: "Business street address",
+  city: "City",
+  state: "State",
+  about: "About",
+};
+
+function isEmpty(v: unknown): boolean {
+  if (Array.isArray(v)) return v.length === 0;
+  return v === null || v === undefined || String(v).trim() === "";
+}
+
+function requiredKeysFor(profile: BusinessProfile | BusinessProfileFormData): (keyof BusinessProfileFormData)[] {
+  const base: (keyof BusinessProfileFormData)[] = [
+    "entityType",
+    "businessType",
+    "category",
+    "mobile",
+    "whatsapp",
+    "pincode",
+    "address",
+    "city",
+    "state",
+    "about",
+  ];
+
+  if (profile.entityType === "individual") {
+    return [...base, "ownerName"];
+  }
+
+  if (profile.entityType === "company") {
+    return [...base, "legalCompanyName", "companyRegNumber", "ownerName"];
+  }
+
+  return ["entityType"];
+}
 
 export function computeProfileCompletion(profile: BusinessProfile): number {
   const keys = Object.keys(profile) as (keyof BusinessProfile)[];
@@ -30,21 +67,9 @@ export function computeProfileCompletion(profile: BusinessProfile): number {
 }
 
 export function getMissingRequiredFields(profile: BusinessProfile): string[] {
-  const labels: Record<string, string> = {
-    businessName: "Business Name",
-    businessType: "Business Type",
-    category: "Category",
-    ownerName: "Owner Name",
-    mobile: "Mobile Number",
-    email: "Email",
-    address: "Address",
-    city: "City",
-    about: "About Business",
-  };
-  return REQUIRED_FIELDS.filter((key) => {
-    const v = profile[key];
-    return Array.isArray(v) ? v.length === 0 : !v;
-  }).map((k) => labels[k] ?? k);
+  return requiredKeysFor(profile)
+    .filter((key) => isEmpty(profile[key]))
+    .map((k) => FIELD_LABELS[k] ?? k);
 }
 
 export function isVerificationPending(profile: BusinessProfile) {

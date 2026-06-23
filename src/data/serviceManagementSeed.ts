@@ -46,6 +46,38 @@ export const SEED_SERVICES: BusinessService[] = [
     updatedAt: "2026-03-10",
     views: 1240,
     enquiries: 32,
+    addOns: [
+      {
+        id: "addon-001",
+        name: "Premium Flower Garlands",
+        description: "Set of 4 traditional rose and jasmine garlands for the main doors.",
+        pricingType: "Fixed Price",
+        price: "₹1,200",
+      },
+      {
+        id: "addon-002",
+        name: "Standard Pooja Materials Kit",
+        description: "Includes coconut, betel leaves, camphor, incense sticks, haldi, kumkum.",
+        pricingType: "Fixed Price",
+        price: "₹800",
+      },
+      {
+        id: "addon-003",
+        name: "Vastu Consultation & Remedies",
+        description: "Includes: Vastu Consultation",
+        pricingType: "Fixed Price",
+        price: "₹8,000",
+        linkedServiceIds: ["svc-005"],
+      },
+      {
+        id: "addon-003b",
+        name: "Wedding Photography Coverage",
+        description: "Includes: Wedding Photography",
+        pricingType: "Starting From",
+        price: "₹45,000",
+        linkedServiceIds: ["svc-006"],
+      }
+    ],
   },
   {
     id: "svc-002",
@@ -164,6 +196,44 @@ export const SEED_SERVICES: BusinessService[] = [
     updatedAt: "2026-03-12",
     views: 540,
     enquiries: 14,
+    addOns: [
+      {
+        id: "addon-004",
+        name: "Prasadam Preparation",
+        description: "Making traditional Kesari Bhath prasadam for 50 guests.",
+        pricingType: "Fixed Price",
+        price: "₹1,500",
+      },
+      {
+        id: "addon-005",
+        name: "Home Pooja Kit",
+        description: "All necessary havan samagri and dry fruits for offering.",
+        pricingType: "Fixed Price",
+        price: "₹1,000",
+      },
+      {
+        id: "addon-005c",
+        name: "Special Flowers & Garlands",
+        description: "Fresh marigold and jasmine garlands for deity decoration.",
+        pricingType: "Fixed Price",
+        price: "₹600",
+      },
+      {
+        id: "addon-005e",
+        name: "Pooja Utensils Rental",
+        description: "Brass oil lamps, plates, spoons, and offering bowls.",
+        pricingType: "Fixed Price",
+        price: "₹400",
+      },
+      {
+        id: "addon-005b",
+        name: "Wedding Catering Services",
+        description: "Includes: Wedding Catering",
+        pricingType: "Starting From",
+        price: "₹250",
+        linkedServiceIds: ["svc-002"],
+      }
+    ],
   },
   {
     id: "svc-005",
@@ -198,7 +268,7 @@ export const SEED_SERVICES: BusinessService[] = [
     days: ["Tue", "Thu", "Sat"],
     startTime: "10:00",
     endTime: "17:00",
-    status: "Draft",
+    status: "Active",
     updatedAt: "2026-03-05",
     views: 310,
     enquiries: 9,

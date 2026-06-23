@@ -63,12 +63,14 @@ export function formatDuration(service: Pick<BusinessService, "durationValue" | 
 }
 
 export function formatServiceId(id: string) {
+  if (typeof id !== "string") return "";
   const match = id.match(/^svc-?(\d+)$/i);
   if (match) return `svc-${match[1].padStart(3, "0")}`;
   return id;
 }
 
 export function formatPackageId(id: string) {
+  if (typeof id !== "string") return "";
   const match = id.match(/^pkg-?(\d+)$/i);
   if (match) return `pkg-${match[1].padStart(3, "0")}`;
   return id;

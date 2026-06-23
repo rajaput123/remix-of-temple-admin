@@ -1,10 +1,11 @@
 export interface PincodeResult {
   city: string;
+  district: string;
   state: string;
   country: string;
 }
 
-/** Lookup Indian pincode via postalpincode.in (city = district, state, country). */
+/** Lookup Indian pincode via postalpincode.in */
 export async function lookupPincode(pincode: string): Promise<PincodeResult | null> {
   const clean = pincode.replace(/\D/g, "");
   if (clean.length !== 6) return null;
@@ -16,8 +17,10 @@ export async function lookupPincode(pincode: string): Promise<PincodeResult | nu
     if (entry?.Status !== "Success" || !entry?.PostOffice?.length) return null;
 
     const po = entry.PostOffice[0];
+    const block = po.Block && po.Block !== "NA" ? po.Block : "";
     return {
-      city: po.District || po.Block || po.Name || "",
+      city: block || po.Name || "",
+      district: po.District || "",
       state: po.State || "",
       country: po.Country || "India",
     };

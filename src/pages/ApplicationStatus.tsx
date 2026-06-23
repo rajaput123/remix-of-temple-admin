@@ -18,16 +18,16 @@ const ApplicationStatus = () => {
 
   const applicationData = {
     referenceNumber: "REG-2026-048291",
-    templeName: "Sri Venkateswara Temple",
+    businessName: "Spice Route Catering",
     submittedDate: "2026-02-14",
     adminName: "Ramesh Kumar",
     mobile: "+91 98765 43210",
-    email: "ramesh@temple.org",
+    email: "hello@spiceroutecatering.in",
   };
 
   const correctionFields = [
-    { field: "Trust Registration Number", issue: "Number format appears invalid. Please re-enter with prefix.", current: "12345" },
-    { field: "Temple Photos", issue: "Minimum 3 photos required. Only 1 uploaded.", current: "1 photo" },
+    { field: "GST Number", issue: "GSTIN format appears invalid. Please re-enter with correct 15-character format.", current: "29ABC123" },
+    { field: "Business Photos", issue: "Logo and storefront photos are required. Only logo uploaded.", current: "1 photo" },
   ];
 
   const rejectionReason = "The submitted registration does not meet the minimum verification requirements. The legal entity documentation could not be verified with the registrar. Please contact support for further assistance.";
@@ -39,7 +39,7 @@ const ApplicationStatus = () => {
       </div>
       <h1 className="text-2xl font-bold text-foreground mb-2">Application Under Review</h1>
       <p className="text-muted-foreground mb-8">
-        Your temple registration is being reviewed by our verification team. This usually takes 2-3 business days.
+        Your business registration is being reviewed by our verification team. This usually takes 2-3 business days.
       </p>
 
       <Card className="text-left mb-6">
@@ -50,8 +50,8 @@ const ApplicationStatus = () => {
           </div>
           <Separator />
           <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Temple</span>
-            <span className="text-sm font-medium">{applicationData.templeName}</span>
+            <span className="text-sm text-muted-foreground">Business</span>
+            <span className="text-sm font-medium">{applicationData.businessName}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">Submitted</span>
@@ -180,14 +180,14 @@ const ApplicationStatus = () => {
       </div>
       <h1 className="text-2xl font-bold text-foreground mb-2">Registration Approved! 🎉</h1>
       <p className="text-muted-foreground mb-8">
-        Your temple has been verified and your admin account is now active.
+        Your business has been verified and your account is now active.
       </p>
 
       <Card className="text-left mb-6">
         <CardContent className="pt-6 space-y-4">
           <div className="flex justify-between">
-            <span className="text-sm text-muted-foreground">Temple</span>
-            <span className="text-sm font-medium">{applicationData.templeName}</span>
+            <span className="text-sm text-muted-foreground">Business</span>
+            <span className="text-sm font-medium">{applicationData.businessName}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-sm text-muted-foreground">Plan Assigned</span>
@@ -201,9 +201,9 @@ const ApplicationStatus = () => {
           <div className="bg-green-50 rounded-lg p-3 text-sm text-green-800">
             <p className="font-medium mb-1">Auto-created for you:</p>
             <ul className="space-y-1 text-xs">
-              <li>✓ Main Temple node</li>
-              <li>✓ Main Shrine</li>
-              <li>✓ Default Darshan Area</li>
+              <li>✓ Business profile</li>
+              <li>✓ Service listings workspace</li>
+              <li>✓ Booking management</li>
             </ul>
           </div>
         </CardContent>
@@ -222,7 +222,7 @@ const ApplicationStatus = () => {
           <button onClick={() => navigate("/")} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back to Home
           </button>
-          <h1 className="text-xl font-bold text-primary">Temple Admin</h1>
+          <h1 className="text-xl font-bold text-primary">Business Connect</h1>
         </div>
       </header>
 

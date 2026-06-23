@@ -1,21 +1,32 @@
-import { Building2, ChevronRight, Plus, Shield, Sparkles, Users } from "lucide-react";
+import { Building2, ChevronRight, MapPin, Plus, Shield, Sparkles, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { profileCardClass, profileTypography as t } from "@/components/business-profile/profileStyles";
+import { hasRegistrationData } from "@/lib/registrationProfileBridge";
 import { cn } from "@/lib/utils";
 
 interface ProfileEmptyStateProps {
   onCreate: () => void;
+  onLoadSample?: () => void;
+  mandatory?: boolean;
 }
 
 const STEPS = [
   { icon: Building2, title: "Business info", desc: "Name, category & about" },
-  { icon: Users, title: "Contact & location", desc: "Phone, email & address" },
+  { icon: Users, title: "Contact", desc: "Owner phone & email" },
+  { icon: MapPin, title: "Business location", desc: "Office, shop or service base" },
   { icon: Shield, title: "Verification", desc: "KYC documents for identity check" },
 ];
 
-export function ProfileEmptyState({ onCreate }: ProfileEmptyStateProps) {
+export function ProfileEmptyState({ onCreate, onLoadSample, mandatory }: ProfileEmptyStateProps) {
+  const fromRegistration = hasRegistrationData();
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+      {mandatory && (
+        <div className="mb-4 rounded-lg border border-warning/30 bg-warning/5 px-4 py-3 text-sm text-warning">
+          Required: complete your business profile before accessing other modules.
+        </div>
+      )}
       <div className={cn("overflow-hidden", profileCardClass)}>
         <div className="grid lg:grid-cols-2">
           <div className="relative flex min-h-[320px] flex-col justify-between bg-gradient-to-br from-primary/90 via-primary/80 to-primary/60 p-8 text-primary-foreground lg:min-h-[420px]">
@@ -28,7 +39,7 @@ export function ProfileEmptyState({ onCreate }: ProfileEmptyStateProps) {
                 Build your marketplace presence
               </h2>
               <p className={cn("mt-4 max-w-sm leading-relaxed text-primary-foreground/85", t.desc)}>
-                Showcase your temple services and reach devotees across Karnataka.
+                List your services and reach customers on the Digidevalaya marketplace.
               </p>
             </div>
             <div className="relative mt-8 grid h-16 w-16 place-items-center rounded-lg border border-primary-foreground/20 bg-primary-foreground/10 backdrop-blur-md">
@@ -41,6 +52,11 @@ export function ProfileEmptyState({ onCreate }: ProfileEmptyStateProps) {
             <h3 className={cn("mt-2", t.title)}>Create your business profile</h3>
             <p className={cn("mt-2", t.muted)}>
               Takes about 5 minutes. You can save as draft and publish when ready.
+              {fromRegistration && (
+                <span className="mt-1 block text-primary">
+                  Your login mobile is pre-filled — add business details below.
+                </span>
+              )}
             </p>
 
             <ul className="mt-8 space-y-4">
@@ -61,9 +77,16 @@ export function ProfileEmptyState({ onCreate }: ProfileEmptyStateProps) {
               ))}
             </ul>
 
-            <Button onClick={onCreate} size="sm" className="mt-10 h-9 w-full gap-2 text-xs sm:w-auto">
-              <Plus className="h-4 w-4" /> Create profile
-            </Button>
+            <div className="mt-10 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              <Button onClick={onCreate} size="sm" className="h-9 gap-2 text-xs">
+                <Plus className="h-4 w-4" /> {mandatory ? "Start required setup" : "Create profile"}
+              </Button>
+              {onLoadSample && (
+                <Button onClick={onLoadSample} size="sm" variant="outline" className="h-9 gap-2 text-xs">
+                  Load sample data
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>

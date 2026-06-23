@@ -207,7 +207,7 @@ export default function ServicesListPage() {
         ) : hasAny ? (
           <>
             <FilterStrip>
-              <div className="relative min-w-[200px] flex-1">
+              <div className="relative w-64 shrink-0">
                 <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={search}

@@ -25,8 +25,7 @@ export default function BCExplore() {
           <p className="text-sm text-muted-foreground">
             A glimpse of the temple-ecosystem businesses on Digidevalaya.
           </p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        </div>        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {SAMPLE.map((b) => {
             const t = BUSINESS_TYPES.find((x) => x.id === b.type);
             const Icon = t?.icon;
@@ -60,3 +59,4 @@ export default function BCExplore() {
     </div>
   );
 }
+

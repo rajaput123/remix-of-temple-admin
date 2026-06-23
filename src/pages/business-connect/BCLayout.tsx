@@ -1,14 +1,14 @@
-import { LayoutDashboard, ListChecks, Package, Sparkles } from "lucide-react";
+import { LayoutDashboard, ListChecks, PackagePlus, Sparkles } from "lucide-react";
 import TempleLayout from "@/components/TempleLayout";
 
-const SERVICE_RESERVED = new Set(["packages", "availability", "pricing", "list"]);
+const SERVICE_RESERVED = new Set(["packages", "availability", "pricing", "list", "addons"]);
 
 const navItems = [
   {
     label: "Dashboard",
     path: "/business-connect/services",
     icon: LayoutDashboard,
-    description: "Service overview and stats",
+    description: "KPIs, trends & service overview",
     isActive: (pathname: string) => pathname === "/business-connect/services",
   },
   {
@@ -23,11 +23,11 @@ const navItems = [
     },
   },
   {
-    label: "Packages",
-    path: "/business-connect/services/packages",
-    icon: Package,
-    description: "Extra tiers for main services",
-    isActive: (pathname: string) => pathname.startsWith("/business-connect/services/packages"),
+    label: "Add-ons",
+    path: "/business-connect/services/addons",
+    icon: PackagePlus,
+    description: "Optional extras or customizable options",
+    isActive: (pathname: string) => pathname.startsWith("/business-connect/services/addons"),
   },
 ];
 

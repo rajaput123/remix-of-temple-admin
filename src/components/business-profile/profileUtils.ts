@@ -1,7 +1,8 @@
 import type { BusinessProfile, ProfileStatus, ProfileVerificationStatus } from "@/types/businessProfile";
 
 export function formatProfileLocation(profile: BusinessProfile) {
-  return [profile.city, profile.state].filter(Boolean).join(", ") || "—";
+  const parts = [profile.city, profile.district, profile.state, profile.pincode].filter(Boolean);
+  return parts.length > 0 ? parts.join(", ") : "—";
 }
 
 export function formatUpdatedAt(iso: string) {
@@ -18,7 +19,7 @@ export function formatUpdatedAt(iso: string) {
 
 export function exportProfilesCsv(profiles: BusinessProfile[]) {
   const rows = profiles.map((p) => ({
-    "Business Name": p.businessName,
+    "Business Name": profileDisplayName(p),
     Category: p.category,
     Owner: p.ownerName,
     Mobile: p.mobile,
@@ -41,13 +42,7 @@ export function filterProfiles(
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
     if (verificationFilter !== "all" && p.verificationStatus !== verificationFilter) return false;
     if (!q) return true;
-    return (
-      (p.businessName ?? "").toLowerCase().includes(q) ||
-      (p.category ?? "").toLowerCase().includes(q) ||
-      (p.ownerName ?? "").toLowerCase().includes(q) ||
-      (p.mobile ?? "").includes(q) ||
-      (p.city ?? "").toLowerCase().includes(q)
-    );
+    return profileSearchText(p).includes(q);
   });
 }
 
@@ -57,6 +52,74 @@ export function toggleInList(list: string[], item: string) {
 
 export function businessTypeLabel(typeId: string, types: { id: string; label: string }[]) {
   return types.find((t) => t.id === typeId)?.label ?? (typeId || "—");
+}
+
+export function formatOptionalText(value?: string | null, fallback = "Not provided"): string {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : fallback;
+}
+
+/** Primary name shown on profile — individual may omit business name. */
+export function profileDisplayName(
+  profile: Pick<BusinessProfile, "entityType" | "businessName" | "ownerName" | "legalCompanyName">,
+): string {
+  if (profile.entityType === "company") {
+    return (
+      profile.businessName.trim() ||
+      profile.legalCompanyName.trim() ||
+      profile.ownerName.trim() ||
+      "Registered business"
+    );
+  }
+  return profile.businessName.trim() || profile.ownerName.trim() || "Service provider";
+}
+
+/** Secondary line under the profile title, when it adds context. */
+export function profileSubtitle(profile: BusinessProfile): string | null {
+  if (profile.entityType === "individual") {
+    const name = profile.ownerName.trim();
+    const trade = profile.businessName.trim();
+    const display = profileDisplayName(profile);
+    if (trade && name && display === trade && name !== trade) return name;
+    return null;
+  }
+  if (profile.entityType === "company") {
+    const display = profileDisplayName(profile);
+    const legal = profile.legalCompanyName.trim();
+    if (legal && legal !== display) return legal;
+    return null;
+  }
+  return null;
+}
+
+export function profileAboutTitle(entityType: BusinessProfile["entityType"]): string {
+  if (entityType === "individual") return "About you & your services";
+  if (entityType === "company") return "About the company";
+  return "About the business";
+}
+
+export function shouldShowGst(profile: Pick<BusinessProfile, "entityType" | "gst" | "gstDoc">): boolean {
+  return profile.entityType === "company" || !!(profile.gst?.trim() || profile.gstDoc);
+}
+
+export function profileSearchText(profile: BusinessProfile): string {
+  return [
+    profile.businessName,
+    profile.ownerName,
+    profile.legalCompanyName,
+    profile.category,
+    profile.mobile,
+    profile.city,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+export function profileEntityLabel(entityType: BusinessProfile["entityType"]): string {
+  if (entityType === "company") return "Registered company";
+  if (entityType === "individual") return "Individual";
+  return "—";
 }
 
 export function profileStatusLabel(status: ProfileStatus): string {

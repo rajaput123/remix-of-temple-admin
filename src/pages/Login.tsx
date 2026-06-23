@@ -3,6 +3,16 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { businessProfileStore } from "@/stores/businessProfileStore";
+import {
+  getBusinessPostLoginRoute,
+  markBusinessProfileSetupRequired,
+  needsBusinessProfileOnboarding,
+} from "@/lib/businessProfileOnboarding";
+import { prepareBusinessPostLoginOnboarding } from "@/lib/businessOnboardingFlow";
+import { preparePostLoginOnboarding, getPostLoginRoute } from "@/lib/onboardingFlow";
+import { readRegistrationData } from "@/lib/registrationProfileBridge";
 
 type LoginRole = "super-admin" | "temple-admin";
 
@@ -12,18 +22,64 @@ const Login = () => {
   const [searchParams] = useSearchParams();
   const roleParam = searchParams.get("role") as LoginRole | null;
   const role: LoginRole = roleParam === "temple-admin" ? "temple-admin" : "super-admin";
-  const prefilledMobile = (location.state as { mobile?: string } | null)?.mobile ?? "";
+  const locationState = location.state as { mobile?: string; newAccount?: boolean } | null;
+  const prefilledMobile = locationState?.mobile ?? "";
+  const isNewAccount = locationState?.newAccount === true;
 
   const [phone, setPhone] = useState(prefilledMobile);
   const [mpin, setMpin] = useState("");
 
+  function handleBusinessLogin(cleanPhone: string) {
+    const reg = readRegistrationData();
+    if (!reg?.mobile || reg.mobile !== cleanPhone) {
+      toast.error("No account found for this mobile number. Please register first.");
+      return;
+    }
+    if (mpin.length !== 4) {
+      toast.error("Enter your 4-digit MPIN");
+      return;
+    }
+    if (reg.mpin && reg.mpin !== mpin) {
+      toast.error("Incorrect MPIN. Try again or use Forgot MPIN.");
+      return;
+    }
+
+    const profile = businessProfileStore.getProfile();
+
+    toast.dismiss();
+
+    if (needsBusinessProfileOnboarding(profile)) {
+      markBusinessProfileSetupRequired();
+    }
+    prepareBusinessPostLoginOnboarding(profile);
+
+    navigate(getBusinessPostLoginRoute(profile));
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/temple-hub");
+    const cleanPhone = phone.replace(/\D/g, "");
+    const reg = readRegistrationData();
+
+    if (reg?.mobile && reg.mobile === cleanPhone) {
+      handleBusinessLogin(cleanPhone);
+      return;
+    }
+
+    preparePostLoginOnboarding();
+    navigate(getPostLoginRoute());
   };
 
   const handleBypass = () => {
-    navigate("/temple-hub");
+    const reg = readRegistrationData();
+    const cleanPhone = phone.replace(/\D/g, "");
+    if (reg?.mobile && reg.mobile === cleanPhone) {
+      toast.error("Complete your business profile before continuing.");
+      handleBusinessLogin(cleanPhone);
+      return;
+    }
+    preparePostLoginOnboarding();
+    navigate(getPostLoginRoute());
   };
 
   return (
@@ -83,7 +139,9 @@ const Login = () => {
                 Sign in to your workspace
               </h1>
               <p className="text-sm text-slate-500 mt-1.5">
-                Use your mobile number and MPIN to continue.
+                {isNewAccount
+                  ? "Use the mobile and MPIN you just created. You'll set up your business profile next."
+                  : "Use your mobile number and MPIN to continue."}
               </p>
             </div>
 
@@ -98,7 +156,7 @@ const Login = () => {
                   inputMode="numeric"
                   placeholder="98765 43210"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
                   className="h-11 rounded-lg border-slate-200 bg-white focus-visible:ring-primary/20 focus-visible:border-primary text-[15px]"
                 />
               </div>
@@ -135,18 +193,20 @@ const Login = () => {
                 Sign in <ArrowRight className="h-4 w-4" />
               </Button>
 
-              <button
-                type="button"
-                onClick={handleBypass}
-                className="w-full text-center text-[12px] font-medium text-slate-500 hover:text-primary hover:underline"
-              >
-                Bypass → Go to Temple Hub
-              </button>
+              {!readRegistrationData()?.mobile && (
+                <button
+                  type="button"
+                  onClick={handleBypass}
+                  className="w-full text-center text-[12px] font-medium text-slate-500 hover:text-primary hover:underline"
+                >
+                  Bypass → Go to Temple Hub
+                </button>
+              )}
             </form>
 
             <p className="text-center text-sm text-slate-500 mt-6">
               Don't have an account?{" "}
-              <Link to="/business-connect/auth" className="text-primary font-medium hover:underline">
+              <Link to="/temple-register" className="text-primary font-medium hover:underline">
                 Create one
               </Link>
             </p>

@@ -1,9 +1,9 @@
-import { Clock, Mail, MapPin, Phone, ShieldCheck } from "lucide-react";
+import { Globe, Languages, MapPin, Mail, Phone, ShieldCheck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { BusinessProfile } from "@/types/businessProfile";
 import { BUSINESS_TYPES } from "@/data/businessTypes";
-import { businessTypeLabel } from "@/components/business-profile/profileUtils";
+import { businessTypeLabel, profileDisplayName, profileEntityLabel } from "@/components/business-profile/profileUtils";
 import { VerificationStatusBadge } from "@/components/business-profile/ProfileBadges";
 import { ProfileAvatar, ProfileCover, ProfileGallery } from "@/components/business-profile/ProfileMedia";
 import { profileCardClass } from "@/components/business-profile/profileStyles";
@@ -16,6 +16,9 @@ interface PublicProfilePreviewProps {
 }
 
 export function PublicProfilePreview({ profile }: PublicProfilePreviewProps) {
+  const displayName = profileDisplayName(profile);
+  const entityLabel = profileEntityLabel(profile.entityType);
+
   return (
     <Card className={`overflow-hidden ${profileCardClass}`}>
       <ProfileCover src={profile.coverImage} height="lg">
@@ -28,9 +31,15 @@ export function PublicProfilePreview({ profile }: PublicProfilePreviewProps) {
 
       <CardContent className="relative px-6 pb-8 pt-0 sm:px-8">
         <div className="-mt-12 flex flex-wrap items-end gap-4">
-          <ProfileAvatar src={profile.logo} alt={profile.businessName} size="md" />
+          <ProfileAvatar
+            src={profile.logo}
+            alt={displayName}
+            fallbackName={profile.ownerName || displayName}
+            size="md"
+          />
           <div className="pb-2 min-w-0 flex-1">
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{profile.businessName}</h2>
+            <p className="text-xs text-muted-foreground">{entityLabel}</p>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{displayName}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               {businessTypeLabel(profile.businessType, BUSINESS_TYPES)} · {profile.category}
               {profile.experience ? ` · ${profile.experience}+ years` : ""}
@@ -55,8 +64,13 @@ export function PublicProfilePreview({ profile }: PublicProfilePreviewProps) {
               <p className="flex items-center gap-2 font-medium">
                 <Phone className="h-4 w-4 text-primary" /> {profile.mobile}
               </p>
+              {profile.whatsapp && (
+                <p className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-primary" /> WhatsApp: {profile.whatsapp}
+                </p>
+              )}
               <p className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-primary" /> {profile.email}
+                <Mail className="h-4 w-4 text-primary" /> {profile.email.trim() || "Not provided"}
               </p>
             </div>
           </div>
@@ -82,30 +96,20 @@ export function PublicProfilePreview({ profile }: PublicProfilePreviewProps) {
           </section>
         )}
 
-        <section className="mt-8 rounded-2xl bg-muted/40 p-5 ring-1 ring-black/[0.04]">
-          <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            <Clock className="h-4 w-4" /> Working Hours
-          </h3>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {profile.workingDays.map((d) => (
-              <Badge key={d} variant="secondary" className="rounded-full">
-                {d}
-              </Badge>
-            ))}
-          </div>
-          <p className="mt-2 text-sm font-medium tabular-nums">
-            {profile.openingTime} – {profile.closingTime}
-          </p>
-          {profile.languages.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1.5">
+        {profile.languages.length > 0 && (
+          <section className="mt-8 rounded-2xl bg-muted/40 p-5 ring-1 ring-black/[0.04]">
+            <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <Globe className="h-4 w-4" /> Languages
+            </h3>
+            <div className="mt-3 flex flex-wrap gap-1.5">
               {profile.languages.map((l) => (
                 <Badge key={l} variant="outline" className="rounded-full">
                   {l}
                 </Badge>
               ))}
             </div>
-          )}
-        </section>
+          </section>
+        )}
       </CardContent>
     </Card>
   );

@@ -7,7 +7,7 @@ import { BUSINESS_TYPES } from "@/data/businessTypes";
 import { ProfileStatusBadge, VerificationStatusBadge } from "@/components/business-profile/ProfileBadges";
 import { ProfileAvatar, ProfileCover } from "@/components/business-profile/ProfileMedia";
 import { profileCardClass } from "@/components/business-profile/profileStyles";
-import { businessTypeLabel, formatProfileLocation } from "@/components/business-profile/profileUtils";
+import { businessTypeLabel, formatOptionalText, formatProfileLocation, profileDisplayName, profileEntityLabel, profileSubtitle } from "@/components/business-profile/profileUtils";
 import {
   computeProfileCompletion,
   getMissingRequiredFields,
@@ -24,6 +24,8 @@ export function SingleProfileHero({ profile, onEdit, onPreview, onPublish }: Sin
   const completion = computeProfileCompletion(profile);
   const missing = getMissingRequiredFields(profile);
   const canPublish = missing.length === 0 && profile.status !== "published";
+  const displayName = profileDisplayName(profile);
+  const subtitle = profileSubtitle(profile);
 
   return (
     <Card className={`overflow-hidden ${profileCardClass}`}>
@@ -37,9 +39,16 @@ export function SingleProfileHero({ profile, onEdit, onPreview, onPublish }: Sin
       <CardContent className="relative p-6 sm:p-8">
         <div className="-mt-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex items-end gap-4">
-            <ProfileAvatar src={profile.logo} alt={profile.businessName} size="sm" />
+            <ProfileAvatar
+              src={profile.logo}
+              alt={displayName}
+              fallbackName={profile.ownerName || displayName}
+              size="sm"
+            />
             <div className="pb-1 min-w-0">
-              <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{profile.businessName}</h2>
+              <p className="text-xs text-muted-foreground">{profileEntityLabel(profile.entityType)}</p>
+              <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{displayName}</h2>
+              {subtitle && <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>}
               <p className="mt-0.5 text-sm text-muted-foreground">
                 {businessTypeLabel(profile.businessType, BUSINESS_TYPES)}
                 {profile.category ? ` · ${profile.category}` : ""}
@@ -76,8 +85,22 @@ export function SingleProfileHero({ profile, onEdit, onPreview, onPublish }: Sin
 
         <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {[
-            { icon: Phone, label: "Mobile", value: profile.mobile, sub: profile.whatsapp ? `WA: ${profile.whatsapp}` : undefined },
-            { icon: Mail, label: "Email", value: profile.email, sub: profile.ownerName },
+            {
+              icon: Phone,
+              label: "Mobile",
+              value: formatOptionalText(profile.mobile, "—"),
+              sub: profile.whatsapp ? `WhatsApp: ${profile.whatsapp}` : undefined,
+            },
+            {
+              icon: Mail,
+              label: "Email",
+              value: formatOptionalText(profile.email, "Not provided"),
+              sub: profile.ownerName.trim()
+                ? profile.entityType === "company"
+                  ? `Contact: ${profile.ownerName}`
+                  : profile.ownerName
+                : undefined,
+            },
             { icon: MapPin, label: "Location", value: formatProfileLocation(profile), sub: profile.address },
           ].map(({ icon: Icon, label, value, sub }) => (
             <div key={label} className="rounded-xl bg-muted/40 p-4 ring-1 ring-black/[0.04]">

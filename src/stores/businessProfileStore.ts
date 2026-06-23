@@ -7,9 +7,14 @@ import type {
 } from "@/types/businessProfile";
 import { EMPTY_PROFILE_FORM } from "@/types/businessProfile";
 import { businessProfilesSeedData } from "@/data/businessProfileData";
-import { profileHasPlaceholderMedia } from "@/data/businessProfileMedia";
+import {
+  LEGACY_BUSINESS_TYPE_IDS,
+  mergeRegistrationIntoProfileForm,
+  normalizeBusinessTypeId,
+  readRegistrationData,
+} from "@/lib/registrationProfileBridge";
 
-const STORAGE_KEY = "digidevalaya-business-profile-v6";
+const STORAGE_KEY = "digidevalaya-business-profile-v8";
 
 function toSingleProfile(list: Partial<BusinessProfile>[]): BusinessProfile[] {
   if (list.length === 0) return [];
@@ -17,9 +22,13 @@ function toSingleProfile(list: Partial<BusinessProfile>[]): BusinessProfile[] {
 }
 
 function normalizeProfile(raw: Partial<BusinessProfile>): BusinessProfile {
-  return {
+  const merged = {
     ...EMPTY_PROFILE_FORM,
     ...raw,
+    businessType: normalizeBusinessTypeId(raw.businessType),
+  };
+  return {
+    ...merged,
     id: raw.id ?? `BP-${Date.now()}`,
     languages: Array.isArray(raw.languages) ? raw.languages : [],
     workingDays: Array.isArray(raw.workingDays) ? raw.workingDays : [...EMPTY_PROFILE_FORM.workingDays],
@@ -29,11 +38,25 @@ function normalizeProfile(raw: Partial<BusinessProfile>): BusinessProfile {
     aadhaarDoc: raw.aadhaarDoc ?? null,
     panDoc: raw.panDoc ?? null,
     gstDoc: raw.gstDoc ?? null,
+    incorporationDoc: raw.incorporationDoc ?? null,
     status: (raw.status as ProfileStatus) ?? "draft",
     verificationStatus: (raw.verificationStatus as ProfileVerificationStatus) ?? "not_submitted",
     createdAt: raw.createdAt ?? new Date().toISOString(),
     updatedAt: raw.updatedAt ?? new Date().toISOString(),
   };
+}
+
+function isStaleProfile(profile: BusinessProfile): boolean {
+  if (LEGACY_BUSINESS_TYPE_IDS.includes(profile.businessType)) return true;
+  if (/pooja|temple|priest|devotee/i.test(profile.businessName)) return true;
+  return profile.entityType === undefined;
+}
+
+function initialProfiles(): BusinessProfile[] {
+  if (readRegistrationData()?.mobile) return [];
+  const seeded = seedProfiles();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
+  return seeded;
 }
 
 function seedProfiles(): BusinessProfile[] {
@@ -45,21 +68,15 @@ function load(): BusinessProfile[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      const seeded = seedProfiles();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
-      return seeded;
+      return initialProfiles();
     }
     const parsed = JSON.parse(raw) as Partial<BusinessProfile>[];
     if (!Array.isArray(parsed) || parsed.length === 0) {
-      const seeded = seedProfiles();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
-      return seeded;
+      return initialProfiles();
     }
     const single = toSingleProfile(parsed);
-    if (parsed.length > 1 || (single[0] && profileHasPlaceholderMedia(single[0]))) {
-      const seeded = seedProfiles();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
-      return seeded;
+    if (parsed.length > 1 || (single[0] && isStaleProfile(single[0]))) {
+      return initialProfiles();
     }
     return single;
   } catch {
@@ -179,6 +196,17 @@ export const businessProfileStore = {
     emit();
   },
 
+  /** Wipe stored profile when a new business account registers. */
+  clearForNewRegistration: () => {
+    profiles = [];
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+    emit();
+  },
+
   publish: (id: string): BusinessProfile | undefined => {
     const profile = profiles.find((p) => p.id === id);
     if (!profile) return undefined;
@@ -273,5 +301,5 @@ export function profileToFormData(profile: BusinessProfile): BusinessProfileForm
 }
 
 export function formDataFromEmpty(): BusinessProfileFormData {
-  return { ...EMPTY_PROFILE_FORM };
+  return mergeRegistrationIntoProfileForm();
 }

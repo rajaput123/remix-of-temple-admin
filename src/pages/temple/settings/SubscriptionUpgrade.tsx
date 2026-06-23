@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { markSubscriptionComplete } from "@/lib/templeConfig";
+import { isBusinessUser, prepareBusinessPostSubscriptionOnboarding } from "@/lib/businessOnboardingFlow";
 
 const plans = [
   {
@@ -151,6 +152,7 @@ const SubscriptionUpgrade = () => {
                 size="lg"
                 onClick={() => {
                   markSubscriptionComplete();
+                  if (isBusinessUser()) prepareBusinessPostSubscriptionOnboarding();
                   toast.success("Payment successful! Plan upgraded.");
                   navigate("/temple-hub");
                 }}

@@ -16,7 +16,7 @@ const UpgradeButton = () => {
   const navigate = useNavigate();
   return (
     <button
-      onClick={() => navigate("/temple/settings/subscription")}
+      onClick={() => navigate("/temple/settings/upgrade")}
       className="flex items-center gap-2 px-5 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-lg hover:bg-primary/90 transition-colors"
     >
       <Crown className="h-4 w-4" />
