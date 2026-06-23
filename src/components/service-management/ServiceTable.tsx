@@ -150,6 +150,25 @@ export function ServiceTable({
 
   const clearSelection = () => setSelected(new Set());
 
+  const SortHead = ({
+    label,
+    col,
+  }: {
+    label: string;
+    col: SortKey;
+    align?: "left" | "right";
+  }) => (
+    <button
+      type="button"
+      onClick={() => toggleSort(col)}
+      aria-sort={sortAria(col)}
+      className="inline-flex max-w-full items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-foreground transition-colors duration-[120ms] hover:text-primary"
+    >
+      <span className="truncate">{label}</span>
+      <ArrowUpDown className="size-2.5 shrink-0 opacity-50" aria-hidden />
+    </button>
+  );
+
   const columns: WorkspaceColumnDef<BusinessService>[] = [
     {
       id: "id",
@@ -278,24 +297,6 @@ export function ServiceTable({
   const sortAria = (key: SortKey): "ascending" | "descending" | "none" =>
     sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : "none";
 
-  const SortHead = ({
-    label,
-    col,
-  }: {
-    label: string;
-    col: SortKey;
-    align?: "left" | "right";
-  }) => (
-    <button
-      type="button"
-      onClick={() => toggleSort(col)}
-      aria-sort={sortAria(col)}
-      className="inline-flex max-w-full items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-foreground transition-colors duration-[120ms] hover:text-primary"
-    >
-      <span className="truncate">{label}</span>
-      <ArrowUpDown className="size-2.5 shrink-0 opacity-50" aria-hidden />
-    </button>
-  );
 
   const openRow = (service: BusinessService) => onView(service);
 

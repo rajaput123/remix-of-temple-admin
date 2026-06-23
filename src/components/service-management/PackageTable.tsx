@@ -26,7 +26,7 @@ import {
   WorkspaceTable,
   type WorkspaceColumnDef,
 } from "@/components/workspace";
-import { WORKSPACE_PAGE_SIZE } from "@/components/workspace/tablePagination";
+import { WORKSPACE_PAGE_SIZE, paginate } from "@/components/workspace/tablePagination";
 import type { BusinessService, ServicePackage } from "@/types/serviceManagement";
 import { cn } from "@/lib/utils";
 import { StatusDotBadge } from "./StatusBadges";
@@ -153,6 +153,40 @@ export function PackageTable({
 
   const clearSelection = () => setSelected(new Set());
 
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const sortAria = (key: SortKey): "ascending" | "descending" | "none" =>
+    sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : "none";
+
+  const SortHead = ({
+    label,
+    col,
+    align = "left",
+  }: {
+    label: string;
+    col: SortKey;
+    align?: "left" | "right";
+  }) => (
+    <button
+      type="button"
+      onClick={() => toggleSort(col)}
+      aria-sort={sortAria(col)}
+      className={cn(
+        "inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-foreground transition-colors duration-[120ms] hover:text-primary",
+        align === "right" && "flex-row-reverse",
+      )}
+    >
+      {label}
+      <ArrowUpDown className="size-2.5 shrink-0 opacity-50" aria-hidden />
+    </button>
+  );
+
   const columns: WorkspaceColumnDef<ServicePackage>[] = [
     {
       id: "id",
@@ -210,16 +244,16 @@ export function PackageTable({
       headerClassName: "text-right",
       className: "overflow-hidden text-right",
       cell: (pkg) => {
-        const { formattedCombined, parts } = packagePriceParts(pkg, serviceById.get(pkg.primaryServiceId));
+        const { main, sub } = packagePriceParts(pkg, serviceById.get(pkg.primaryServiceId));
         return (
           <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-0.5">
-            <p className="font-mono text-xs tabular-nums text-foreground">{formattedCombined}</p>
-            {parts && (
+            <p className="font-mono text-xs tabular-nums text-foreground">{main}</p>
+            {sub && (
               <span
                 className="truncate font-mono text-[10px] tabular-nums text-muted-foreground"
-                title={parts}
+                title={sub}
               >
-                · {parts}
+                · {sub}
               </span>
             )}
           </div>
@@ -244,39 +278,6 @@ export function PackageTable({
     }
   ];
 
-  const toggleSort = (key: SortKey) => {
-    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    else {
-      setSortKey(key);
-      setSortDir("asc");
-    }
-  };
-
-  const sortAria = (key: SortKey): "ascending" | "descending" | "none" =>
-    sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : "none";
-
-  const SortHead = ({
-    label,
-    col,
-    align = "left",
-  }: {
-    label: string;
-    col: SortKey;
-    align?: "left" | "right";
-  }) => (
-    <button
-      type="button"
-      onClick={() => toggleSort(col)}
-      aria-sort={sortAria(col)}
-      className={cn(
-        "inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-foreground transition-colors duration-[120ms] hover:text-primary",
-        align === "right" && "flex-row-reverse",
-      )}
-    >
-      {label}
-      <ArrowUpDown className="size-2.5 shrink-0 opacity-50" aria-hidden />
-    </button>
-  );
 
   const openRow = (pkg: ServicePackage) => onEdit(pkg);
 
