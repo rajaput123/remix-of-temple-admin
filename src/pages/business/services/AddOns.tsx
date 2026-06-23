@@ -88,9 +88,22 @@ export default function AddOnsPage() {
 
   const columns: WorkspaceColumnDef<ServiceAddOn & { serviceId: string }>[] = [
     {
+      id: "id",
+      header: (
+        <span className="text-[10px] font-bold uppercase tracking-wider text-foreground">ID</span>
+      ),
+      colStyle: { width: "5.5rem" },
+      className: "max-w-[5.5rem] overflow-hidden text-left",
+      cell: (addOn) => (
+        <span className="block max-w-full truncate font-mono text-[11px] text-primary" title={addOn.id}>
+          {addOn.id}
+        </span>
+      )
+    },
+    {
       id: "name",
       header: "Add-on",
-      colStyle: { width: "40%" },
+      colStyle: { width: "34%" },
       className: "text-left max-w-0 overflow-hidden",
       cell: (addOn) => {
         return (
