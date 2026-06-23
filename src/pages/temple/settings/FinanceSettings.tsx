@@ -86,15 +86,98 @@ function normalizeBank(raw: Partial<BankAccount> & Pick<BankAccount, "id">): Ban
   };
 }
 
+const DUMMY_BANK_ACCOUNTS: BankAccount[] = [
+  {
+    id: "bank-001",
+    accountName: "Sri Venkateswara Temple Trust",
+    bankName: "State Bank of India",
+    accountNumber: "30215478965",
+    ifscCode: "SBIN0001234",
+    branch: "Tirupati Main",
+    isPrimary: true,
+    gatewayAccountId: "acc_RZP001",
+    purpose: "Donations",
+    panNumber: "AABTS1234C",
+    eightyGLink: "80G",
+    isDefaultDonation: true,
+    isDefaultSeva: false,
+    status: "Active",
+  },
+  {
+    id: "bank-002",
+    accountName: "Temple Seva Account",
+    bankName: "HDFC Bank",
+    accountNumber: "50100123456789",
+    ifscCode: "HDFC0000456",
+    branch: "Tirumala Branch",
+    isPrimary: false,
+    gatewayAccountId: "acc_RZP002",
+    purpose: "Seva Payments",
+    panNumber: "AABTS1234C",
+    eightyGLink: "Non-80G",
+    isDefaultDonation: false,
+    isDefaultSeva: true,
+    status: "Active",
+  },
+  {
+    id: "bank-003",
+    accountName: "Temple Events & Festivals",
+    bankName: "ICICI Bank",
+    accountNumber: "624505012345",
+    ifscCode: "ICIC0006245",
+    branch: "Tirupati East",
+    isPrimary: false,
+    purpose: "Event Payments",
+    panNumber: "AABTS1234C",
+    eightyGLink: "Both",
+    isDefaultDonation: false,
+    isDefaultSeva: false,
+    status: "Active",
+  },
+  {
+    id: "bank-004",
+    accountName: "Temple Operations & Salaries",
+    bankName: "Axis Bank",
+    accountNumber: "912010056789",
+    ifscCode: "UTIB0001122",
+    branch: "Tirupati Central",
+    isPrimary: false,
+    purpose: "Salaries",
+    panNumber: "AABTS1234C",
+    eightyGLink: "Non-80G",
+    isDefaultDonation: false,
+    isDefaultSeva: false,
+    status: "Active",
+  },
+  {
+    id: "bank-005",
+    accountName: "Temple Construction Fund",
+    bankName: "Canara Bank",
+    accountNumber: "11042200012345",
+    ifscCode: "CNRB0001104",
+    branch: "Tirupati West",
+    isPrimary: false,
+    purpose: "Project Funds",
+    panNumber: "AABTS1234C",
+    eightyGLink: "80G",
+    isDefaultDonation: false,
+    isDefaultSeva: false,
+    status: "Paused",
+  },
+];
+
 function loadBankAccounts(): BankAccount[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return DUMMY_BANK_ACCOUNTS;
   try {
     const raw = localStorage.getItem(BANKS_LS_KEY);
-    if (raw) return (JSON.parse(raw) as Partial<BankAccount>[]).map(normalizeBank);
+    if (raw) {
+      const parsed = (JSON.parse(raw) as Partial<BankAccount>[]).map(normalizeBank);
+      if (parsed.length > 0) return parsed;
+    }
   } catch {
     /* ignore */
   }
-  return [];
+  return DUMMY_BANK_ACCOUNTS;
 }
 
 const emptyBankForm = () => ({
