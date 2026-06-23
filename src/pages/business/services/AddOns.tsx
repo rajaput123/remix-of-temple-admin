@@ -103,7 +103,7 @@ export default function AddOnsPage() {
     {
       id: "name",
       header: "Add-on",
-      colStyle: { width: "34%" },
+      colStyle: { width: "32%" },
       className: "text-left max-w-0 overflow-hidden",
       cell: (addOn) => {
         return (
@@ -126,12 +126,12 @@ export default function AddOnsPage() {
     {
       id: "mainService",
       header: "Main Service",
-      colStyle: { width: "40%" },
-      className: "text-left max-w-0 overflow-hidden",
+      colStyle: { width: "22%" },
+      className: "max-w-0 overflow-hidden text-left",
       cell: (addOn) => {
         const serviceName = serviceNameById.get(addOn.serviceId) ?? "—";
         return (
-          <span className="truncate text-sm text-muted-foreground" title={serviceName}>
+          <span className="block w-full truncate text-sm text-muted-foreground" title={serviceName}>
             {serviceName}
           </span>
         );
@@ -140,14 +140,18 @@ export default function AddOnsPage() {
     {
       id: "pricingType",
       header: "Pricing Type",
-      colStyle: { width: "10%" },
-      className: "text-left text-sm text-muted-foreground",
-      cell: (addOn) => addOn.pricingType
+      colStyle: { width: "8rem" },
+      className: "max-w-0 overflow-hidden text-left",
+      cell: (addOn) => (
+        <span className="block w-full truncate text-sm text-muted-foreground" title={addOn.pricingType}>
+          {addOn.pricingType}
+        </span>
+      )
     },
     {
       id: "totalPrice",
       header: "Total Price",
-      colStyle: { width: "10%" },
+      colStyle: { width: "9rem" },
       headerClassName: "text-right",
       className: "text-right",
       cell: (addOn) => {
