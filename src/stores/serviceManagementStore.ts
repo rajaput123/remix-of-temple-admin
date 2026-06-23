@@ -4,9 +4,11 @@ import type {
   BookingSettings,
   BusinessService,
   PricingRule,
+  ServiceCustomField,
   ServicePackage,
   ServiceStatus,
 } from "@/types/serviceManagement";
+import { normalizeCustomField } from "@/components/service-management/customFieldUtils";
 import {
   SEED_AVAILABILITY,
   SEED_PACKAGES,
@@ -14,8 +16,8 @@ import {
   SEED_SERVICES,
 } from "@/data/serviceManagementSeed";
 
-const STORAGE_KEY = "digidevalaya-service-management-v4";
-const SEED_VERSION = 4;
+const STORAGE_KEY = "digidevalaya-service-management-v5";
+const SEED_VERSION = 5;
 
 interface ServiceManagementState {
   services: BusinessService[];
@@ -76,6 +78,8 @@ export function emptyService(): BusinessService {
     updatedAt: new Date().toISOString().slice(0, 10),
     views: 0,
     enquiries: 0,
+    customFields: [],
+    addOns: [],
   };
 }
 
@@ -89,6 +93,8 @@ function normalizeService(raw: Partial<BusinessService> & { id: string }): Busin
     days: raw.days ?? [],
     requirements: raw.requirements ?? "",
     booking: { ...defaultBooking(), ...raw.booking },
+    customFields: (raw.customFields ?? []).map((f) => normalizeCustomField(f as ServiceCustomField)),
+    addOns: raw.addOns ?? [],
   };
 }
 

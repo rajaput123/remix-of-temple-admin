@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 import { SEED_SERVICE_BOOKINGS } from "@/data/serviceBookingSeed";
 import type { ServiceBooking, ServiceBookingStatus } from "@/types/serviceBooking";
 
-const STORAGE_KEY = "digidevalaya-service-bookings-v1";
+const STORAGE_KEY = "digidevalaya-service-bookings-v5";
 
 let cache: ServiceBooking[] | null = null;
 const listeners = new Set<() => void>();
@@ -48,6 +48,11 @@ export function subscribeServiceBookings(listener: () => void) {
 
 export function useServiceBookings() {
   return useSyncExternalStore(subscribeServiceBookings, getServiceBookings, getServiceBookings);
+}
+
+export function useCounterBookings() {
+  const all = useServiceBookings();
+  return all.filter((b) => b.source === "Counter");
 }
 
 function nextBookingId(existing: ServiceBooking[]) {

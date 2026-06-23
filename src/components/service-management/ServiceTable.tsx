@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useState, type SyntheticEvent } from "react";
 import {
   ArrowUpDown,
-  Bookmark,
   CheckCheck,
   ChevronDown,
   Inbox,
   Layers,
   Pencil,
+  Search,
   SlidersHorizontal,
   Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -35,10 +36,10 @@ import {
 } from "@/components/workspace";
 import { paginate, WORKSPACE_PAGE_SIZE } from "@/components/workspace/tablePagination";
 import type { BusinessService } from "@/types/serviceManagement";
-import { SERVICE_CATEGORIES } from "@/types/serviceManagement";
+import { SERVICE_LISTING_CATEGORIES } from "@/types/serviceManagement";
 import { cn } from "@/lib/utils";
-import { AvailabilityDotBadge, StatusDotBadge } from "./StatusBadges";
-import { formatAge, formatPrice, formatServiceId } from "./shared";
+import { StatusDotBadge } from "./StatusBadges";
+import { formatAge, formatPrice, formatPriceSub, formatServiceId, parseServicePriceValue } from "./shared";
 
 type SortDir = "asc" | "desc";
 
@@ -62,6 +63,7 @@ interface ServiceTableProps {
   onFilterDrafts?: () => void;
   draftHighlight?: { count: number; label: string };
   emptyAction?: React.ReactNode;
+  filterActions?: React.ReactNode;
 }
 
 function queueStatusLabel(status: BusinessService["status"]) {
@@ -70,12 +72,19 @@ function queueStatusLabel(status: BusinessService["status"]) {
   return status;
 }
 
-function locationLabel(service: BusinessService) {
-  return service.city || service.subcategory || "—";
-}
-
-function subjectSecondary(service: BusinessService) {
-  return service.subcategory || service.city || service.category;
+function inlineFieldParts(service: BusinessService) {
+  const parts: string[] = [];
+  const desc = service.description?.trim();
+  if (desc) {
+    parts.push(desc.length > 48 ? `${desc.slice(0, 48)}…` : desc);
+  }
+  for (const field of service.customFields ?? []) {
+    if (field.name.trim()) parts.push(field.name.trim());
+  }
+  for (const addOn of service.addOns ?? []) {
+    if (addOn.name.trim()) parts.push(addOn.name.trim());
+  }
+  return parts;
 }
 
 export function ServiceTable({
@@ -87,25 +96,28 @@ export function ServiceTable({
   onFilterDrafts,
   draftHighlight,
   emptyAction,
+  filterActions,
 }: ServiceTableProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [savedView, setSavedView] = useState("queue");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("updatedAt");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
   const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
     let rows = services.filter((s) => {
+      const matchSearch =
+        !q ||
+        s.name.toLowerCase().includes(q) ||
+        s.category.toLowerCase().includes(q) ||
+        s.description.toLowerCase().includes(q);
       const cat = categoryFilter === "all" || s.category === categoryFilter;
       const st = statusFilter === "all" || s.status === statusFilter;
-      const view =
-        savedView === "all" ||
-        savedView === "queue" ||
-        (savedView === "drafts" && s.status === "Draft") ||
-        (savedView === "active" && s.status === "Active");
-      return cat && st && view;
+      return matchSearch && cat && st;
     });
 
     rows = [...rows].sort((a, b) => {
@@ -118,7 +130,7 @@ export function ServiceTable({
           cmp = a.category.localeCompare(b.category);
           break;
         case "price":
-          cmp = Number(a.price || 0) - Number(b.price || 0);
+          cmp = parseServicePriceValue(a.price) - parseServicePriceValue(b.price);
           break;
         case "status":
           cmp = a.status.localeCompare(b.status);
@@ -131,7 +143,7 @@ export function ServiceTable({
     });
 
     return rows;
-  }, [services, categoryFilter, statusFilter, savedView, sortKey, sortDir]);
+  }, [services, search, categoryFilter, statusFilter, sortKey, sortDir]);
 
   const { items: paged, totalPages, currentPage, rangeStart, rangeEnd, total } = paginate(
     filtered,
@@ -178,7 +190,6 @@ export function ServiceTable({
   const SortHead = ({
     label,
     col,
-    align = "left",
   }: {
     label: string;
     col: SortKey;
@@ -188,12 +199,9 @@ export function ServiceTable({
       type="button"
       onClick={() => toggleSort(col)}
       aria-sort={sortAria(col)}
-      className={cn(
-        "inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-foreground transition-colors duration-[120ms] hover:text-primary",
-        align === "right" && "flex-row-reverse",
-      )}
+      className="inline-flex max-w-full items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-foreground transition-colors duration-[120ms] hover:text-primary"
     >
-      {label}
+      <span className="truncate">{label}</span>
       <ArrowUpDown className="size-2.5 shrink-0 opacity-50" aria-hidden />
     </button>
   );
@@ -207,7 +215,6 @@ export function ServiceTable({
           label="Bottleneck detected."
           actionLabel="Review batch"
           onAction={() => {
-            setSavedView("drafts");
             setStatusFilter("Draft");
             onFilterDrafts?.();
             setPage(1);
@@ -220,6 +227,19 @@ export function ServiceTable({
       )}
 
       <FilterStrip>
+        <div className="relative min-w-[200px] flex-1">
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            placeholder="Search services…"
+            className="h-7 pl-8 text-xs shadow-none"
+          />
+        </div>
+
         <Select value={categoryFilter} onValueChange={(v) => { setCategoryFilter(v); setPage(1); }}>
           <SelectTrigger className="h-7 w-auto min-w-[132px] gap-1.5 px-2.5 text-xs shadow-none [&>svg:last-child]:hidden">
             <Layers className="size-3.5 shrink-0 text-muted-foreground" />
@@ -228,8 +248,8 @@ export function ServiceTable({
             <ChevronDown className="size-3 text-muted-foreground" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            {SERVICE_CATEGORIES.map((c) => (
+            <SelectItem value="all">All categories</SelectItem>
+            {SERVICE_LISTING_CATEGORIES.map((c) => (
               <SelectItem key={c} value={c}>{c}</SelectItem>
             ))}
           </SelectContent>
@@ -247,21 +267,6 @@ export function ServiceTable({
             <SelectItem value="Draft">Draft</SelectItem>
             <SelectItem value="Active">Active</SelectItem>
             <SelectItem value="Inactive">Inactive</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={savedView} onValueChange={(v) => { setSavedView(v); setPage(1); }}>
-          <SelectTrigger className="h-7 w-auto min-w-[148px] gap-1.5 px-2.5 text-xs shadow-none [&>svg:last-child]:hidden">
-            <Bookmark className="size-3.5 shrink-0 text-muted-foreground" />
-            Saved view
-            <SelectValue placeholder="My queue" />
-            <ChevronDown className="size-3 text-muted-foreground" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="queue">My queue</SelectItem>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="drafts">Drafts</SelectItem>
           </SelectContent>
         </Select>
 
@@ -309,18 +314,22 @@ export function ServiceTable({
             Batch publish
           </Button>
         </FilterSelectionActions>
+
+        {filterActions && (
+          <div className="ml-auto flex shrink-0 items-center gap-1 border-l border-border pl-2">
+            {filterActions}
+          </div>
+        )}
       </FilterStrip>
 
-      <div className="flex flex-col overflow-hidden" role="region" aria-label="Services table">
+      <div className="flex flex-col overflow-x-auto" role="region" aria-label="Services table">
         <Table variant="workspace" container={false} className="table-workspace min-w-[960px]">
           <colgroup>
             <col style={{ width: "2.5rem" }} />
-            <col style={{ width: "4.5rem" }} />
-            <col />
-            <col style={{ width: "13%" }} />
-            <col style={{ width: "11%" }} />
-            <col style={{ width: "6.5rem" }} />
-            <col style={{ width: "7.5rem" }} />
+            <col style={{ width: "5.5rem" }} />
+            <col style={{ width: "26%" }} />
+            <col style={{ width: "12%" }} />
+            <col style={{ width: "10rem" }} />
             <col style={{ width: "6.5rem" }} />
             <col style={{ width: "4.5rem" }} />
           </colgroup>
@@ -329,38 +338,34 @@ export function ServiceTable({
               <TableHead className="text-center">
                 <Checkbox checked={allPageSelected} onCheckedChange={toggleAll} aria-label="Select all rows" />
               </TableHead>
-              <TableHead className="text-left">ID</TableHead>
+              <TableHead className="text-left">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-foreground">ID</span>
+              </TableHead>
               <TableHead className="text-left">
                 <SortHead label="Service" col="name" />
               </TableHead>
-              <TableHead className="hidden text-left md:table-cell">
+              <TableHead className="text-left">
                 <SortHead label="Category" col="category" />
               </TableHead>
-              <TableHead className="hidden text-left lg:table-cell">Location</TableHead>
               <TableHead className="text-right">
-                <div className="flex justify-end">
-                  <SortHead label="Price" col="price" align="right" />
-                </div>
+                <SortHead label="Price" col="price" />
               </TableHead>
-              <TableHead className="hidden text-left sm:table-cell">Availability</TableHead>
               <TableHead className="text-left">
                 <SortHead label="Status" col="status" />
               </TableHead>
-              <TableHead className="text-right">
-                <div className="flex justify-end">
-                  <SortHead label="Updated" col="updatedAt" align="right" />
-                </div>
+              <TableHead className="text-left">
+                <SortHead label="Updated" col="updatedAt" />
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {paged.length === 0 ? (
               <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={9} className="p-0">
+                <TableCell colSpan={7} className="p-0">
                   <div className="py-16 text-center">
                     <Inbox className="mx-auto size-8 text-muted-foreground/40" aria-hidden />
                     <p className="mt-3 text-sm font-medium text-foreground">No services match your filters</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Try adjusting category, status, or saved view.</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Try adjusting category or status.</p>
                     {emptyAction && <div className="mt-4">{emptyAction}</div>}
                   </div>
                 </TableCell>
@@ -368,6 +373,9 @@ export function ServiceTable({
             ) : (
               paged.map((service) => {
                 const isSelected = selected.has(service.id);
+                const isExpanded = expandedId === service.id;
+                const priceSub = formatPriceSub(service);
+                const fieldParts = inlineFieldParts(service);
                 return (
                   <TableRow
                     key={service.id}
@@ -398,10 +406,10 @@ export function ServiceTable({
                         aria-label={`Select ${service.name}`}
                       />
                     </TableCell>
-                    <TableCell className="whitespace-nowrap text-left">
+                    <TableCell className="max-w-[5.5rem] overflow-hidden text-left">
                       <button
                         type="button"
-                        className="font-mono text-[11px] text-primary hover:underline"
+                        className="block max-w-full truncate font-mono text-[11px] text-primary hover:underline"
                         title={service.id}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -411,32 +419,57 @@ export function ServiceTable({
                         {formatServiceId(service.id)}
                       </button>
                     </TableCell>
-                    <TableCell className="min-w-0 text-left">
-                      <div className="min-w-0 space-y-0.5" title={`${service.name} · ${subjectSecondary(service)}`}>
-                        <p className="cell-primary">{service.name}</p>
-                        <p className="cell-secondary">{subjectSecondary(service)}</p>
+                    <TableCell className="max-w-0 overflow-hidden text-left">
+                      <div
+                        className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5"
+                        title={`${service.name}${service.description ? ` · ${service.description}` : ""}`}
+                      >
+                        <p className="cell-primary shrink-0">{service.name || "—"}</p>
+                        {isExpanded &&
+                          fieldParts.map((part, i) => (
+                            <span
+                              key={`${part}-${i}`}
+                              className="inline-flex max-w-[12rem] truncate rounded border bg-muted/30 px-1.5 py-px text-[10px] text-muted-foreground"
+                              title={part}
+                            >
+                              {part}
+                            </span>
+                          ))}
                       </div>
                     </TableCell>
-                    <TableCell className="hidden min-w-0 text-left md:table-cell">
-                      <span className="block truncate text-muted-foreground" title={service.category}>
-                        {service.category}
+                    <TableCell className="max-w-0 overflow-hidden text-left">
+                      <span className="block truncate text-sm text-muted-foreground" title={service.category || undefined}>
+                        {service.category || "—"}
                       </span>
                     </TableCell>
-                    <TableCell className="hidden min-w-0 text-left lg:table-cell">
-                      <span className="block truncate text-muted-foreground" title={locationLabel(service)}>
-                        {locationLabel(service)}
-                      </span>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap text-right font-mono text-xs tabular-nums">
-                      {formatPrice(service)}
-                    </TableCell>
-                    <TableCell className="hidden whitespace-nowrap text-left sm:table-cell">
-                      <AvailabilityDotBadge availability={service.availability} />
+                    <TableCell className="overflow-hidden text-right">
+                      <div className="flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-0.5">
+                        <p className="font-mono text-xs tabular-nums text-foreground">{formatPrice(service)}</p>
+                        {isExpanded && priceSub && (
+                          <span
+                            className="truncate font-mono text-[10px] tabular-nums text-muted-foreground"
+                            title={priceSub}
+                          >
+                            · {priceSub}
+                          </span>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="whitespace-nowrap text-left">
-                      <StatusDotBadge status={service.status} label={queueStatusLabel(service.status)} />
+                      <button
+                        type="button"
+                        className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        aria-expanded={isExpanded}
+                        aria-label={`${isExpanded ? "Hide" : "Show"} fields for ${service.name}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExpandedId((id) => (id === service.id ? null : service.id));
+                        }}
+                      >
+                        <StatusDotBadge status={service.status} label={queueStatusLabel(service.status)} />
+                      </button>
                     </TableCell>
-                    <TableCell className="whitespace-nowrap text-right font-mono text-[11px] tabular-nums text-muted-foreground">
+                    <TableCell className="whitespace-nowrap text-left font-mono text-[11px] tabular-nums text-muted-foreground">
                       {formatAge(service.updatedAt)}
                     </TableCell>
                   </TableRow>

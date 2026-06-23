@@ -15,8 +15,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { ServiceFormDrawer } from "@/components/service-management/ServiceFormDrawer";
+import { ServiceListingFormDialog } from "@/components/service-management/ServiceListingFormDialog";
 import { ServiceDetailView } from "@/components/service-management/ServiceDetailView";
+import {
+  hasListingErrors,
+  validateServiceListing,
+  type ServiceListingFormErrors,
+} from "@/components/service-management/serviceListingValidation";
 import type { BusinessService } from "@/types/serviceManagement";
 import { serviceManagementStore, useServiceManagementStore } from "@/stores/serviceManagementStore";
 
@@ -24,10 +29,60 @@ export default function ServiceDetailPage() {
   const { serviceId } = useParams<{ serviceId: string }>();
   const navigate = useNavigate();
   const { services } = useServiceManagementStore();
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<BusinessService | null>(null);
+  const [formErrors, setFormErrors] = useState<ServiceListingFormErrors>({});
 
   const service = services.find((s) => s.id === serviceId);
+
+  const closeForm = () => {
+    setFormOpen(false);
+    setEditing(null);
+    setFormErrors({});
+  };
+
+  const openEdit = () => {
+    if (!service) return;
+    setFormErrors({});
+    setEditing({
+      ...service,
+      customFields: service.customFields ?? [],
+      addOns: service.addOns ?? [],
+    });
+    setFormOpen(true);
+  };
+
+  const saveDraft = (next: BusinessService) => {
+    const errors = validateServiceListing(next, "draft");
+    if (hasListingErrors(errors)) {
+      setFormErrors(errors);
+      toast.error("Enter a service name to save draft");
+      return;
+    }
+    setFormErrors({});
+    serviceManagementStore.upsertService({ ...next, status: "Draft" });
+    closeForm();
+    toast.success("Draft saved");
+  };
+
+  const publish = (next: BusinessService) => {
+    const errors = validateServiceListing(next, "publish");
+    if (hasListingErrors(errors)) {
+      setFormErrors(errors);
+      if (errors.price) {
+        toast.error(errors.price);
+      } else if (errors.discount) {
+        toast.error(errors.discount);
+      } else {
+        toast.error("Fix the highlighted fields to publish");
+      }
+      return;
+    }
+    setFormErrors({});
+    serviceManagementStore.upsertService({ ...next, status: "Active" });
+    closeForm();
+    toast.success("Service updated");
+  };
 
   if (!service) {
     return (
@@ -41,17 +96,6 @@ export default function ServiceDetailPage() {
       </div>
     );
   }
-
-  const save = (next: BusinessService, status: BusinessService["status"]) => {
-    if (!next.name.trim() || !next.category || !next.description.trim()) {
-      toast.error("Please fill required fields");
-      return;
-    }
-    serviceManagementStore.upsertService({ ...next, status });
-    setDrawerOpen(false);
-    setEditing(null);
-    toast.success("Service updated");
-  };
 
   return (
     <div className="mx-auto max-w-5xl space-y-5 px-4 py-4 sm:px-6 sm:py-6">
@@ -86,14 +130,7 @@ export default function ServiceDetailPage() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <Button
-            size="sm"
-            className="gap-1.5"
-            onClick={() => {
-              setEditing({ ...service });
-              setDrawerOpen(true);
-            }}
-          >
+          <Button size="sm" className="gap-1.5" onClick={openEdit}>
             <Pencil className="h-4 w-4" /> Edit
           </Button>
         </div>
@@ -101,16 +138,18 @@ export default function ServiceDetailPage() {
 
       <ServiceDetailView service={service} />
 
-      <ServiceFormDrawer
-        open={drawerOpen}
+      <ServiceListingFormDialog
+        open={formOpen}
         onOpenChange={(open) => {
-          setDrawerOpen(open);
-          if (!open) setEditing(null);
+          if (!open) closeForm();
+          else setFormOpen(true);
         }}
         service={editing}
+        errors={formErrors}
         onChange={setEditing}
-        onSaveDraft={(s) => save(s, "Draft")}
-        onPublish={(s) => save(s, "Active")}
+        onErrorsChange={setFormErrors}
+        onSaveDraft={saveDraft}
+        onPublish={publish}
       />
     </div>
   );

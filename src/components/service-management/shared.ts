@@ -1,4 +1,4 @@
-import type { BusinessService, ServiceAvailability, ServicePackage, ServiceStatus } from "@/types/serviceManagement";
+import type { BusinessService, ServiceAddOn, ServiceAvailability, ServicePackage, ServiceStatus } from "@/types/serviceManagement";
 
 /** Semantic status tints — use tokens, never raw Tailwind palette names */
 export const statusStyles: Record<ServiceStatus, string> = {
@@ -15,13 +15,32 @@ export const availabilityStyles: Record<ServiceAvailability, string> = {
 
 export function formatPrice(service: Pick<BusinessService, "pricingType" | "price" | "discount">) {
   if (service.pricingType === "Quote Based") return "Quote Based";
-  const base =
-    service.pricingType === "Starting From" ? `From ₹${service.price || "—"}` : `₹${service.price || "—"}`;
-  return base;
+  if (service.pricingType === "Contact For Pricing") return "Contact for pricing";
+
+  const raw = service.price?.trim();
+  if (!raw) return "—";
+
+  const amount = /^(?:₹|Rs\.?|INR\s*)/i.test(raw) ? raw : `₹${raw}`;
+  return service.pricingType === "Starting From" ? `From ${amount}` : amount;
+}
+
+export function parseServicePriceValue(price?: string): number {
+  // Lazy import pattern avoided — duplicate minimal parse to keep shared free of rupeeFormat cycle
+  const v = price?.trim();
+  if (!v) return 0;
+  const cleaned = v.replace(/,/g, "");
+  const match = cleaned.match(/(?:₹|Rs\.?|INR\s*)?(\d+(?:\.\d+)?)/i);
+  return match ? Number(match[1]) : 0;
 }
 
 export function formatPriceSub(service: Pick<BusinessService, "pricingType" | "discount">) {
-  const parts: string[] = [service.pricingType];
+  const parts: string[] = [];
+  if (
+    service.pricingType !== "Quote Based" &&
+    service.pricingType !== "Contact For Pricing"
+  ) {
+    parts.push(service.pricingType);
+  }
   if (service.discount?.trim()) parts.push(`Discount: ${service.discount.trim()}`);
   return parts.join(" · ");
 }
@@ -85,6 +104,21 @@ export function packageCombinedPriceValue(
 ) {
   if (service?.pricingType === "Quote Based") return 0;
   return Number(service?.price || 0) + Number(pkg.price || 0);
+}
+
+export function formatAddOnPrice(addOn: Pick<ServiceAddOn, "pricingType" | "price">) {
+  if (addOn.pricingType === "Contact For Pricing") return "Contact for pricing";
+  const raw = addOn.price?.trim();
+  if (!raw) return "—";
+  const amount = /^(?:₹|Rs\.?|INR\s*)/i.test(raw) ? raw : `₹${raw}`;
+  return addOn.pricingType === "Starting From" ? `From ${amount}` : amount;
+}
+
+export function displayPriceAmount(price?: string, currency = "INR") {
+  const raw = price?.trim();
+  if (!raw) return "—";
+  if (/^(?:₹|Rs\.?|INR\s*|\$)/i.test(raw)) return raw;
+  return currency === "USD" ? `$${raw}` : `₹${raw}`;
 }
 
 export function formatAge(updatedAt: string) {

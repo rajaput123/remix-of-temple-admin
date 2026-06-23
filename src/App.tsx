@@ -37,7 +37,9 @@ import PackagesPage from "./pages/business/services/Packages";
 import AvailabilityPage from "./pages/business/services/Availability";
 import ServicePricingPage from "./pages/business/services/Pricing";
 import OnlineServiceBookings from "./pages/business/bookings/OnlineBookings";
-import ServiceCounterBooking from "./pages/business/bookings/CounterBooking";
+import CounterBookingsPage from "./pages/business/bookings/counter/CounterBookingsPage";
+import NewCounterBookingPage from "./pages/business/bookings/counter/NewCounterBookingPage";
+import BookingCalendarPage from "./pages/business/bookings/counter/BookingCalendarPage";
 import BCExplore from "./pages/business-connect/Explore";
 import Profile from "./pages/Profile";
 // Temple Admin Module Layouts
@@ -327,6 +329,7 @@ const App = () => {
               </Route>
             </Route>
             <Route path="/business-connect/bookings" element={<BookingLayout />}>
+<<<<<<< Updated upstream
               <Route index element={<BookingsToday />} />
               <Route path="all" element={<AllBookings />} />
               <Route path="counter" element={<CounterBooking />} />
@@ -334,6 +337,35 @@ const App = () => {
               <Route path="attendance" element={<Attendance />} />
               <Route path="reports" element={<BookingReports />} />
               <Route path="online" element={<Navigate to="/business-connect/bookings" replace />} />
+=======
+              <Route index element={<Navigate to="counter" replace />} />
+              <Route path="online" element={<OnlineServiceBookings />} />
+              <Route path="counter" element={<CounterBookingsPage />} />
+              <Route path="counter/new" element={<NewCounterBookingPage />} />
+              <Route path="all" element={<Navigate to="counter" replace />} />
+              <Route path="new" element={<Navigate to="counter/new" replace />} />
+              <Route path="calendar" element={<BookingCalendarPage />} />
+              <Route
+                path="quotations"
+                element={
+                  <CounterBookingsPage
+                    title="Quotations"
+                    description="Bookings with quotation sent — awaiting customer confirmation."
+                    fixedStatus="Quotation Sent"
+                  />
+                }
+              />
+              <Route
+                path="completed"
+                element={
+                  <CounterBookingsPage
+                    title="Completed"
+                    description="Counter bookings where service has been delivered."
+                    fixedStatus="Completed"
+                  />
+                }
+              />
+>>>>>>> Stashed changes
             </Route>
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
               <Route index element={<Navigate to="business" replace />} />

@@ -1,7 +1,15 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckCheck, Download, Plus, Upload } from "lucide-react";
+import { LayoutGrid, List, Plus, Search, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,69 +20,64 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
-import { WorkspacePage, WorkspaceStatusBar } from "@/components/workspace";
-import { ServiceFormDrawer } from "@/components/service-management/ServiceFormDrawer";
+import { FilterStrip, WorkspacePage, WorkspaceStatusBar } from "@/components/workspace";
+import { ServiceListingFormDialog } from "@/components/service-management/ServiceListingFormDialog";
 import { ServicesEmptyState } from "@/components/service-management/ServicesEmptyState";
 import { ServiceTable } from "@/components/service-management/ServiceTable";
-import { BulkImportDialog } from "@/components/service-management/BulkImportDialog";
-import { exportServicesCsv } from "@/components/service-management/csvUtils";
+import { ServiceCard } from "@/components/service-management/ServiceCard";
 import {
-  hasFormErrors,
-  validateService,
-  type ServiceFormErrors,
-} from "@/components/service-management/validation";
+  hasListingErrors,
+  validateServiceListing,
+  type ServiceListingFormErrors,
+} from "@/components/service-management/serviceListingValidation";
 import type { BusinessService } from "@/types/serviceManagement";
+import { SERVICE_LISTING_CATEGORIES } from "@/types/serviceManagement";
 import {
   emptyService,
   serviceManagementStore,
   useServices,
 } from "@/stores/serviceManagementStore";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
-const DRAFT_KEY = "digidevalaya-service-draft";
+const DRAFT_KEY = "digidevalaya-service-listing-draft";
 
-type QueueTab = "pending" | "in_review" | "all";
+type ViewMode = "card" | "table";
 
 export default function ServicesListPage() {
   const navigate = useNavigate();
   const services = useServices();
-  const [listTab, setListTab] = useState<QueueTab>("all");
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [view, setView] = useState<ViewMode>("table");
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<BusinessService | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BusinessService | null>(null);
   const [bulkDeleteIds, setBulkDeleteIds] = useState<string[]>([]);
-  const [formErrors, setFormErrors] = useState<ServiceFormErrors>({});
-  const [importOpen, setImportOpen] = useState(false);
+  const [formErrors, setFormErrors] = useState<ServiceListingFormErrors>({});
 
-  const pendingCount = services.filter((s) => s.status === "Draft").length;
-  const inReviewCount = services.filter((s) => s.status === "Inactive").length;
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return services.filter((s) => {
+      const matchSearch =
+        !q ||
+        s.name.toLowerCase().includes(q) ||
+        s.category.toLowerCase().includes(q) ||
+        s.description.toLowerCase().includes(q);
+      const matchStatus = statusFilter === "all" || s.status === statusFilter;
+      const matchCategory = categoryFilter === "all" || s.category === categoryFilter;
+      return matchSearch && matchStatus && matchCategory;
+    });
+  }, [services, search, statusFilter, categoryFilter]);
 
-  const tabFiltered = useMemo(() => {
-    if (listTab === "pending") return services.filter((s) => s.status === "Draft");
-    if (listTab === "in_review") return services.filter((s) => s.status === "Inactive");
-    return services;
-  }, [services, listTab]);
-
-  const draftServices = services.filter((s) => s.status === "Draft");
-  const bottleneckLabel =
-    draftServices[0]?.category || draftServices[0]?.name?.split(" ")[0] || "Draft services";
-
-  const handleExport = () => {
-    exportServicesCsv(services);
-    toast.success("Services exported");
+  const closeForm = () => {
+    setFormOpen(false);
+    setEditing(null);
+    setFormErrors({});
   };
 
-  const handleBatchPublish = () => {
-    const drafts = services.filter((s) => s.status === "Draft");
-    if (drafts.length === 0) {
-      toast.info("No pending services to publish");
-      return;
-    }
-    drafts.forEach((s) => serviceManagementStore.setServiceStatus(s.id, "Active"));
-    toast.success(`${drafts.length} service(s) published`);
-  };
-
-  const openAdd = () => {
+  const openCreate = () => {
     setFormErrors({});
     try {
       const raw = localStorage.getItem(DRAFT_KEY);
@@ -87,82 +90,107 @@ export default function ServicesListPage() {
     } catch {
       setEditing(emptyService());
     }
-    setDrawerOpen(true);
+    setFormOpen(true);
   };
 
   const openEdit = (service: BusinessService) => {
     setFormErrors({});
-    setEditing({ ...service });
-    setDrawerOpen(true);
+    setEditing({ ...service, customFields: service.customFields ?? [], addOns: service.addOns ?? [] });
+    setFormOpen(true);
   };
 
-  const save = (service: BusinessService, status: BusinessService["status"]) => {
-    const mode = status === "Active" ? "publish" : "draft";
-    const errors = validateService(service, mode);
-    if (hasFormErrors(errors)) {
+  const saveDraft = (service: BusinessService) => {
+    const errors = validateServiceListing(service, "draft");
+    if (hasListingErrors(errors)) {
       setFormErrors(errors);
-      toast.error("Fix the highlighted fields to continue");
+      toast.error("Enter a service name to save draft");
       return;
     }
     setFormErrors({});
-    serviceManagementStore.upsertService({ ...service, status });
+    serviceManagementStore.upsertService({ ...service, status: "Draft" });
     localStorage.removeItem(DRAFT_KEY);
-    setDrawerOpen(false);
-    setEditing(null);
-    toast.success(status === "Active" ? "Service published" : "Service saved as draft");
+    closeForm();
+    toast.success("Draft saved");
+  };
+
+  const publish = (service: BusinessService) => {
+    const errors = validateServiceListing(service, "publish");
+    if (hasListingErrors(errors)) {
+      setFormErrors(errors);
+      if (errors.price) {
+        toast.error(errors.price);
+      } else if (errors.discount) {
+        toast.error(errors.discount);
+      } else {
+        toast.error("Fix the highlighted fields to publish");
+      }
+      return;
+    }
+    setFormErrors({});
+    serviceManagementStore.upsertService({ ...service, status: "Active" });
+    localStorage.removeItem(DRAFT_KEY);
+    closeForm();
+    toast.success("Service published");
   };
 
   const hasAny = services.length > 0;
+  const draftServices = services.filter((s) => s.status === "Draft");
+  const draftHighlight =
+    draftServices.length > 0
+      ? { count: draftServices.length, label: draftServices[0]?.name || "Draft services" }
+      : undefined;
+
+  const viewToggle = (
+    <>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        className={cn("h-7 px-2", view === "table" && "bg-muted")}
+        onClick={() => setView("table")}
+        aria-label="Table view"
+      >
+        <List className="size-4" />
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        className={cn("h-7 px-2", view === "card" && "bg-muted")}
+        onClick={() => setView("card")}
+        aria-label="Card view"
+      >
+        <LayoutGrid className="size-4" />
+      </Button>
+    </>
+  );
 
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col">
       <WorkspacePage
-        eyebrow="Business Connect · Service listing"
-        title="Service listing"
-        description="Manage and publish your service listings"
+        eyebrow="Business Connect · Service Listings"
+        title="Service Listings"
+        description="Add what you sell, set pricing, and start receiving enquiries and bookings."
+        statusBar={hasAny ? <WorkspaceStatusBar /> : undefined}
         actions={
           hasAny ? (
-            <>
-              <Button variant="outline" size="sm" className="h-9 gap-1.5 text-xs" onClick={() => setImportOpen(true)}>
-                <Upload className="size-3.5" /> Import
-              </Button>
-              <Button variant="outline" size="sm" className="h-9 gap-1.5 text-xs" onClick={handleExport}>
-                <Download className="size-3.5" /> Export
-              </Button>
-              <Button size="sm" className="h-9 gap-1.5 text-xs" onClick={handleBatchPublish}>
-                <CheckCheck className="size-3.5" /> Batch publish
-              </Button>
-              <Button variant="outline" size="sm" className="h-9 gap-1.5 text-xs" onClick={openAdd}>
-                <Plus className="size-3.5" /> Add
-              </Button>
-            </>
+            <Button size="sm" className="h-9 gap-1.5 text-xs" onClick={openCreate}>
+              <Plus className="size-3.5" /> Create Service
+            </Button>
           ) : undefined
         }
-        tabs={
-          hasAny
-            ? [
-                { id: "pending", label: "Pending", count: pendingCount },
-                { id: "in_review", label: "In review", count: inReviewCount },
-                { id: "all", label: "All", count: services.length },
-              ]
-            : undefined
-        }
-        activeTab={listTab}
-        onTabChange={(id) => setListTab(id as QueueTab)}
-        statusBar={hasAny ? <WorkspaceStatusBar /> : undefined}
       >
         {!hasAny && (
           <div className="flex flex-1 items-center justify-center px-4 py-16">
-            <ServicesEmptyState onAdd={openAdd} onImport={() => setImportOpen(true)} />
+            <ServicesEmptyState onAdd={openCreate} />
           </div>
         )}
 
-        {hasAny && (
+        {hasAny && view === "table" ? (
           <ServiceTable
-            services={tabFiltered}
-            draftHighlight={
-              pendingCount > 0 ? { count: pendingCount, label: bottleneckLabel } : undefined
-            }
+            services={services}
+            draftHighlight={draftHighlight}
+            filterActions={viewToggle}
             onView={(s) => navigate(`/business-connect/services/${s.id}`)}
             onEdit={openEdit}
             onBulkDelete={setBulkDeleteIds}
@@ -170,38 +198,85 @@ export default function ServicesListPage() {
               ids.forEach((id) => serviceManagementStore.setServiceStatus(id, "Active"));
               toast.success(`${ids.length} service(s) published`);
             }}
-            onFilterDrafts={() => setListTab("pending")}
             emptyAction={
-              <Button size="sm" className="h-9" onClick={openAdd}>
-                Add service
+              <Button size="sm" className="h-9" onClick={openCreate}>
+                Create Service
               </Button>
             }
           />
-        )}
+        ) : hasAny ? (
+          <>
+            <FilterStrip>
+              <div className="relative min-w-[200px] flex-1">
+                <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search services…"
+                  className="h-7 pl-8 text-xs"
+                />
+              </div>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="h-7 w-[130px] text-xs">
+                  <SlidersHorizontal className="mr-1.5 size-3.5 text-muted-foreground" />
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All status</SelectItem>
+                  <SelectItem value="Active">Active</SelectItem>
+                  <SelectItem value="Draft">Draft</SelectItem>
+                  <SelectItem value="Inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="h-7 w-[160px] text-xs">
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All categories</SelectItem>
+                  {SERVICE_LISTING_CATEGORIES.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {c}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="ml-auto flex shrink-0 items-center gap-1 border-l border-border pl-2">
+                {viewToggle}
+              </div>
+            </FilterStrip>
+
+            {filtered.length === 0 ? (
+              <div className="flex flex-col items-center justify-center gap-2 px-4 py-16 text-center">
+                <p className="text-sm font-medium text-foreground">No services match your filters</p>
+                <p className="text-xs text-muted-foreground">Try adjusting search or filters.</p>
+              </div>
+            ) : (
+              <div className="grid gap-4 p-4 sm:grid-cols-2 xl:grid-cols-3">
+                {filtered.map((service) => (
+                  <ServiceCard
+                    key={service.id}
+                    service={service}
+                    onView={() => navigate(`/business-connect/services/${service.id}`)}
+                    onEdit={() => openEdit(service)}
+                    onDelete={() => setDeleteTarget(service)}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        ) : null}
       </WorkspacePage>
 
-      <BulkImportDialog
-        open={importOpen}
-        onOpenChange={setImportOpen}
-        kind="services"
-        services={services}
-        onImported={() => toast.success("Services imported")}
-      />
-
-      <ServiceFormDrawer
-        open={drawerOpen}
+      <ServiceListingFormDialog
+        open={formOpen}
         onOpenChange={(open) => {
-          setDrawerOpen(open);
-          if (!open) {
-            setEditing(null);
-            setFormErrors({});
-          }
+          if (!open) closeForm();
         }}
         service={editing}
         errors={formErrors}
         onChange={(s) => {
           setEditing(s);
-          if (Object.keys(formErrors).length > 0) setFormErrors({});
           if (!s.id) {
             try {
               localStorage.setItem(DRAFT_KEY, JSON.stringify(s));
@@ -210,39 +285,18 @@ export default function ServicesListPage() {
             }
           }
         }}
-        onSaveDraft={(s) => save(s, "Draft")}
-        onPublish={(s) => save(s, "Active")}
+        onErrorsChange={setFormErrors}
+        onSaveDraft={saveDraft}
+        onPublish={publish}
       />
-
-      <AlertDialog open={bulkDeleteIds.length > 0} onOpenChange={(open) => !open && setBulkDeleteIds([])}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Delete {bulkDeleteIds.length} service{bulkDeleteIds.length > 1 ? "s" : ""}?
-            </AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                bulkDeleteIds.forEach((id) => serviceManagementStore.deleteService(id));
-                toast.success(`${bulkDeleteIds.length} service(s) deleted`);
-                setBulkDeleteIds([]);
-              }}
-              className="bg-destructive hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this service?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogDescription>
+              {deleteTarget?.name ? `"${deleteTarget.name}" will be removed permanently.` : "This action cannot be undone."}
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -253,6 +307,28 @@ export default function ServicesListPage() {
                   toast.success("Service deleted");
                   setDeleteTarget(null);
                 }
+              }}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={bulkDeleteIds.length > 0} onOpenChange={(open) => !open && setBulkDeleteIds([])}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete {bulkDeleteIds.length} service(s)?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                bulkDeleteIds.forEach((id) => serviceManagementStore.deleteService(id));
+                toast.success(`${bulkDeleteIds.length} service(s) deleted`);
+                setBulkDeleteIds([]);
               }}
               className="bg-destructive hover:bg-destructive/90"
             >

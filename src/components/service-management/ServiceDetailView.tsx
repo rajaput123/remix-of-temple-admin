@@ -8,6 +8,7 @@ import {
   IndianRupee,
   Languages,
   MapPin,
+  PackagePlus,
   Settings2,
   XCircle,
 } from "lucide-react";
@@ -20,6 +21,8 @@ import {
   parseRequirementBullets,
 } from "./serviceFormConstants";
 import {
+  displayPriceAmount,
+  formatAddOnPrice,
   formatAge,
   formatDuration,
   formatOfferPeriod,
@@ -105,7 +108,8 @@ interface ServiceDetailViewProps {
 
 export function ServiceDetailView({ service }: ServiceDetailViewProps) {
   const requirements = parseRequirementBullets(service.requirements).filter(Boolean);
-  const currencySymbol = service.currency === "USD" ? "$" : "₹";
+  const customFields = service.customFields ?? [];
+  const addOns = service.addOns ?? [];
   const startTime = formatTimeLabel(service.startTime);
   const endTime = formatTimeLabel(service.endTime);
   const hoursLabel =
@@ -180,15 +184,76 @@ export function ServiceDetailView({ service }: ServiceDetailViewProps) {
             <DetailRow label="Base price">
               {service.pricingType === "Quote Based"
                 ? "Not applicable"
-                : service.price
-                  ? `${currencySymbol}${service.price}`
-                  : "—"}
+                : displayPriceAmount(service.price, service.currency)}
             </DetailRow>
             <DetailRow label="Discount">{displayOrEmpty(service.discount) ?? "—"}</DetailRow>
             <DetailRow label="Listed as">
               <span className="font-medium">{formatPrice(service)}</span>
             </DetailRow>
           </dl>
+        </SectionCard>
+
+        <SectionCard title="Custom fields" icon={Settings2}>
+          {customFields.length > 0 ? (
+            <ul className="divide-y divide-border/50 py-1">
+              {customFields.map((field) => (
+                <li key={field.id} className="flex flex-col gap-2 py-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-foreground">{field.name}</p>
+                    <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                      <Badge variant="secondary" className="text-[10px] font-normal">
+                        {field.type}
+                      </Badge>
+                      {field.required && (
+                        <Badge variant="outline" className="text-[10px] font-normal">
+                          Required
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                  {field.options && field.options.length > 0 && (
+                    <p className="text-xs text-muted-foreground sm:max-w-[50%] sm:text-right">
+                      Options: {field.options.join(", ")}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="py-4 text-sm text-muted-foreground">No custom fields configured.</p>
+          )}
+        </SectionCard>
+
+        <SectionCard title="Add-ons" icon={PackagePlus}>
+          {addOns.length > 0 ? (
+            <div className="overflow-x-auto py-2">
+              <table className="w-full min-w-[320px] text-left text-sm">
+                <thead>
+                  <tr className="border-b text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <th className="pb-2 pr-3 font-bold">Name</th>
+                    <th className="pb-2 pr-3 font-bold">Pricing</th>
+                    <th className="pb-2 font-bold text-right">Price</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/50">
+                  {addOns.map((addOn) => (
+                    <tr key={addOn.id}>
+                      <td className="py-2.5 pr-3">
+                        <p className="font-medium text-foreground">{addOn.name}</p>
+                        {addOn.description?.trim() && (
+                          <p className="mt-0.5 text-xs text-muted-foreground">{addOn.description.trim()}</p>
+                        )}
+                      </td>
+                      <td className="py-2.5 pr-3 text-muted-foreground">{addOn.pricingType}</td>
+                      <td className="py-2.5 text-right font-mono text-xs tabular-nums">{formatAddOnPrice(addOn)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="py-4 text-sm text-muted-foreground">No add-ons configured.</p>
+          )}
         </SectionCard>
 
         <SectionCard title="Location & coverage" icon={MapPin}>

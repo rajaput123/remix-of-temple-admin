@@ -10,7 +10,7 @@ interface ProfileEmptyStateProps {
 const STEPS = [
   { icon: Building2, title: "Business info", desc: "Name, category & about" },
   { icon: Users, title: "Contact & location", desc: "Phone, email & address" },
-  { icon: Shield, title: "Verification", desc: "KYC documents for trust badge" },
+  { icon: Shield, title: "Verification", desc: "KYC documents for identity check" },
 ];
 
 export function ProfileEmptyState({ onCreate }: ProfileEmptyStateProps) {
@@ -28,7 +28,7 @@ export function ProfileEmptyState({ onCreate }: ProfileEmptyStateProps) {
                 Build your marketplace presence
               </h2>
               <p className={cn("mt-4 max-w-sm leading-relaxed text-primary-foreground/85", t.desc)}>
-                Showcase your temple services, reach devotees across Karnataka, and earn a verified trust badge.
+                Showcase your temple services and reach devotees across Karnataka.
               </p>
             </div>
             <div className="relative mt-8 grid h-16 w-16 place-items-center rounded-lg border border-primary-foreground/20 bg-primary-foreground/10 backdrop-blur-md">

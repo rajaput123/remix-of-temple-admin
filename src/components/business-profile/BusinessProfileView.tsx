@@ -6,7 +6,6 @@ import {
   Briefcase,
   CheckCircle,
   CheckCircle2,
-  Clock,
   Edit3,
   FileText,
   Globe,
@@ -21,17 +20,17 @@ import {
   User,
   XCircle,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { BusinessProfile } from "@/types/businessProfile";
 import { BUSINESS_TYPES } from "@/data/businessTypes";
 import { profileImageUrl } from "@/data/businessProfileMedia";
-import { ProfileStatusBadge, VerificationStatusBadge } from "@/components/business-profile/ProfileBadges";
 import { ProfileAvatar } from "@/components/business-profile/ProfileMedia";
 import {
   businessTypeLabel,
   formatProfileLocation,
   formatUpdatedAt,
+  profileStatusLabel,
+  verificationStatusLabel,
 } from "@/components/business-profile/profileUtils";
 import {
   computeProfileCompletion,
@@ -171,9 +170,7 @@ function GalleryTile({ src, className, large }: { src: string; className?: strin
         onError={() => setFailed(true)}
       />
       {large && (
-        <div className="absolute bottom-3 left-3 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur-sm">
-          Featured
-        </div>
+        <div className="absolute bottom-3 left-3 text-[10px] font-medium text-white/90">Featured</div>
       )}
     </div>
   );
@@ -211,7 +208,6 @@ function CompletionRing({ value }: { value: number }) {
 
 export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProfileViewProps) {
   const navigate = useNavigate();
-  const workingDays = profile.workingDays ?? [];
   const languages = profile.languages ?? [];
   const gallery = profile.gallery ?? [];
   const completion = computeProfileCompletion(profile);
@@ -261,12 +257,6 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
             )}
           </div>
         </div>
-
-        {verified && (
-          <div className="absolute bottom-16 right-4 z-10 flex items-center gap-1.5 rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white shadow-lg sm:right-6">
-            <ShieldCheck className="h-3.5 w-3.5" /> Verified
-          </div>
-        )}
       </div>
 
       {/* Rising content sheet */}
@@ -283,13 +273,19 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
               />
               <div className="min-w-0 sm:pb-1">
                 <p className={t.eyebrow}>Business Connect · Profile</p>
-                <div className="mb-2 mt-1 flex flex-wrap items-center gap-2">
-                  <Badge variant="secondary">{typeLabel}</Badge>
+                <div className="mb-2 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+                  <span>{typeLabel}</span>
                   {profile.category && (
-                    <Badge variant="outline">{profile.category}</Badge>
+                    <>
+                      <span className="text-border">·</span>
+                      <span>{profile.category}</span>
+                    </>
                   )}
                   {profile.experience && (
-                    <span className={t.desc}>{profile.experience}+ yrs</span>
+                    <>
+                      <span className="text-border">·</span>
+                      <span>{profile.experience}+ yrs</span>
+                    </>
                   )}
                 </div>
                 <h1 className={t.title}>{profile.businessName}</h1>
@@ -306,10 +302,6 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                 </p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 sm:justify-end">
-              <ProfileStatusBadge status={profile.status} />
-              <VerificationStatusBadge status={profile.verificationStatus} />
-            </div>
           </div>
 
           {/* Bento stats */}
@@ -321,13 +313,13 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
             />
             <StatTile
               label="Profile status"
-              value={<ProfileStatusBadge status={profile.status} />}
+              value={<p className={cn(t.body, "font-medium")}>{profileStatusLabel(profile.status)}</p>}
               sub={profile.status === "published" ? "Live on marketplace" : "Not visible yet"}
             />
             <StatTile
               label="Verification"
-              value={<VerificationStatusBadge status={profile.verificationStatus} />}
-              sub={verified ? "Trust badge active" : pending ? "Review in progress" : "Documents needed"}
+              value={<p className={cn(t.body, "font-medium")}>{verificationStatusLabel(profile.verificationStatus)}</p>}
+              sub={verified ? "Documents approved" : pending ? "Review in progress" : "Documents needed"}
             />
             <StatTile
               label="Last updated"
@@ -390,7 +382,7 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
                 {verified && (
                   <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-4 py-3 text-sm text-success">
                     <CheckCircle2 className="h-4 w-4 shrink-0" />
-                    Verified — badge shown on your public listing
+                    Documents verified — profile approved
                   </div>
                 )}
                 {pending && (
@@ -459,37 +451,22 @@ export function BusinessProfileView({ profile, onEdit, onPublish }: BusinessProf
 
               <div className={cn("p-5", profileCardClass)}>
                 <div className="flex items-center gap-2 text-foreground">
-                  <Clock className="h-4 w-4 text-primary" />
-                  <p className={t.section}>Working hours</p>
+                  <Globe className="h-4 w-4 text-primary" />
+                  <p className={t.section}>Languages</p>
                 </div>
-                <p className={cn("mt-3", t.mono, "text-sm font-medium")}>
-                  {profile.openingTime}
-                  <span className="mx-2 font-normal text-muted-foreground">–</span>
-                  {profile.closingTime}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {workingDays.map((d) => (
-                    <span
-                      key={d}
-                      className="rounded-md border border-border bg-muted/30 px-2 py-1 text-xs font-medium text-foreground"
-                    >
-                      {d}
-                    </span>
-                  ))}
-                </div>
-                {languages.length > 0 && (
-                  <div className="mt-5 border-t border-border pt-4">
-                    <p className={cn("flex items-center gap-1.5", t.label)}>
-                      <Globe className="h-3.5 w-3.5" /> Languages
-                    </p>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {languages.map((l) => (
-                        <Badge key={l} variant="secondary" className="rounded-full text-xs">
-                          {l}
-                        </Badge>
-                      ))}
-                    </div>
+                {languages.length > 0 ? (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {languages.map((l) => (
+                      <span
+                        key={l}
+                        className="rounded-md border border-border bg-muted/30 px-2 py-1 text-xs font-medium text-foreground"
+                      >
+                        {l}
+                      </span>
+                    ))}
                   </div>
+                ) : (
+                  <p className={cn("mt-3", t.desc)}>No languages added.</p>
                 )}
               </div>
 

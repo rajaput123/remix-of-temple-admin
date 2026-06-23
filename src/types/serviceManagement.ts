@@ -1,6 +1,37 @@
 export type ServiceStatus = "Draft" | "Active" | "Inactive";
 export type ServiceAvailability = "Available" | "Limited Availability" | "Not Available";
-export type PricingType = "Fixed Price" | "Starting From" | "Quote Based";
+export type PricingType = "Fixed Price" | "Starting From" | "Contact For Pricing" | "Quote Based";
+
+export type AddOnPricingType = "Fixed Price" | "Starting From" | "Contact For Pricing";
+
+export type CustomFieldType =
+  | "Text"
+  | "Number"
+  | "Date"
+  | "Dropdown"
+  | "Multi Select"
+  | "Checkbox"
+  | "Text Area";
+
+export interface ServiceCustomField {
+  id: string;
+  name: string;
+  type: CustomFieldType;
+  required: boolean;
+  /** Comma-separated or structured options for Dropdown / Multi Select */
+  options?: string[];
+}
+
+export interface ServiceAddOn {
+  id: string;
+  name: string;
+  description?: string;
+  pricingType: AddOnPricingType;
+  price?: string;
+}
+
+/** Listing status shown in create form (Draft is set via Save Draft action) */
+export type ListingVisibilityStatus = "Active" | "Inactive";
 export type CoverageType = "Local" | "District" | "Statewide" | "Nationwide";
 export type ServiceType = "at_customer" | "at_temple" | "online" | "hybrid";
 export type DurationUnit = "Minutes" | "Hours" | "Half Day" | "Full Day" | "Days";
@@ -49,6 +80,8 @@ export interface BusinessService {
   updatedAt: string;
   views: number;
   enquiries: number;
+  customFields?: ServiceCustomField[];
+  addOns?: ServiceAddOn[];
 }
 
 export interface ServicePackage {
@@ -88,17 +121,37 @@ export interface PricingRule {
   updatedAt: string;
 }
 
+/** Business-owner friendly categories for service listing */
+export const SERVICE_LISTING_CATEGORIES = [
+  "Priest Service",
+  "Catering",
+  "Hotel & Accommodation",
+  "Travel & Transport",
+  "Astrology",
+  "Vastu",
+  "Decoration",
+  "Photography",
+  "Music Services",
+  "Other",
+] as const;
+
+/** @deprecated Use SERVICE_LISTING_CATEGORIES — kept for seed data compatibility */
 export const SERVICE_CATEGORIES = [
   "Priest Services",
+  "Priest Service",
   "Catering",
   "Hotel",
+  "Hotel & Accommodation",
   "Travel",
+  "Travel & Transport",
   "Astrology",
   "Vastu",
   "Decoration",
   "Photography",
   "Music",
+  "Music Services",
   "Flower Vendor",
+  "Other",
 ] as const;
 
 export const WORKING_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;

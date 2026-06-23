@@ -1,4 +1,4 @@
-import type { BusinessProfile } from "@/types/businessProfile";
+import type { BusinessProfile, ProfileStatus, ProfileVerificationStatus } from "@/types/businessProfile";
 
 export function formatProfileLocation(profile: BusinessProfile) {
   return [profile.city, profile.state].filter(Boolean).join(", ") || "—";
@@ -57,4 +57,24 @@ export function toggleInList(list: string[], item: string) {
 
 export function businessTypeLabel(typeId: string, types: { id: string; label: string }[]) {
   return types.find((t) => t.id === typeId)?.label ?? (typeId || "—");
+}
+
+export function profileStatusLabel(status: ProfileStatus): string {
+  const labels: Record<ProfileStatus, string> = {
+    draft: "Draft",
+    published: "Published",
+    pending: "Pending",
+  };
+  return labels[status] ?? status;
+}
+
+export function verificationStatusLabel(status: ProfileVerificationStatus): string {
+  const labels: Record<ProfileVerificationStatus, string> = {
+    not_submitted: "Not submitted",
+    pending: "Pending review",
+    verified: "Verified",
+    rejected: "Rejected",
+    reupload_requested: "Reupload requested",
+  };
+  return labels[status] ?? status;
 }
