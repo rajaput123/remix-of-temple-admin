@@ -137,7 +137,7 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
   };
 
   const handlePriceBlur = () => {
-    if (isLinked) return;
+    if (mode === "existing") return;
     if (!showPrice || !draft.price?.trim()) return;
     const formatted = formatRupeePriceInput(draft.price);
     if (formatted !== draft.price) set({ price: formatted });
@@ -226,7 +226,7 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
     );
 
     setDraft(emptyAddOn());
-    setIsLinked(false);
+    setMode("custom");
     setNameError("");
     setPriceError("");
     toast.success("Add-on added successfully. Continue adding next.");
