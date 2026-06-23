@@ -19,6 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Link2, Sparkles } from "lucide-react";
 import type { AddOnPricingType, BusinessService, ServiceAddOn } from "@/types/serviceManagement";
 import { useServices } from "@/stores/serviceManagementStore";
 import { formatRupeePriceInput, validateRupeePrice } from "./rupeeFormat";
@@ -52,7 +55,7 @@ interface AddOnDialogProps {
 export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: AddOnDialogProps) {
   const [draft, setDraft] = useState<ServiceAddOn>(emptyAddOn());
   const [serviceId, setServiceId] = useState("");
-  const [isLinked, setIsLinked] = useState(false);
+  const [mode, setMode] = useState<"existing" | "custom">("custom");
   const [nameError, setNameError] = useState("");
   const [priceError, setPriceError] = useState("");
   const [serviceError, setServiceError] = useState("");
@@ -67,7 +70,7 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
     if (!open) return;
     setDraft(addOn ? { ...addOn } : emptyAddOn());
     setServiceId(addOn?.serviceId ?? (services?.[0]?.id ?? ""));
-    setIsLinked(Boolean(addOn?.linkedServiceIds && addOn.linkedServiceIds.length > 0));
+    setMode(addOn?.linkedServiceIds && addOn.linkedServiceIds.length > 0 ? "existing" : "custom");
     setNameError("");
     setPriceError("");
     setServiceError("");
@@ -75,27 +78,53 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
 
   const set = (patch: Partial<ServiceAddOn>) => setDraft((d) => ({ ...d, ...patch }));
 
-  const handleLinkToggle = (checked: boolean) => {
-    setIsLinked(checked);
-    if (!checked) {
+  const selectedLinkedServices = allServices.filter((s) =>
+    (draft.linkedServiceIds ?? []).includes(s.id)
+  );
+
+  const linkedPriceTotal = selectedLinkedServices.reduce((sum, s) => {
+    const num = parseInt((s.price || "").replace(/[^\d]/g, ""), 10);
+    return sum + (isNaN(num) ? 0 : num);
+  }, 0);
+
+  const handleModeChange = (next: string) => {
+    const m = next as "existing" | "custom";
+    setMode(m);
+    if (m === "custom") {
       set({ linkedServiceIds: [] });
     }
+    setNameError("");
+    setPriceError("");
   };
 
   const handleLinkServicesChange = (linkedIds: string[]) => {
-    set({ linkedServiceIds: linkedIds });
+    const selectedSvcs = allServices.filter((s) => linkedIds.includes(s.id));
+    const total = selectedSvcs.reduce((sum, s) => {
+      const num = parseInt((s.price || "").replace(/[^\d]/g, ""), 10);
+      return sum + (isNaN(num) ? 0 : num);
+    }, 0);
+    const hasQuote = selectedSvcs.some((s) => s.pricingType === "Contact For Pricing");
+    set({
+      linkedServiceIds: linkedIds,
+      name: selectedSvcs.map((s) => s.name).join(" + "),
+      description: selectedSvcs.length
+        ? `Includes: ${selectedSvcs.map((s) => s.name).join(", ")}`
+        : "",
+      price: hasQuote ? "" : total > 0 ? `₹${total.toLocaleString("en-IN")}` : "",
+      pricingType: hasQuote ? "Contact For Pricing" : "Fixed Price",
+    });
+    setNameError("");
+    setPriceError("");
   };
 
-  const linkedPriceTotal = (() => {
-    const ids = draft.linkedServiceIds ?? [];
-    if (!ids.length) return 0;
-    return allServices
-      .filter((s) => ids.includes(s.id))
-      .reduce((sum, s) => {
-        const num = parseInt((s.price || "").replace(/[^\d]/g, ""), 10);
-        return sum + (isNaN(num) ? 0 : num);
-      }, 0);
+  const mainServiceName = services?.find((s) => s.id === serviceId)?.name ?? "—";
+  const previewName = draft.name?.trim() || "Untitled add-on";
+  const previewPriceLabel = (() => {
+    if (draft.pricingType === "Contact For Pricing") return "Contact for pricing";
+    if (!draft.price?.trim()) return "—";
+    return draft.pricingType === "Starting From" ? `From ${draft.price}` : draft.price;
   })();
+
 
 
   const handlePricingTypeChange = (pricingType: AddOnPricingType) => {
