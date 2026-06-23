@@ -19,6 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Link2, Sparkles } from "lucide-react";
 import type { AddOnPricingType, BusinessService, ServiceAddOn } from "@/types/serviceManagement";
 import { useServices } from "@/stores/serviceManagementStore";
 import { formatRupeePriceInput, validateRupeePrice } from "./rupeeFormat";
@@ -52,7 +55,7 @@ interface AddOnDialogProps {
 export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: AddOnDialogProps) {
   const [draft, setDraft] = useState<ServiceAddOn>(emptyAddOn());
   const [serviceId, setServiceId] = useState("");
-  const [isLinked, setIsLinked] = useState(false);
+  const [mode, setMode] = useState<"existing" | "custom">("custom");
   const [nameError, setNameError] = useState("");
   const [priceError, setPriceError] = useState("");
   const [serviceError, setServiceError] = useState("");
@@ -67,7 +70,7 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
     if (!open) return;
     setDraft(addOn ? { ...addOn } : emptyAddOn());
     setServiceId(addOn?.serviceId ?? (services?.[0]?.id ?? ""));
-    setIsLinked(Boolean(addOn?.linkedServiceIds && addOn.linkedServiceIds.length > 0));
+    setMode(addOn?.linkedServiceIds && addOn.linkedServiceIds.length > 0 ? "existing" : "custom");
     setNameError("");
     setPriceError("");
     setServiceError("");
@@ -75,27 +78,53 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
 
   const set = (patch: Partial<ServiceAddOn>) => setDraft((d) => ({ ...d, ...patch }));
 
-  const handleLinkToggle = (checked: boolean) => {
-    setIsLinked(checked);
-    if (!checked) {
+  const selectedLinkedServices = allServices.filter((s) =>
+    (draft.linkedServiceIds ?? []).includes(s.id)
+  );
+
+  const linkedPriceTotal = selectedLinkedServices.reduce((sum, s) => {
+    const num = parseInt((s.price || "").replace(/[^\d]/g, ""), 10);
+    return sum + (isNaN(num) ? 0 : num);
+  }, 0);
+
+  const handleModeChange = (next: string) => {
+    const m = next as "existing" | "custom";
+    setMode(m);
+    if (m === "custom") {
       set({ linkedServiceIds: [] });
     }
+    setNameError("");
+    setPriceError("");
   };
 
   const handleLinkServicesChange = (linkedIds: string[]) => {
-    set({ linkedServiceIds: linkedIds });
+    const selectedSvcs = allServices.filter((s) => linkedIds.includes(s.id));
+    const total = selectedSvcs.reduce((sum, s) => {
+      const num = parseInt((s.price || "").replace(/[^\d]/g, ""), 10);
+      return sum + (isNaN(num) ? 0 : num);
+    }, 0);
+    const hasQuote = selectedSvcs.some((s) => s.pricingType === "Contact For Pricing");
+    set({
+      linkedServiceIds: linkedIds,
+      name: selectedSvcs.map((s) => s.name).join(" + "),
+      description: selectedSvcs.length
+        ? `Includes: ${selectedSvcs.map((s) => s.name).join(", ")}`
+        : "",
+      price: hasQuote ? "" : total > 0 ? `₹${total.toLocaleString("en-IN")}` : "",
+      pricingType: hasQuote ? "Contact For Pricing" : "Fixed Price",
+    });
+    setNameError("");
+    setPriceError("");
   };
 
-  const linkedPriceTotal = (() => {
-    const ids = draft.linkedServiceIds ?? [];
-    if (!ids.length) return 0;
-    return allServices
-      .filter((s) => ids.includes(s.id))
-      .reduce((sum, s) => {
-        const num = parseInt((s.price || "").replace(/[^\d]/g, ""), 10);
-        return sum + (isNaN(num) ? 0 : num);
-      }, 0);
+  const mainServiceName = services?.find((s) => s.id === serviceId)?.name ?? "—";
+  const previewName = draft.name?.trim() || "Untitled add-on";
+  const previewPriceLabel = (() => {
+    if (draft.pricingType === "Contact For Pricing") return "Contact for pricing";
+    if (!draft.price?.trim()) return "—";
+    return draft.pricingType === "Starting From" ? `From ${draft.price}` : draft.price;
   })();
+
 
 
   const handlePricingTypeChange = (pricingType: AddOnPricingType) => {
@@ -108,7 +137,7 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
   };
 
   const handlePriceBlur = () => {
-    if (isLinked) return;
+    if (mode === "existing") return;
     if (!showPrice || !draft.price?.trim()) return;
     const formatted = formatRupeePriceInput(draft.price);
     if (formatted !== draft.price) set({ price: formatted });
@@ -197,7 +226,7 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
     );
 
     setDraft(emptyAddOn());
-    setIsLinked(false);
+    setMode("custom");
     setNameError("");
     setPriceError("");
     toast.success("Add-on added successfully. Continue adding next.");
@@ -231,117 +260,159 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
             </Field>
           )}
 
-          <div className="flex items-center gap-2 rounded-md border border-dashed p-2.5 bg-muted/20">
-            <Checkbox
-              id="link-service"
-              checked={isLinked}
-              onCheckedChange={(checked) => handleLinkToggle(Boolean(checked))}
-            />
-            <label
-              htmlFor="link-service"
-              className="text-xs font-medium cursor-pointer select-none text-foreground py-0.5"
-            >
-              Also link existing service(s) to this add-on <span className="text-muted-foreground font-normal">(optional)</span>
-            </label>
+          <Tabs value={mode} onValueChange={handleModeChange} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="custom" className="text-xs gap-1.5">
+                <Sparkles className="size-3.5" /> Create new add-on
+              </TabsTrigger>
+              <TabsTrigger value="existing" className="text-xs gap-1.5">
+                <Link2 className="size-3.5" /> Pick from existing services
+              </TabsTrigger>
+            </TabsList>
 
-          </div>
+            <TabsContent value="existing" className="mt-4 space-y-4">
+              <Field label="Select services to bundle *">
+                <div className="border rounded-md p-3.5 bg-background grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
+                  {linkableServices.length === 0 ? (
+                    <p className="text-xs text-muted-foreground">No other services available to link.</p>
+                  ) : (
+                    linkableServices.map((s) => {
+                      const checked = (draft.linkedServiceIds ?? []).includes(s.id);
+                      return (
+                        <div key={s.id} className="flex items-center justify-between gap-2.5 py-0.5">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <Checkbox
+                              id={`link-svc-${s.id}`}
+                              checked={checked}
+                              onCheckedChange={(val) => {
+                                const currentIds = draft.linkedServiceIds ?? [];
+                                const nextIds = val
+                                  ? [...currentIds, s.id]
+                                  : currentIds.filter((id) => id !== s.id);
+                                handleLinkServicesChange(nextIds);
+                              }}
+                            />
+                            <label
+                              htmlFor={`link-svc-${s.id}`}
+                              className="text-xs cursor-pointer select-none font-medium text-foreground py-0.5 truncate"
+                            >
+                              {s.name}
+                            </label>
+                          </div>
+                          {s.price && (
+                            <span className="font-mono text-[10px] text-muted-foreground shrink-0">₹{s.price}</span>
+                          )}
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+                {linkedPriceTotal > 0 && (
+                  <p className="mt-1.5 text-[11px] text-muted-foreground">
+                    Combined price: <span className="font-mono text-foreground">₹{linkedPriceTotal.toLocaleString("en-IN")}</span> — used as the add-on price.
+                  </p>
+                )}
+              </Field>
+            </TabsContent>
 
-          {isLinked && (
-            <Field label="Link Services *">
-              <div className="border rounded-md p-3.5 bg-background grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
-                {linkableServices.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">No other services available to link.</p>
-                ) : (
-                  linkableServices.map((s) => {
-                    const checked = (draft.linkedServiceIds ?? []).includes(s.id);
-                    return (
-                      <div key={s.id} className="flex items-center gap-2.5 py-0.5">
-                        <Checkbox
-                          id={`link-svc-${s.id}`}
-                          checked={checked}
-                          onCheckedChange={(val) => {
-                            const currentIds = draft.linkedServiceIds ?? [];
-                            const nextIds = val
-                              ? [...currentIds, s.id]
-                              : currentIds.filter((id) => id !== s.id);
-                            handleLinkServicesChange(nextIds);
-                          }}
-                        />
-                        <label
-                          htmlFor={`link-svc-${s.id}`}
-                          className="text-xs cursor-pointer select-none font-medium text-foreground py-0.5"
-                        >
-                          {s.name}
-                        </label>
-                      </div>
-                    );
-                  })
+            <TabsContent value="custom" className="mt-4 space-y-4">
+              <Field label="Add-on name *" error={nameError}>
+                <Input
+                  value={draft.name}
+                  onChange={(e) => {
+                    set({ name: e.target.value });
+                    if (nameError) setNameError("");
+                  }}
+                  placeholder={SERVICE_LISTING_PLACEHOLDERS.addOnName}
+                />
+              </Field>
+
+              <Field label="Description">
+                <Textarea
+                  value={draft.description ?? ""}
+                  onChange={(e) => set({ description: e.target.value })}
+                  rows={2}
+                  className="resize-none"
+                  placeholder={SERVICE_LISTING_PLACEHOLDERS.addOnDescription}
+                />
+              </Field>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Pricing type">
+                  <Select
+                    value={draft.pricingType}
+                    onValueChange={(v) => handlePricingTypeChange(v as AddOnPricingType)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ADDON_PRICING.map((p) => (
+                        <SelectItem key={p} value={p}>
+                          {p}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+
+                <Field
+                  label={showPrice ? "Price *" : "Price"}
+                  error={priceError}
+                  hint={showPrice && !priceError ? "e.g. ₹500" : undefined}
+                >
+                  <Input
+                    value={draft.price ?? ""}
+                    onChange={(e) => {
+                      set({ price: e.target.value });
+                      if (priceError) setPriceError("");
+                    }}
+                    onBlur={handlePriceBlur}
+                    placeholder={showPrice ? SERVICE_LISTING_PLACEHOLDERS.addOnPrice : "Not required"}
+                    disabled={!showPrice}
+                  />
+                </Field>
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          {/* Preview */}
+          <div className="rounded-md border bg-muted/20 p-3.5">
+            <div className="mb-2 flex items-center gap-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Preview</span>
+              {mode === "existing" && selectedLinkedServices.length > 0 && (
+                <Badge variant="secondary" className="h-4 px-1.5 text-[9px] bg-primary/10 text-primary border-transparent gap-0.5">
+                  <Link2 className="size-2" /> Linked ({selectedLinkedServices.length})
+                </Badge>
+              )}
+            </div>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1 space-y-1">
+                <p className="text-sm font-semibold text-foreground truncate">{previewName}</p>
+                <p className="text-[11px] text-muted-foreground">
+                  Main service: <span className="text-foreground">{mainServiceName}</span>
+                </p>
+                {draft.description && (
+                  <p className="text-[11px] text-muted-foreground line-clamp-2">{draft.description}</p>
+                )}
+                {selectedLinkedServices.length > 0 && (
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {selectedLinkedServices.map((s) => (
+                      <span
+                        key={s.id}
+                        className="inline-flex items-center gap-1 rounded border bg-background px-1.5 py-0.5 text-[10px] text-foreground"
+                      >
+                        <Link2 className="size-2.5 text-primary" /> {s.name}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
-              {linkedPriceTotal > 0 && (
-                <p className="mt-1.5 text-[11px] text-muted-foreground">
-                  Linked services total: <span className="font-mono text-foreground">₹{linkedPriceTotal.toLocaleString("en-IN")}</span> · You can use this as the add-on price or set your own.
-                </p>
-              )}
-            </Field>
-          )}
-
-          <Field label="Add-on name *" error={nameError}>
-            <Input
-              value={draft.name}
-              onChange={(e) => {
-                set({ name: e.target.value });
-                if (nameError) setNameError("");
-              }}
-              placeholder={SERVICE_LISTING_PLACEHOLDERS.addOnName}
-            />
-          </Field>
-
-          <Field label="Description">
-            <Textarea
-              value={draft.description ?? ""}
-              onChange={(e) => set({ description: e.target.value })}
-              rows={2}
-              className="resize-none"
-              placeholder={SERVICE_LISTING_PLACEHOLDERS.addOnDescription}
-            />
-          </Field>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Pricing type">
-              <Select
-                value={draft.pricingType}
-                onValueChange={(v) => handlePricingTypeChange(v as AddOnPricingType)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {ADDON_PRICING.map((p) => (
-                    <SelectItem key={p} value={p}>
-                      {p}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
-
-            <Field
-              label={showPrice ? "Price *" : "Price"}
-              error={priceError}
-              hint={showPrice && !priceError ? "e.g. ₹500" : undefined}
-            >
-              <Input
-                value={draft.price ?? ""}
-                onChange={(e) => {
-                  set({ price: e.target.value });
-                  if (priceError) setPriceError("");
-                }}
-                onBlur={handlePriceBlur}
-                placeholder={showPrice ? SERVICE_LISTING_PLACEHOLDERS.addOnPrice : "Not required"}
-                disabled={!showPrice}
-              />
-            </Field>
+              <div className="text-right shrink-0">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{draft.pricingType}</p>
+                <p className="font-mono text-sm font-semibold text-foreground">{previewPriceLabel}</p>
+              </div>
+            </div>
           </div>
         </div>
 
