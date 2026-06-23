@@ -79,49 +79,24 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
     setIsLinked(checked);
     if (!checked) {
       set({ linkedServiceIds: [] });
-    } else {
-      const firstSvc = linkableServices[0];
-      if (firstSvc) {
-        handleLinkServicesChange([firstSvc.id]);
-      }
     }
   };
 
   const handleLinkServicesChange = (linkedIds: string[]) => {
-    const selectedSvcs = allServices.filter((s) => linkedIds.includes(s.id));
-    if (selectedSvcs.length > 0) {
-      const names = selectedSvcs.map((s) => s.name).join(" + ");
-      const desc = `Includes: ${selectedSvcs.map((s) => s.name).join(", ")}`;
-      
-      let totalVal = 0;
-      selectedSvcs.forEach((s) => {
-        if (s.price) {
-          const num = parseInt(s.price.replace(/[^\d]/g, ""), 10);
-          if (!isNaN(num)) {
-            totalVal += num;
-          }
-        }
-      });
-
-      set({
-        linkedServiceIds: linkedIds,
-        name: names,
-        description: desc,
-        price: totalVal > 0 ? `₹${totalVal.toLocaleString("en-IN")}` : "",
-        pricingType: selectedSvcs.some((s) => s.pricingType === "Contact For Pricing") ? "Contact For Pricing" : "Fixed Price",
-      });
-      setNameError("");
-      setPriceError("");
-    } else {
-      set({
-        linkedServiceIds: [],
-        name: "",
-        description: "",
-        price: "",
-        pricingType: "Fixed Price",
-      });
-    }
+    set({ linkedServiceIds: linkedIds });
   };
+
+  const linkedPriceTotal = (() => {
+    const ids = draft.linkedServiceIds ?? [];
+    if (!ids.length) return 0;
+    return allServices
+      .filter((s) => ids.includes(s.id))
+      .reduce((sum, s) => {
+        const num = parseInt((s.price || "").replace(/[^\d]/g, ""), 10);
+        return sum + (isNaN(num) ? 0 : num);
+      }, 0);
+  })();
+
 
   const handlePricingTypeChange = (pricingType: AddOnPricingType) => {
     if (!addOnNeedsPrice(pricingType)) {
@@ -266,8 +241,9 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
               htmlFor="link-service"
               className="text-xs font-medium cursor-pointer select-none text-foreground py-0.5"
             >
-              Link another existing service as add-on
+              Also link existing service(s) to this add-on <span className="text-muted-foreground font-normal">(optional)</span>
             </label>
+
           </div>
 
           {isLinked && (
