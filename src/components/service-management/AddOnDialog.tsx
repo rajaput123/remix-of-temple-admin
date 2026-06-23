@@ -278,6 +278,11 @@ export function AddOnDialog({ open, onOpenChange, addOn, services, onSave }: Add
                   })
                 )}
               </div>
+              {linkedPriceTotal > 0 && (
+                <p className="mt-1.5 text-[11px] text-muted-foreground">
+                  Linked services total: <span className="font-mono text-foreground">₹{linkedPriceTotal.toLocaleString("en-IN")}</span> · You can use this as the add-on price or set your own.
+                </p>
+              )}
             </Field>
           )}
 
