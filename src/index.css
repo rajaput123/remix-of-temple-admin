@@ -162,6 +162,10 @@
   }
 
   /* Shell: sidebar ends above viewport-fixed status strip */
+  :root {
+    --shell-statusbar-height: 0px;
+  }
+
   :root[data-status-bar="true"] {
     --shell-statusbar-height: 2.25rem;
   }

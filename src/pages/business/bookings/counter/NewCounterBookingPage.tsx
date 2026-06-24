@@ -49,7 +49,7 @@ interface BookingDraft {
   scheduledTime: string;
 }
 
-const STEP_TITLES = ["What to book?", "Devotee details", "Payment"];
+const STEP_TITLES = ["What to book?", "Customer details", "Payment"];
 
 export default function NewCounterBookingPage() {
   const navigate = useNavigate();
@@ -458,7 +458,7 @@ export default function NewCounterBookingPage() {
                 </div>
 
                 <Button type="button" size="lg" className="h-12 w-full gap-2 text-base" onClick={goStep1}>
-                  Next — Devotee details
+                  Next — Customer details
                   <ArrowRight className="size-5" />
                 </Button>
               </div>
@@ -466,7 +466,7 @@ export default function NewCounterBookingPage() {
           </div>
         )}
 
-        {/* ——— STEP 2: Devotee ——— */}
+        {/* ——— STEP 2: Customer ——— */}
         {step === 2 && draft && (
           <div className="mx-auto w-full max-w-md flex-1 px-4 py-6 sm:px-6">
             <SummaryChip draft={draft} />
@@ -507,7 +507,7 @@ export default function NewCounterBookingPage() {
               )}
 
               <Field label="Full name" required>
-                <Input className="h-12 text-lg" value={name} onChange={(e) => setName(e.target.value)} placeholder="Devotee name" />
+                <Input className="h-12 text-lg" value={name} onChange={(e) => setName(e.target.value)} placeholder="Customer name" />
               </Field>
 
               <Field label="Pincode" required hint="City & state fill automatically">

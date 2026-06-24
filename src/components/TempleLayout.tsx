@@ -56,6 +56,8 @@ interface TempleLayoutProps {
   profileName?: string;
   profileRole?: string;
   profileInitials?: string;
+  /** Override default main content padding (default: px-4 pb-4 pt-4) */
+  contentClassName?: string;
 }
 
 function isNavItemActive(
@@ -83,6 +85,7 @@ const TempleLayout = ({
   profileName = "Temple Admin",
   profileRole = "Operations Lead · Admin",
   profileInitials = "RK",
+  contentClassName = "px-4 pb-4 pt-4",
 }: TempleLayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -432,7 +435,7 @@ const TempleLayout = ({
           collapsed ? "ml-16" : "ml-60",
         )}
       >
-        <div className="shell-main-content flex min-h-0 flex-1 flex-col px-8 pb-6 pt-6">
+        <div className={cn("shell-main-content flex min-h-0 flex-1 flex-col", contentClassName)}>
           <Outlet />
         </div>
       </main>

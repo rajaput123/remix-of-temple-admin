@@ -127,7 +127,11 @@ export function WorkspaceTable<T>({
   const totalColsCount = columns.length + (showCheckboxes ? 1 : 0);
 
   return (
-    <div className={cn("flex flex-col overflow-x-auto", className)} role="region" aria-label={ariaLabel}>
+    <div
+      className={cn("flex flex-col overflow-x-auto pl-5", className)}
+      role="region"
+      aria-label={ariaLabel}
+    >
       <Table variant="workspace" container={false} className={cn("table-workspace", minWidth)}>
         <colgroup>
           {showCheckboxes && <col style={{ width: "2.5rem" }} />}

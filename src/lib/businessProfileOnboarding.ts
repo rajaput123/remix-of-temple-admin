@@ -24,6 +24,10 @@ const ALLOWED_PREFIXES = [
   "/business/profile",
   "/forgot-mpin",
   "/business-connect/explore",
+  "/business-connect/services",
+  "/business-connect/bookings",
+  "/business-connect/crm",
+  "/business-connect/communication",
 ];
 
 export function markBusinessProfileSetupRequired(): void {

@@ -36,10 +36,23 @@ import PackagesPage from "./pages/business/services/Packages";
 import AvailabilityPage from "./pages/business/services/Availability";
 import ServicePricingPage from "./pages/business/services/Pricing";
 import AddOnsPage from "./pages/business/services/AddOns";
-import OnlineServiceBookings from "./pages/business/bookings/OnlineBookings";
-import CounterBookingsPage from "./pages/business/bookings/counter/CounterBookingsPage";
-import NewCounterBookingPage from "./pages/business/bookings/counter/NewCounterBookingPage";
+import BusinessBookingsToday from "./pages/business/bookings/BusinessBookingsToday";
+import BusinessAllBookings from "./pages/business/bookings/BusinessAllBookings";
+import BusinessCounterBooking from "./pages/business/bookings/BusinessCounterBooking";
 import BookingCalendarPage from "./pages/business/bookings/counter/BookingCalendarPage";
+import CRMLayout from "./pages/business-connect/CRMLayout";
+import CustomersList from "./pages/business/crm/CustomersList";
+import CrmSegments from "./pages/business/crm/CrmSegments";
+import CrmInsights from "./pages/business/crm/CrmInsights";
+import BusinessCommunicationLayout from "./pages/business-connect/BusinessCommunicationLayout";
+import { CommunicationLegacyRedirect } from "./pages/business-connect/communicationLegacyRedirect";
+import BusinessCommunicationInbox from "./pages/business/communication/BusinessCommunicationInbox";
+import BusinessCampaigns from "./pages/business/communication/BusinessCampaigns";
+import BusinessCommunicationRules from "./pages/business/communication/BusinessCommunicationRules";
+import BusinessMessageTemplates from "./pages/business/communication/BusinessMessageTemplates";
+import BusinessCommunicationLogs from "./pages/business/communication/BusinessCommunicationLogs";
+import BusinessAnnouncements from "./pages/business/communication/BusinessAnnouncements";
+import BusinessNotifications from "./pages/business/communication/BusinessNotifications";
 import BCExplore from "./pages/business-connect/Explore";
 import { BusinessProfileOnboardingRedirect } from "@/components/business-profile/BusinessProfileOnboardingRedirect";
 import Profile from "./pages/Profile";
@@ -171,16 +184,6 @@ import InstitutionReports from "./pages/temple/institutions/InstitutionReports";
 // import DataCollectionWorkflow from "./pages/temple/crowd/DataCollectionWorkflow";
 // import ImplementationStatus from "./pages/temple/crowd/ImplementationStatus";
 // import PracticalOperations from "./pages/temple/crowd/PracticalOperations";
-// PR & Communication Module
-import CommunicationLayout from "./pages/temple/CommunicationLayout";
-import ControlCenter from "./pages/temple/communication/ControlCenter";
-import CommAnnouncements from "./pages/temple/communication/Announcements";
-import MediaCommunication from "./pages/temple/communication/MediaCommunication";
-import LiveBroadcast from "./pages/temple/communication/LiveBroadcast";
-import DevoteeExperience from "./pages/temple/communication/DevoteeExperience";
-import PublicMeetings from "./pages/temple/communication/PublicMeetings";
-import CommLogsReports from "./pages/temple/communication/LogsReports";
-import TempleWebsite from "./pages/temple/communication/TempleWebsite";
 // Donation Management Module
 import DonationsLayout from "./pages/temple/DonationsLayout";
 import DonationDashboard from "./pages/temple/donations/Dashboard";
@@ -331,33 +334,32 @@ const App = () => {
               </Route>
             </Route>
             <Route path="/business-connect/bookings" element={<BookingLayout />}>
-              <Route index element={<Navigate to="counter" replace />} />
-              <Route path="online" element={<OnlineServiceBookings />} />
-              <Route path="counter" element={<CounterBookingsPage />} />
-              <Route path="counter/new" element={<NewCounterBookingPage />} />
-              <Route path="all" element={<Navigate to="counter" replace />} />
-              <Route path="new" element={<Navigate to="counter/new" replace />} />
+              <Route index element={<BusinessBookingsToday />} />
+              <Route path="all" element={<BusinessAllBookings />} />
+              <Route path="counter" element={<BusinessCounterBooking />} />
               <Route path="calendar" element={<BookingCalendarPage />} />
-              <Route
-                path="quotations"
-                element={
-                  <CounterBookingsPage
-                    title="Quotations"
-                    description="Bookings with quotation sent — awaiting customer confirmation."
-                    fixedStatus="Quotation Sent"
-                  />
-                }
-              />
-              <Route
-                path="completed"
-                element={
-                  <CounterBookingsPage
-                    title="Completed"
-                    description="Counter bookings where service has been delivered."
-                    fixedStatus="Completed"
-                  />
-                }
-              />
+              <Route path="online" element={<Navigate to="all" replace />} />
+              <Route path="prasad" element={<Navigate to="/business-connect/bookings" replace />} />
+              <Route path="attendance" element={<Navigate to="/business-connect/bookings" replace />} />
+              <Route path="reports" element={<Navigate to="all" replace />} />
+              <Route path="quotations" element={<Navigate to="all" replace />} />
+              <Route path="completed" element={<Navigate to="all" replace />} />
+              <Route path="counter/new" element={<Navigate to="../counter" replace />} />
+              <Route path="new" element={<Navigate to="counter" replace />} />
+            </Route>
+            <Route path="/business-connect/crm" element={<CRMLayout />}>
+              <Route index element={<CustomersList />} />
+              <Route path="segments" element={<CrmSegments />} />
+              <Route path="insights" element={<CrmInsights />} />
+            </Route>
+            <Route path="/business-connect/communication" element={<BusinessCommunicationLayout />}>
+              <Route index element={<BusinessCommunicationInbox />} />
+              <Route path="announcements" element={<BusinessAnnouncements />} />
+              <Route path="notifications" element={<BusinessNotifications />} />
+              <Route path="campaigns" element={<BusinessCampaigns />} />
+              <Route path="automations" element={<BusinessCommunicationRules />} />
+              <Route path="templates" element={<BusinessMessageTemplates />} />
+              <Route path="logs" element={<BusinessCommunicationLogs />} />
             </Route>
             <Route path="/business-connect/onboarding" element={<BCOnboardingLayout />}>
               <Route index element={<Navigate to="business" replace />} />
@@ -581,17 +583,8 @@ const App = () => {
               <Route path="archive" element={<EventArchive />} />
               <Route path=":eventId" element={<EventDetails />} />
             </Route>
-            {/* PR & Communication Module */}
-            <Route path="/temple/communication" element={<CommunicationLayout />}>
-              <Route index element={<ControlCenter />} />
-              <Route path="announcements" element={<CommAnnouncements />} />
-              <Route path="media" element={<MediaCommunication />} />
-              <Route path="broadcast" element={<LiveBroadcast />} />
-              <Route path="experience" element={<DevoteeExperience />} />
-              <Route path="meetings" element={<PublicMeetings />} />
-              <Route path="logs" element={<CommLogsReports />} />
-              <Route path="website" element={<TempleWebsite />} />
-            </Route>
+            {/* Legacy temple communication → business module */}
+            <Route path="/temple/communication/*" element={<CommunicationLegacyRedirect />} />
             <Route path="/temple/live" element={<TempleHub />} />
             <Route path="/temple/help" element={<HelpSupport />} />
             {/* Crowd & Capacity Management Module (Upcoming) */}

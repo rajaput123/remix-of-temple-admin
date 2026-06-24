@@ -51,12 +51,12 @@ export function WorkspacePage({
   return (
     <div
       className={cn(
-        "flex min-h-0 flex-1 flex-col bg-card",
-        bleed && "-mx-8 -mt-6 flex h-full min-h-[calc(100vh-var(--shell-statusbar-height))]",
+        "flex h-full min-h-0 w-full flex-1 flex-col bg-card",
+        bleed && "-mx-4 min-h-[calc(100vh-var(--shell-statusbar-height))]",
         className,
       )}
     >
-      <header className="shrink-0 border-b border-border">
+      <header className="relative z-10 shrink-0 border-b border-border bg-card">
         <div className="flex flex-wrap items-start justify-between gap-4 px-6 pb-3 pt-4">
           <div className="min-w-0">
             {trail && (
@@ -105,7 +105,7 @@ export function WorkspacePage({
 
       <div
         className={cn(
-          "flex min-h-0 flex-1 flex-col overflow-hidden",
+          "flex min-h-0 flex-1 flex-col overflow-y-auto pt-3",
           statusBar && "pb-[var(--shell-statusbar-height)]",
         )}
       >

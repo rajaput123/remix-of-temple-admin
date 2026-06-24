@@ -141,11 +141,11 @@ const allModules = [
   { id: "bookings", title: "Booking Management", icon: Calendar, enabled: true, path: "/business-connect/bookings",
     description: "Appointments, consultations, reservations & service bookings", category: "operations",
     gradient: "from-[hsl(142,60%,40%)] to-[hsl(142,55%,30%)]", bgTint: "bg-[hsl(142,50%,95%)]" },
-  { id: "crm", title: "CRM", icon: UserCheck, enabled: true, path: "/temple/devotees",
+  { id: "crm", title: "CRM", icon: UserCheck, enabled: true, path: "/business-connect/crm",
     description: "Customers, leads, enquiries & relationship management", category: "operations",
     gradient: "from-[hsl(200,65%,48%)] to-[hsl(200,60%,36%)]", bgTint: "bg-[hsl(200,55%,95%)]" },
-  { id: "communication", title: "Communication", icon: Megaphone, enabled: true, path: "/temple/communication",
-    description: "Inbox, SMS, email, WhatsApp & announcements", category: "operations",
+  { id: "communication", title: "Communication", icon: Megaphone, enabled: true, path: "/business-connect/communication",
+    description: "Inbox, announcements, notifications, campaigns & automations", category: "operations",
     gradient: "from-[hsl(199,70%,48%)] to-[hsl(205,65%,38%)]", bgTint: "bg-[hsl(199,60%,96%)]" },
   { id: "live-services", title: "Live Services", icon: Video, enabled: true, path: "/business-connect/live",
     description: "Live streaming, video consultations & recordings", category: "operations",
@@ -393,7 +393,7 @@ const TempleHub = () => {
     {
       selector: '[data-tour-module="communication"]',
       title: "14. Communication",
-      description: "Send announcements, SMS and notifications to devotees, volunteers and staff. Manage your temple website here too.",
+      description: "Manage customer inbox, campaigns, booking automations, message templates, and delivery logs across WhatsApp, SMS, and email.",
     },
     {
       selector: '[data-tour-module="assets"]',

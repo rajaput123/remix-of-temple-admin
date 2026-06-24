@@ -28,6 +28,10 @@ export const BUSINESS_MODULES_UNLOCKED_BEFORE_PLAN = new Set([
   "business-profile",
   "settings",
   "finance",
+  "service-listings",
+  "bookings",
+  "crm",
+  "communication",
 ]);
 
 export function isBusinessUser(): boolean {
@@ -78,10 +82,27 @@ export function isBusinessHubModuleEnabled(moduleId: string, profile: BusinessPr
   return true;
 }
 
+const BUSINESS_CONNECT_OPERATIONAL_PREFIXES = [
+  "/business-connect/services",
+  "/business-connect/bookings",
+  "/business-connect/crm",
+  "/business-connect/communication",
+];
+
+function isBusinessConnectOperationalPath(pathname: string): boolean {
+  return BUSINESS_CONNECT_OPERATIONAL_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
 export function isPathAllowedForBusinessAccess(pathname: string, profile: BusinessProfile | null): boolean {
   if (!isBusinessUser()) return true;
   if (needsBusinessProfileOnboarding(profile)) {
     return isPathAllowedDuringProfileSetup(pathname);
+  }
+  // Core SMB modules (services, bookings, CRM) after profile is complete
+  if (isBusinessProfileComplete(profile) && isBusinessConnectOperationalPath(pathname)) {
+    return true;
   }
   if (needsBusinessPlanForModules(profile)) {
     if (pathname === "/" || pathname === "/login") return true;
@@ -98,6 +119,7 @@ export function isPathAllowedForBusinessAccess(pathname: string, profile: Busine
   }
   if (getBusinessOnboardingStep(profile) === "finance") {
     if (pathname === "/" || pathname === "/login") return true;
+    if (isBusinessConnectOperationalPath(pathname)) return true;
     const allowed = [
       "/temple-hub",
       "/business/profile",
