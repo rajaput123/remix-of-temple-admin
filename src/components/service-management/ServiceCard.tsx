@@ -1,11 +1,11 @@
-import { Eye, ImageIcon, IndianRupee, Pencil, Trash2 } from "lucide-react";
+import { Clock, Eye, ImageIcon, IndianRupee, Pencil, Trash2, Users } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import type { BusinessService } from "@/types/serviceManagement";
 import { cn } from "@/lib/utils";
-import { formatPrice, statusStyles } from "./shared";
+import { formatPrice, formatTimeRange, statusStyles } from "./shared";
 
 interface ServiceCardProps {
   service: BusinessService;
@@ -36,6 +36,18 @@ export function ServiceCard({ service, onView, onEdit, onDelete }: ServiceCardPr
       <div className="flex flex-1 flex-col p-4">
         <h3 className="line-clamp-1 text-sm font-semibold text-foreground">{service.name}</h3>
         <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{service.category || "—"}</p>
+
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+          <span className="inline-flex items-center gap-1">
+            <Clock className="size-3" />
+            {formatTimeRange(service)}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Users className="size-3" />
+            {service.slots?.trim() ? `${service.slots} slots` : "No slot limit"}
+          </span>
+        </div>
+
         <p className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-foreground">
           <IndianRupee className="size-3.5 text-muted-foreground" />
           {formatPrice(service)}

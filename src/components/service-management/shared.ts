@@ -57,6 +57,22 @@ export function formatSlots(service: Pick<BusinessService, "slots">) {
   return `${n} slot${n === 1 ? "" : "s"}`;
 }
 
+function to12h(value?: string) {
+  if (!value?.trim()) return null;
+  const [h, m] = value.split(":").map(Number);
+  if (Number.isNaN(h) || Number.isNaN(m)) return value;
+  const period = h >= 12 ? "PM" : "AM";
+  const hour12 = h % 12 || 12;
+  return `${hour12}:${String(m).padStart(2, "0")} ${period}`;
+}
+
+export function formatTimeRange(service: Pick<BusinessService, "startTime" | "endTime">) {
+  const s = to12h(service.startTime);
+  const e = to12h(service.endTime);
+  if (s && e) return `${s} – ${e}`;
+  return s || e || "—";
+}
+
 export function formatDuration(service: Pick<BusinessService, "durationValue" | "durationUnit">) {
   if (!service.durationValue) return "—";
   return `${service.durationValue} ${service.durationUnit}`;
