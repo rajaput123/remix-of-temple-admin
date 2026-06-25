@@ -270,7 +270,7 @@ export function ServiceDetailView({ service }: ServiceDetailViewProps) {
             <DetailRow label="Start date">{displayOrEmpty(service.startDate) ?? "—"}</DetailRow>
             <DetailRow label="End date">{displayOrEmpty(service.endDate) ?? "—"}</DetailRow>
             <DetailRow label="Offer period">{formatOfferPeriod(service)}</DetailRow>
-            <DetailRow label="Available slots">{formatSlots(service)}</DetailRow>
+            <DetailRow label={`Available ${service.capacityLabel || "Slots"}`}>{formatSlots(service)}</DetailRow>
           </dl>
         </SectionCard>
 
