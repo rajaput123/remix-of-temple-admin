@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { BusinessService, PricingType } from "@/types/serviceManagement";
-import { SERVICE_LISTING_CATEGORIES, WORKING_DAYS } from "@/types/serviceManagement";
+import { SERVICE_LISTING_CATEGORIES } from "@/types/serviceManagement";
 import { Field } from "./ui";
 import { CustomFieldsBuilder } from "./CustomFieldsBuilder";
 import { AddOnsBuilder } from "./AddOnsBuilder";
@@ -270,35 +270,8 @@ export function ServiceListingForm({
                 <div>
                   <p className="text-xs font-semibold text-foreground">Schedule & slots</p>
                   <p className="text-[11px] text-muted-foreground">
-                    Set available days, daily timings, and max bookings (slots) for this service.
+                    Set daily timings and max bookings (slots) for this service.
                   </p>
-                </div>
-
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Available days</label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {WORKING_DAYS.map((d) => {
-                      const on = (service.days ?? []).includes(d);
-                      return (
-                        <button
-                          type="button"
-                          key={d}
-                          onClick={() => {
-                            const days = service.days ?? [];
-                            set({ days: on ? days.filter((x) => x !== d) : [...days, d] });
-                          }}
-                          className={cn(
-                            "rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
-                            on
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border bg-background text-muted-foreground hover:bg-muted",
-                          )}
-                        >
-                          {d}
-                        </button>
-                      );
-                    })}
-                  </div>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
