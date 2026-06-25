@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { BusinessService, PricingType } from "@/types/serviceManagement";
-import { SERVICE_LISTING_CATEGORIES } from "@/types/serviceManagement";
+import { SERVICE_LISTING_CATEGORIES, CAPACITY_LABELS } from "@/types/serviceManagement";
 import { Field } from "./ui";
 import { CustomFieldsBuilder } from "./CustomFieldsBuilder";
 import { AddOnsBuilder } from "./AddOnsBuilder";
@@ -268,9 +268,9 @@ export function ServiceListingForm({
 
               <div className="sm:col-span-2 space-y-3 rounded-md border border-border bg-muted/20 p-3">
                 <div>
-                  <p className="text-xs font-semibold text-foreground">Schedule & slots</p>
+                  <p className="text-xs font-semibold text-foreground">Schedule & capacity</p>
                   <p className="text-[11px] text-muted-foreground">
-                    Set daily timings and max bookings (slots) for this service.
+                    Set daily timings and max bookings for this service.
                   </p>
                 </div>
 
@@ -291,21 +291,39 @@ export function ServiceListingForm({
                       onChange={(e) => set({ endTime: e.target.value })}
                     />
                   </Field>
-                  <Field
-                    label="Available slots"
-                    hint="Max bookings allowed in this window"
-                    htmlFor="svc-slots"
-                  >
-                    <Input
-                      id="svc-slots"
-                      type="text"
-                      inputMode="numeric"
-                      value={service.slots || ""}
-                      onChange={(e) => set({ slots: e.target.value.replace(/\D/g, "") })}
-                      placeholder="e.g. 12"
-                    />
+                  <Field label="Capacity type" htmlFor="svc-cap-label">
+                    <Select
+                      value={service.capacityLabel || "Slots"}
+                      onValueChange={(v) => set({ capacityLabel: v })}
+                    >
+                      <SelectTrigger id="svc-cap-label">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CAPACITY_LABELS.map((l) => (
+                          <SelectItem key={l} value={l}>
+                            {l}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </Field>
                 </div>
+
+                <Field
+                  label={`Available ${service.capacityLabel || "Slots"}`}
+                  hint="Max bookings allowed in this window"
+                  htmlFor="svc-slots"
+                >
+                  <Input
+                    id="svc-slots"
+                    type="text"
+                    inputMode="numeric"
+                    value={service.slots || ""}
+                    onChange={(e) => set({ slots: e.target.value.replace(/\D/g, "") })}
+                    placeholder="e.g. 12"
+                  />
+                </Field>
               </div>
             </div>
           </TabsContent>

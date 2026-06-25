@@ -77,6 +77,8 @@ export interface BusinessService {
   endDate?: string;
   /** Optional max booking slots per period */
   slots?: string;
+  /** Label for capacity unit — e.g. Slots, Rooms, Tables */
+  capacityLabel?: string;
   status: ServiceStatus;
   updatedAt: string;
   views: number;
@@ -164,6 +166,16 @@ export const SERVICE_LANGUAGES = [
   "Telugu",
   "Tamil",
   "Malayalam",
+] as const;
+
+export const CAPACITY_LABELS = [
+  "Slots",
+  "Rooms",
+  "Tables",
+  "Seats",
+  "Appointments",
+  "Bookings",
+  "Passes",
 ] as const;
 
 export const SERVICE_TYPE_LABELS: Record<ServiceType, string> = {

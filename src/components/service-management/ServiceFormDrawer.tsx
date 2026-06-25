@@ -40,6 +40,7 @@ import {
   SERVICE_LANGUAGES,
   SERVICE_TYPE_LABELS,
   WORKING_DAYS,
+  CAPACITY_LABELS,
 } from "@/types/serviceManagement";
 import { Field, FieldGroupError, SectionTitle } from "./ui";
 import type { ServiceFormErrors } from "./validation";
@@ -324,7 +325,7 @@ export function ServiceFormDrawer({
               title="Offer Period & Slots"
               desc="Optional — limit when the service is bookable and how many slots are available."
             />
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <Field label="Start Date" hint="Optional listing start." error={errors.startDate}>
                 <Input
                   type="date"
@@ -340,8 +341,27 @@ export function ServiceFormDrawer({
                   min={service.startDate || undefined}
                 />
               </Field>
+            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <Field label="Capacity type">
+                <Select
+                  value={service.capacityLabel || "Slots"}
+                  onValueChange={(v) => set({ capacityLabel: v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CAPACITY_LABELS.map((l) => (
+                      <SelectItem key={l} value={l}>
+                        {l}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
               <Field
-                label="Available Slots"
+                label={`Available ${service.capacityLabel || "Slots"}`}
                 hint="Optional — max bookings in this period."
                 error={errors.slots}
               >
@@ -350,7 +370,7 @@ export function ServiceFormDrawer({
                   inputMode="numeric"
                   value={service.slots || ""}
                   onChange={(e) => set({ slots: e.target.value.replace(/\D/g, "") })}
-                  placeholder="Enter slot count"
+                  placeholder={`Enter ${(service.capacityLabel || "Slots").toLowerCase()} count`}
                 />
               </Field>
             </div>

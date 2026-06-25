@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import type { BusinessService } from "@/types/serviceManagement";
 import { cn } from "@/lib/utils";
-import { formatPrice, formatTimeRange, statusStyles } from "./shared";
+import { formatPrice, formatTimeRange, statusStyles, formatSlots } from "./shared";
 
 interface ServiceCardProps {
   service: BusinessService;
@@ -44,7 +44,7 @@ export function ServiceCard({ service, onView, onEdit, onDelete }: ServiceCardPr
           </span>
           <span className="inline-flex items-center gap-1">
             <Users className="size-3" />
-            {service.slots?.trim() ? `${service.slots} slots` : "No slot limit"}
+            {service.slots?.trim() ? formatSlots(service) : "No limit"}
           </span>
         </div>
 
