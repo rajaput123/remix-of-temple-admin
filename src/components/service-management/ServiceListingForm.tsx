@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { BusinessService, PricingType } from "@/types/serviceManagement";
-import { SERVICE_LISTING_CATEGORIES } from "@/types/serviceManagement";
+import { SERVICE_LISTING_CATEGORIES, WORKING_DAYS } from "@/types/serviceManagement";
 import { Field } from "./ui";
 import { CustomFieldsBuilder } from "./CustomFieldsBuilder";
 import { AddOnsBuilder } from "./AddOnsBuilder";
@@ -265,6 +265,75 @@ export function ServiceListingForm({
                 error={errors.gallery}
                 onChange={(gallery) => set({ gallery })}
               />
+
+              <div className="sm:col-span-2 space-y-3 rounded-md border border-border bg-muted/20 p-3">
+                <div>
+                  <p className="text-xs font-semibold text-foreground">Schedule & slots</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Set available days, daily timings, and max bookings (slots) for this service.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Available days</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {WORKING_DAYS.map((d) => {
+                      const on = (service.days ?? []).includes(d);
+                      return (
+                        <button
+                          type="button"
+                          key={d}
+                          onClick={() => {
+                            const days = service.days ?? [];
+                            set({ days: on ? days.filter((x) => x !== d) : [...days, d] });
+                          }}
+                          className={cn(
+                            "rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+                            on
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border bg-background text-muted-foreground hover:bg-muted",
+                          )}
+                        >
+                          {d}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <Field label="Start time" htmlFor="svc-start">
+                    <Input
+                      id="svc-start"
+                      type="time"
+                      value={service.startTime || ""}
+                      onChange={(e) => set({ startTime: e.target.value })}
+                    />
+                  </Field>
+                  <Field label="End time" htmlFor="svc-end">
+                    <Input
+                      id="svc-end"
+                      type="time"
+                      value={service.endTime || ""}
+                      onChange={(e) => set({ endTime: e.target.value })}
+                    />
+                  </Field>
+                  <Field
+                    label="Available slots"
+                    hint="Max bookings allowed in this window"
+                    htmlFor="svc-slots"
+                  >
+                    <Input
+                      id="svc-slots"
+                      type="text"
+                      inputMode="numeric"
+                      value={service.slots || ""}
+                      onChange={(e) => set({ slots: e.target.value.replace(/\D/g, "") })}
+                      placeholder="e.g. 12"
+                    />
+                  </Field>
+                </div>
+              </div>
             </div>
           </TabsContent>
 
