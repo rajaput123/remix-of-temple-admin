@@ -26,7 +26,7 @@ import { WORKSPACE_PAGE_SIZE } from "@/components/workspace/tablePagination";
 import type { BusinessService } from "@/types/serviceManagement";
 import { SERVICE_LISTING_CATEGORIES } from "@/types/serviceManagement";
 import { StatusDotBadge } from "./StatusBadges";
-import { formatAge, formatPrice, formatPriceSub, formatServiceId } from "./shared";
+import { formatAge, formatPrice, formatPriceSub, formatServiceId, formatSlots, formatTimeRange } from "./shared";
 
 interface ServiceTableProps {
   services: BusinessService[];
@@ -98,7 +98,7 @@ export function ServiceTable({
     {
       id: "name",
       header: "Service",
-      colStyle: { width: "32%" },
+      colStyle: { width: "24%" },
       className: "text-left max-w-0 overflow-hidden",
       cell: (service) => (
         <div className="min-w-0 space-y-0.5">
@@ -112,7 +112,7 @@ export function ServiceTable({
     {
       id: "category",
       header: "Category",
-      colStyle: { width: "18%" },
+      colStyle: { width: "14%" },
       className: "max-w-0 overflow-hidden text-left",
       cell: (service) => (
         <span className="block w-full truncate text-sm text-muted-foreground" title={service.category || undefined}>
@@ -121,9 +121,44 @@ export function ServiceTable({
       ),
     },
     {
+      id: "timing",
+      header: "Timing",
+      colStyle: { width: "11rem" },
+      className: "whitespace-nowrap text-left",
+      cell: (service) => {
+        const days = service.days ?? [];
+        const dayLabel =
+          days.length === 0
+            ? "No days set"
+            : days.length === 7
+              ? "All days"
+              : `${days.length} day${days.length === 1 ? "" : "s"}`;
+        return (
+          <div className="flex flex-col gap-0.5">
+            <span className="font-mono text-[11px] tabular-nums text-foreground">
+              {formatTimeRange(service)}
+            </span>
+            <span className="text-[10px] text-muted-foreground">{dayLabel}</span>
+          </div>
+        );
+      },
+    },
+    {
+      id: "slots",
+      header: "Slots",
+      colStyle: { width: "5rem" },
+      headerClassName: "text-right",
+      className: "whitespace-nowrap text-right font-mono text-[11px] tabular-nums",
+      cell: (service) => (
+        <span className={cn(!service.slots?.trim() && "text-muted-foreground")}>
+          {service.slots?.trim() ? service.slots : "—"}
+        </span>
+      ),
+    },
+    {
       id: "price",
       header: "Price",
-      colStyle: { width: "9rem" },
+      colStyle: { width: "8rem" },
       headerClassName: "text-right",
       className: "text-right",
       cell: (service) => {
@@ -139,7 +174,7 @@ export function ServiceTable({
     {
       id: "status",
       header: "Status",
-      colStyle: { width: "8rem" },
+      colStyle: { width: "7rem" },
       className: "whitespace-nowrap text-left",
       cell: (service) => (
         <StatusDotBadge status={service.status} label={queueStatusLabel(service.status)} />
