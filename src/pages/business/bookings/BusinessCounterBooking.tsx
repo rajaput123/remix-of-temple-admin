@@ -206,7 +206,7 @@ export default function BusinessCounterBooking() {
     pincode: "",
     city: "",
     state: "",
-    purpose: BOOKING_PURPOSES[0],
+    purpose: BOOKING_PURPOSES[0] as string,
     purposeOther: "",
   });
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
