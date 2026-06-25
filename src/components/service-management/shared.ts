@@ -51,10 +51,11 @@ export function formatOfferPeriod(service: Pick<BusinessService, "startDate" | "
   return service.startDate || service.endDate || "—";
 }
 
-export function formatSlots(service: Pick<BusinessService, "slots">) {
+export function formatSlots(service: Pick<BusinessService, "slots" | "capacityLabel">) {
   if (!service.slots?.trim()) return "—";
   const n = Number(service.slots);
-  return `${n} slot${n === 1 ? "" : "s"}`;
+  const label = service.capacityLabel?.trim() || "Slots";
+  return `${n} ${label}`;
 }
 
 function to12h(value?: string) {

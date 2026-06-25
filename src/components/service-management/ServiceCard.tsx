@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import type { BusinessService } from "@/types/serviceManagement";
 import { cn } from "@/lib/utils";
-import { formatPrice, formatTimeRange, statusStyles } from "./shared";
+import { formatPrice, formatTimeRange, statusStyles, formatSlots } from "./shared";
 
 interface ServiceCardProps {
   service: BusinessService;

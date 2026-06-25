@@ -146,13 +146,13 @@ export function ServiceTable({
     },
     {
       id: "slots",
-      header: "Slots",
-      colStyle: { width: "5rem" },
+      header: "Capacity",
+      colStyle: { width: "6rem" },
       headerClassName: "text-right",
       className: "whitespace-nowrap text-right font-mono text-[11px] tabular-nums",
       cell: (service) => (
         <span className={cn(!service.slots?.trim() && "text-muted-foreground")}>
-          {service.slots?.trim() ? service.slots : "—"}
+          {formatSlots(service)}
         </span>
       ),
     },
