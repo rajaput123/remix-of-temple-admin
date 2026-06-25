@@ -74,6 +74,7 @@ export function emptyService(): BusinessService {
     startDate: "",
     endDate: "",
     slots: "",
+    capacityLabel: "Slots",
     status: "Draft",
     updatedAt: new Date().toISOString().slice(0, 10),
     views: 0,

@@ -40,6 +40,7 @@ import {
   SERVICE_LANGUAGES,
   SERVICE_TYPE_LABELS,
   WORKING_DAYS,
+  CAPACITY_LABELS,
 } from "@/types/serviceManagement";
 import { Field, FieldGroupError, SectionTitle } from "./ui";
 import type { ServiceFormErrors } from "./validation";
