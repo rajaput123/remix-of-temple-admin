@@ -27,6 +27,7 @@ import type { BusinessService } from "@/types/serviceManagement";
 import { SERVICE_LISTING_CATEGORIES } from "@/types/serviceManagement";
 import { StatusDotBadge } from "./StatusBadges";
 import { formatAge, formatPrice, formatPriceSub, formatServiceId, formatSlots, formatTimeRange } from "./shared";
+import { cn } from "@/lib/utils";
 
 interface ServiceTableProps {
   services: BusinessService[];
