@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { BusinessService, PricingType } from "@/types/serviceManagement";
-import { SERVICE_LISTING_CATEGORIES, WORKING_DAYS } from "@/types/serviceManagement";
+import { SERVICE_LISTING_CATEGORIES } from "@/types/serviceManagement";
 import { Field } from "./ui";
 import { CustomFieldsBuilder } from "./CustomFieldsBuilder";
 import { AddOnsBuilder } from "./AddOnsBuilder";
